@@ -1,7 +1,0 @@
-{
-  "name": "test_3step_ai",
-  "type": "quantum_grad",
-  "trained_at": "2025-09-03T19:32:10.028470",
-  "epochs": 50,
-  "final_loss": 0.9762377738952637
-}

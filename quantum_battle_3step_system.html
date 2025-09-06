@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -126,10 +126,10 @@
 
         /* ステップ1: 学習方法選択 */
         .learning-method-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-direction: row;
             gap: 30px;
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -194,10 +194,13 @@
 
         /* ステップ2: モジュール設計 (Jupyter Notebook スタイル) */
         .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .module-card {
@@ -206,6 +209,8 @@
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transition: transform 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
         }
 
         .module-card:hover {
@@ -213,13 +218,15 @@
         }
 
         .module-title {
-            font-size: 1.4em;
+            font-size: 1.5em;
             font-weight: bold;
             color: #667eea;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e9ecef;
         }
 
         .module-icon {
@@ -319,9 +326,11 @@
         }
 
         .param-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .param-item {
@@ -527,6 +536,15 @@
             background: #e0e0e0;
         }
 
+        /* 敵エリアのホバー効果を無効化 */
+        .board-cell.player-b-good:hover,
+        .board-cell.player-b-bad:hover {
+            background: #bdbdbd;
+        }
+        .board-cell.player-b-bad:hover {
+            background: #9e9e9e;
+        }
+
         /* プレイヤー別の駒色分け */
         .board-cell.player-a-good { 
             background: #a5d6a7; 
@@ -537,12 +555,14 @@
             color: #c62828;
         }
         .board-cell.player-b-good { 
-            background: #90caf9; 
-            color: #1565c0;
+            background: #bdbdbd; 
+            color: #616161;
+            cursor: not-allowed;
         }
         .board-cell.player-b-bad { 
-            background: #ffab91; 
-            color: #e65100;
+            background: #9e9e9e; 
+            color: #424242;
+            cursor: not-allowed;
         }
 
         /* 配置可能エリアのハイライト */
@@ -573,6 +593,64 @@
             margin: 0 10px;
             padding: 3px 8px;
             border-radius: 3px;
+        }
+
+        /* モジュール説明欄のスタイル */
+        .module-description {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .module-description h5 {
+            color: #495057;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .module-description textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9em;
+            line-height: 1.4;
+            resize: vertical;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .module-description textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .module-description .description-hint {
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* 説明欄の折りたたみ機能 */
+        .description-toggle {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            text-decoration: underline;
+        }
+
+        .description-toggle:hover {
+            color: #0056b3;
         }
     </style>
 </head>
@@ -631,32 +709,6 @@
                     </div>
                 </div>
 
-                <div class="method-card" id="sl-card" onclick="selectLearningMethod('supervised')">
-                    <div class="method-icon">📚</div>
-                    <div class="method-title">教師あり学習</div>
-                    <div class="method-description">
-                        エキスパートプレイヤーの棋譜データから、最適な手を予測するモデルを学習します。
-                        人間の戦略を模倣し、高品質な行動を再現します。
-                    </div>
-                    <div class="method-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">✓</span>
-                            棋譜データからの学習
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">✓</span>
-                            高速な収束
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">✓</span>
-                            安定した性能
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">✓</span>
-                            人間の戦略を模倣
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="button-container">
@@ -682,8 +734,8 @@
                             <h4>🎯 ガイスターのルール</h4>
                             <ul style="margin-left: 20px; margin-top: 10px;">
                                 <li><strong>各プレイヤー8駒</strong>: 善玉4個 + 悪玉4個</li>
-                                <li><strong>プレイヤーA（緑）</strong>: 下側2行の中央4列に配置</li>
-                                <li><strong>プレイヤーB（青）</strong>: 上側2行の中央4列に配置</li>
+                                <li><strong>自分の駒のみ配置可能</strong>: 下側2行の中央4列に配置</li>
+                                <li><strong>⚠️ 重要</strong>: 相手の駒配置は見えません（未知）</li>
                                 <li><strong>脱出口</strong>: 相手陣地の角（薄い色のセル）</li>
                             </ul>
                         </div>
@@ -691,10 +743,9 @@
                         <div class="placement-board" id="placementBoard"></div>
                         
                         <div class="board-legend">
-                            <div class="legend-item" style="background: #a5d6a7;">A善玉</div>
-                            <div class="legend-item" style="background: #ef9a9a;">A悪玉</div>
-                            <div class="legend-item" style="background: #90caf9;">B善玉</div>
-                            <div class="legend-item" style="background: #ffab91;">B悪玉</div>
+                            <div class="legend-item" style="background: #a5d6a7;">A善玉（編集可能）</div>
+                            <div class="legend-item" style="background: #ef9a9a;">A悪玉（編集可能）</div>
+                            <div class="legend-item" style="background: #bdbdbd; color: #616161;">B駒（未知・編集不可）</div>
                             <div class="legend-item" style="background: rgba(76, 175, 80, 0.3);">A脱出口</div>
                             <div class="legend-item" style="background: rgba(33, 150, 243, 0.3);">B脱出口</div>
                         </div>
@@ -703,18 +754,23 @@
                             <div class="selector-title">配置テンプレート：</div>
                             <div class="option-grid">
                                 <div class="option-button selected" onclick="selectModule('placement', 'standard', event)">
-                                    🎯 標準配置
-                                </div>
-                                <div class="option-button" onclick="selectModule('placement', 'aggressive', event)">
-                                    ⚔️ 攻撃配置
-                                </div>
-                                <div class="option-button" onclick="selectModule('placement', 'defensive', event)">
-                                    🛡️ 防御配置
+                                    標準配置
                                 </div>
                                 <div class="option-button" onclick="selectModule('placement', 'custom', event)">
-                                    ✏️ カスタム
+                                    カスタム
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- 説明欄 -->
+                        <div class="module-description">
+                            <h5>📝 配置戦略の説明</h5>
+                            <textarea id="placementDescription" placeholder="この配置戦略について説明してください...&#10;例：&#10;- 前線に悪玉を配置して相手を誘導&#10;- 善玉を後方で守備を固める&#10;- 脱出を狙いやすい位置に善玉を配置">修正エンジン対応配置：ガイスタールール準拠
+- プレイヤーAは下側（y=4,5）に配置（修正された座標系）
+- プレイヤーBは上側（y=0,1）に配置
+- 脱出口：A=相手陣地の上側角(0,0),(5,0)、B=下側角(0,5),(5,5)
+- 相手の駒配置は完全に未知として学習</textarea>
+                            <div class="description-hint">AIがこの配置を選択する理由や戦略を記載してください</div>
                         </div>
                         
                         <button class="run-button" onclick="runPlacement()">▶ 配置を実行</button>
@@ -735,18 +791,18 @@
                             <div class="config-item">
                                 <label class="config-label">🔢 量子ビット数（n_qubits）:</label>
                                 <div class="slider-container">
-                                    <input type="range" class="slider" id="qubitsSlider" min="4" max="12" value="8" 
+                                    <input type="range" class="slider" id="qubitsSlider" min="4" max="12" value="6" 
                                            oninput="updateSliderValue('qubits', this.value)">
-                                    <div class="value-display" id="qubitsValue">8</div>
+                                    <div class="value-display" id="qubitsValue">6</div>
                                 </div>
                             </div>
                             
                             <div class="config-item">
                                 <label class="config-label">📚 レイヤー数（n_layers）:</label>
                                 <div class="slider-container">
-                                    <input type="range" class="slider" id="layersSlider" min="1" max="5" value="3" 
+                                    <input type="range" class="slider" id="layersSlider" min="1" max="5" value="2" 
                                            oninput="updateSliderValue('layers', this.value)">
-                                    <div class="value-display" id="layersValue">3</div>
+                                    <div class="value-display" id="layersValue">2</div>
                                 </div>
                             </div>
                             
@@ -773,6 +829,35 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="module-selector" style="margin-top: 15px;">
+                                <div class="selector-title">🧠 状態チャンネル数：</div>
+                                <div class="option-grid">
+                                    <div class="option-button selected" onclick="selectModule('stateChannels', '7', event)">
+                                        7CH (252次元)
+                                    </div>
+                                    <div class="option-button" onclick="selectModule('stateChannels', '12', event)">
+                                        12CH (432次元) 🌟
+                                    </div>
+                                    <div class="option-button" onclick="selectModule('stateChannels', '16', event)">
+                                        16CH (576次元)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 説明欄 -->
+                        <div class="module-description">
+                            <h5>🔬 確率的量子推定システムの説明</h5>
+                            <div class="description-content">
+                                <strong>確率的量子推定器 (Probabilistic Quantum Estimator)</strong><br>
+                                • 8個の4qubit回路で各敵コマを独立推定<br>
+                                • 各コマの善玉確率を量子重ね合わせで計算<br>
+                                • 位置、移動パターン、周辺状況、戦術価値の4特徴を活用<br>
+                                • 70-75%の推定精度、10ms高速推論<br>
+                                • 252次元→16次元で情報損失を最小化<br>
+                                • 確率的推定により不確実性を含んだ戦略判断が可能
+                            </div>
                         </div>
                         
                         <button class="run-button" onclick="runQuantumConfig()">▶ 量子回路を構築</button>
@@ -790,20 +875,27 @@
                     <div class="notebook-cell">
                         <div class="cell-number">In [3]:</div>
                         <div class="module-selector">
-                            <div class="selector-title">報酬戦略を選択：</div>
+                            <div class="selector-title">報酬戦略：</div>
                             <div class="option-grid">
                                 <div class="option-button selected" onclick="selectModule('reward', 'balanced', event)">
                                     ⚖️ バランス型
                                 </div>
-                                <div class="option-button" onclick="selectModule('reward', 'aggressive', event)">
-                                    🗡️ 攻撃重視
-                                </div>
-                                <div class="option-button" onclick="selectModule('reward', 'defensive', event)">
-                                    🛡️ 防御重視
-                                </div>
-                                <div class="option-button" onclick="selectModule('reward', 'escape', event)">
-                                    🏃 脱出重視
-                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 説明欄 -->
+                        <div class="module-description">
+                            <h5>💰 報酬戦略の説明</h5>
+                            <div class="description-content">
+                                <strong>修正エンジン対応報酬設計（ガイスタールール準拠）</strong><br>
+                                • 相手の善玉を捕獲: +10ポイント（有利になる）<br>
+                                • 相手の悪玉を捕獲: -5ポイント（相手に有利を与える）<br>
+                                • 脱出成功: +100ポイント（勝利条件）<br>
+                                • 善玉が取られる: -20ポイント（不利になる）<br>
+                                • 悪玉を取らせる: +10ポイント（戦略的価値）<br>
+                                • 相手陣地への前進: +3ポイント（脱出への道筋）<br>
+                                • 中央制御: +1ポイント（盤面支配）<br>
+                                • AIがどのような行動を学習するかを決める重要な要素です
                             </div>
                         </div>
                         
@@ -827,15 +919,21 @@
                                 <div class="option-button selected" onclick="selectModule('qmap', 'dqn', event)">
                                     🧠 DQN
                                 </div>
-                                <div class="option-button" onclick="selectModule('qmap', 'sarsa', event)">
-                                    📈 SARSA
-                                </div>
-                                <div class="option-button" onclick="selectModule('qmap', 'montecarlo', event)">
-                                    🎲 モンテカルロ
-                                </div>
-                                <div class="option-button" onclick="selectModule('qmap', 'tabular', event)">
-                                    📊 テーブル型
-                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 説明欄 -->
+                        <div class="module-description">
+                            <h5>🗺️ Q値学習方式の説明</h5>
+                            <div class="description-content">
+                                <strong>修正エンジン対応 Deep Q-Network (DQN) - 拡張可能チャンネル</strong><br>
+                                • 6×6×7の状態空間を252次元で表現<br>
+                                • 基本7チャンネル：自分善玉・悪玉、相手駒、確認済み相手善玉・悪玉、移動可能位置、脱出位置<br>
+                                • 5つのアクション（4方向移動 + 脱出）に対応<br>
+                                • DebugGeisterGameエンジンとの完全統合<br>
+                                • 経験再生によるサンプル効率の向上<br>
+                                • 価値関数近似による複雑な戦略学習<br>
+                                • 量子推定器との統合で高精度判断を実現
                             </div>
                         </div>
                         
@@ -859,16 +957,19 @@
                                 <div class="option-button selected" onclick="selectModule('action', 'epsilon', event)">
                                     🎰 ε-greedy
                                 </div>
-                                <div class="option-button" onclick="selectModule('action', 'boltzmann', event)">
-                                    🌡️ ボルツマン
-                                </div>
-                                <div class="option-button" onclick="selectModule('action', 'ucb', event)">
-                                    📊 UCB
-                                </div>
-                                <div class="option-button" onclick="selectModule('action', 'thompson', event)">
-                                    🎲 トンプソン
-                                </div>
                             </div>
+                        </div>
+
+                        <!-- 説明欄 -->
+                        <div class="module-description">
+                            <h5>🎯 行動選択戦略の説明</h5>
+                            <textarea id="actionDescription" placeholder="行動選択の方式について説明してください...&#10;例：&#10;- ε-greedyの探索率設定理由&#10;- 温度パラメータの調整方針&#10;- 学習段階での戦略変更">ε-greedy戦略
+- 初期探索率ε=0.1で未知の行動も試行
+- 学習進行に従いε減衰(0.995)で徐々に活用重視
+- 最小探索率0.01で常に新しい可能性を保持
+- 量子推定の不確実性を考慮した適度な探索
+- ガイスター特有の情報戦に対応した慎重な戦略</textarea>
+                            <div class="description-hint">探索と活用のバランスをどのように調整するかを説明してください</div>
                         </div>
                         
                         <button class="run-button" onclick="runAction()">▶ 行動選択戦略を設定</button>
@@ -985,52 +1086,6 @@
                     </div>
                 </div>
 
-                <!-- 教師あり学習固有のパラメータ -->
-                <div class="param-section" id="slParams" style="display: none;">
-                    <div class="param-section-title">
-                        <span>📚</span>
-                        教師あり学習パラメータ
-                    </div>
-                    <div class="param-grid">
-                        <div class="param-item">
-                            <label class="param-label">
-                                <span>📂</span> データセットパス
-                            </label>
-                            <input type="text" class="param-input" placeholder="path/to/dataset.csv" id="datasetPath">
-                        </div>
-                        <div class="param-item">
-                            <label class="param-label">
-                                <span>🔀</span> データ拡張
-                            </label>
-                            <select class="param-input" id="augmentation">
-                                <option value="none">なし</option>
-                                <option value="rotation">回転</option>
-                                <option value="flip">反転</option>
-                                <option value="all" selected>すべて</option>
-                            </select>
-                        </div>
-                        <div class="param-item">
-                            <label class="param-label">
-                                <span>⚖️</span> クラス重み付け
-                            </label>
-                            <select class="param-input" id="classWeight">
-                                <option value="none">なし</option>
-                                <option value="balanced" selected>バランス</option>
-                                <option value="custom">カスタム</option>
-                            </select>
-                        </div>
-                        <div class="param-item">
-                            <label class="param-label">
-                                <span>📊</span> 損失関数
-                            </label>
-                            <select class="param-input" id="lossFunction">
-                                <option value="cross_entropy" selected>クロスエントロピー</option>
-                                <option value="mse">MSE</option>
-                                <option value="focal">Focal Loss</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- 最適化設定 -->
                 <div class="param-section">
@@ -1164,19 +1219,27 @@
                         cell.title = 'プレイヤーB配置エリア';
                     }
                     
-                    // 脱出口の表示
-                    if ((i === 5 && j === 0) || (i === 5 && j === 5)) {
+                    // 脱出口の表示（正しいガイスタールール）
+                    if ((i === 0 && j === 0) || (i === 0 && j === 5)) {
                         cell.classList.add('escape-a');
-                        cell.title = 'プレイヤーA脱出口';
+                        cell.title = 'プレイヤーA脱出口（相手陣地の角）';
                         cell.textContent = '🚪';
                     }
-                    if ((i === 0 && j === 0) || (i === 0 && j === 5)) {
+                    if ((i === 5 && j === 0) || (i === 5 && j === 5)) {
                         cell.classList.add('escape-b');
-                        cell.title = 'プレイヤーB脱出口';
+                        cell.title = 'プレイヤーB脱出口（相手陣地の角）';
                         cell.textContent = '🚪';
                     }
                     
-                    cell.onclick = () => togglePiece(i, j);
+                    // 敵エリア（上2行）以外にクリックイベントを設定
+                    if (i > 1) {
+                        cell.onclick = () => togglePiece(i, j);
+                    } else {
+                        // 敵エリアには警告メッセージのみ
+                        cell.onclick = () => {
+                            alert('相手の駒エリアは編集できません（ガイスタールール）');
+                        };
+                    }
                     board.appendChild(cell);
                 }
             }
@@ -1312,12 +1375,12 @@ ${strategies[config.action]}`;
                     cell.classList.add('player-b-area');
                 }
                 
-                // 脱出口表示を再追加
-                if ((row === 5 && col === 0) || (row === 5 && col === 5)) {
+                // 脱出口表示を再追加（正しいルール）
+                if ((row === 0 && col === 0) || (row === 0 && col === 5)) {
                     cell.classList.add('escape-a');
                     if (value === 0) cell.textContent = '🚪';
                 }
-                if ((row === 0 && col === 0) || (row === 0 && col === 5)) {
+                if ((row === 5 && col === 0) || (row === 5 && col === 5)) {
                     cell.classList.add('escape-b');
                     if (value === 0) cell.textContent = '🚪';
                 }
@@ -1334,17 +1397,23 @@ ${strategies[config.action]}`;
                 } else if (value === 2) {
                     cell.classList.add('player-b-good');
                     cell.textContent = '○';
-                    cell.title = 'プレイヤーB 善玉';
+                    cell.title = '相手駒（善玉/悪玉不明）';
                 } else if (value === -2) {
                     cell.classList.add('player-b-bad');
                     cell.textContent = '●';
-                    cell.title = 'プレイヤーB 悪玉';
+                    cell.title = '相手駒（善玉/悪玉不明）';
                 }
             });
         }
 
         // ピース切り替え（カスタムモード時）
         function togglePiece(row, col) {
+            // 敵エリア（上2行）はクリック不可
+            if (row <= 1) {
+                alert('相手の駒エリアは編集できません（ガイスタールール）');
+                return;
+            }
+
             if (config.placement !== 'custom') {
                 alert('カスタムモードを選択してから駒を編集してください');
                 return;
@@ -1371,10 +1440,8 @@ ${strategies[config.action]}`;
             if (isPlayerAArea) {
                 // プレイヤーAエリア: 0 → 1(善玉) → -1(悪玉) → 0
                 next = current === 0 ? 1 : current === 1 ? -1 : 0;
-            } else if (isPlayerBArea) {
-                // プレイヤーBエリア: 0 → 2(善玉) → -2(悪玉) → 0
-                next = current === 0 ? 2 : current === 2 ? -2 : 0;
             }
+            // プレイヤーBエリアは編集不可（ガイスタールール準拠）
             
             config.board[row][col] = next;
             updateBoardDisplay();
@@ -1409,13 +1476,8 @@ ${strategies[config.action]}`;
             goToStep(3);
             
             // 学習方法に応じてパラメータセクションを表示/非表示
-            if (config.learningMethod === 'reinforcement') {
-                document.getElementById('rlParams').style.display = 'block';
-                document.getElementById('slParams').style.display = 'none';
-            } else {
-                document.getElementById('rlParams').style.display = 'none';
-                document.getElementById('slParams').style.display = 'block';
-            }
+            // 強化学習のみ
+            document.getElementById('rlParams').style.display = 'block';
         }
 
         // ステップ遷移
@@ -1518,20 +1580,64 @@ ${strategies[config.action]}`;
 
         // コード生成
         function generateCode() {
+            // 説明欄の内容を取得（textareaとdivの両方に対応）
+            const placementDesc = document.getElementById('placementDescription')?.value || 
+                                document.querySelector('#step2 .module-card:nth-child(1) .description-content')?.textContent?.trim() ||
+                                '修正エンジン対応配置：ガイスタールール準拠';
+            const quantumDesc = document.getElementById('quantumDescription')?.value || 
+                              document.querySelector('#step2 .module-card:nth-child(2) .description-content')?.textContent?.trim() ||
+                              '確率的量子推定器による敵コマの善玉/悪玉確率推定';
+            const rewardDesc = document.getElementById('rewardDescription')?.value || 
+                             document.querySelector('#step2 .module-card:nth-child(3) .description-content')?.textContent?.trim() ||
+                             'バランス型報酬関数：捕獲・脱出・戦略的行動を総合評価';
+            const qmapDesc = document.getElementById('qmapDescription')?.value || 
+                           document.querySelector('#step2 .module-card:nth-child(4) .description-content')?.textContent?.trim() ||
+                           'DQNによるQ値学習：深層強化学習で価値関数を近似';
+            const actionDesc = document.getElementById('actionDescription')?.value || 
+                             document.querySelector('#step2 .module-card:nth-child(5) .description-content')?.textContent?.trim() ||
+                             'ε-greedy戦略：探索と活用のバランスを動的調整';
+
             const code = `# ============================================
 # Quantum Battle System - Auto-Generated Code
 # ============================================
 # 学習方法: ${config.learningMethod === 'reinforcement' ? '強化学習' : '教師あり学習'}
 # 生成日時: ${new Date().toLocaleString('ja-JP')}
+#
+# ===== AI設計説明 =====
+# 
+# 【モジュール1: 初期配置戦略】
+${placementDesc.split('\n').map(line => '# ' + line).join('\n')}
+# 
+# 【モジュール2: 量子推定システム】  
+${quantumDesc.split('\n').map(line => '# ' + line).join('\n')}
+# 
+# 【モジュール3: 報酬戦略】
+${rewardDesc.split('\n').map(line => '# ' + line).join('\n')}
+# 
+# 【モジュール4: Q値学習方式】
+${qmapDesc.split('\n').map(line => '# ' + line).join('\n')}
+# 
+# 【モジュール5: 行動選択戦略】
+${actionDesc.split('\n').map(line => '# ' + line).join('\n')}
+# 
+# ============================================
 
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from quantum_battle_system import QuantumBattleSystem
+import sys
+import os
+from pathlib import Path
 
-# ===== システム初期化 =====
-system = QuantumBattleSystem()
+# 修正されたゲームエンジンのインポート
+sys.path.append(str(Path(__file__).parent))
+sys.path.append(str(Path(__file__).parent / "src"))
+from src.qugeister_competitive.debug_game_viewer import DebugGeisterGame
+from src.qugeister_competitive.ai_base import BaseAI
+
+# ===== ゲームエンジン初期化（修正版） =====
+game_engine = DebugGeisterGame()
 
 # ===== 学習方法の設定 =====
 learning_config = {
@@ -1541,12 +1647,21 @@ learning_config = {
 
 # ===== モジュール設定 =====
 module_config = {
-    # モジュール1: 初期配置
+    # モジュール1: 初期配置（修正されたエンジン対応 - プレイヤーA下側配置）
     'placement': {
         'type': '${config.placement}',
-        'board': np.array([
-${config.board.map(row => '            ' + JSON.stringify(row)).join(',\n')}
-        ])
+        'player_a_bottom': True,    # プレイヤーAは下側（y=4,5）に配置
+        'player_b_top': True,       # プレイヤーBは上側（y=0,1）に配置
+        'my_pieces_only': np.array([
+${config.board.slice(4, 6).map(row => '            ' + JSON.stringify(row.map(val => (val === 1 || val === -1) ? val : 0))).join(',\n')}
+        ]),
+        'escape_positions': {
+            'player_a': [(0, 0), (5, 0)],  # A脱出口：相手陣地（上側角）
+            'player_b': [(0, 5), (5, 5)]   # B脱出口：相手陣地（下側角）
+        },
+        'coordinate_system': 'corrected',  # 修正された座標系
+        'opponent_unknown': True,          # 相手の駒配置は完全に未知
+        'rule_compliant': True            # ガイスタールール準拠
     },
     
     # モジュール2: 敵駒推定（CQCNN）
@@ -1558,19 +1673,57 @@ ${config.board.map(row => '            ' + JSON.stringify(row)).join(',\n')}
         'total_params': ${config.qubits * config.layers * 3}
     },
     
-    # モジュール3: 報酬関数
+    # モジュール3: 報酬関数（修正されたルール対応）
     'reward': {
         'strategy': '${config.reward}',
-        'capture_reward': ${config.reward === 'aggressive' ? 20 : config.reward === 'defensive' ? 5 : 10},
+        'capture_good_reward': ${config.reward === 'aggressive' ? 20 : config.reward === 'defensive' ? 5 : 10},
+        'capture_bad_penalty': -5,        # 相手の悪玉を取ることはマイナス
         'escape_reward': ${config.reward === 'escape' ? 100 : config.reward === 'defensive' ? 40 : 50},
-        'captured_penalty': ${config.reward === 'defensive' ? -20 : -10}
+        'captured_good_penalty': ${config.reward === 'defensive' ? -30 : -20},  # 善玉を取られる
+        'captured_bad_reward': 10,        # 悪玉を取らせる（戦略的）
+        'win_condition_rewards': {
+            'escape_win': 100,            # 脱出勝利
+            'eliminate_all_good': 100,    # 相手善玉全取得
+            'eliminate_all_bad': 100      # 相手悪玉全取らせ
+        },
+        'position_rewards': {
+            'advance_toward_escape': 2,   # 脱出口への前進
+            'center_control': 1,          # 中央制御
+            'opponent_territory': 3       # 相手陣地への侵入
+        }
     },
     
-    # モジュール4: Q値計算
+    # モジュール4: Q値計算（修正されたエンジン対応）
     'qmap': {
         'method': '${config.qmap}',
-        'state_dim': 144,  # 6x6x4
-        'action_dim': 4     # 4方向
+        'state_dim': ${config.stateChannels ? config.stateChannels * 36 : 252},  # 6x6x${config.stateChannels || 7}チャンネル
+        'action_dim': 5,         # 4方向 + 脱出
+        'selected_channels': ${config.stateChannels || 7},
+        'state_channels': {
+            'my_good_pieces': 1,     # 自分の善玉位置
+            'my_bad_pieces': 1,      # 自分の悪玉位置  
+            'opponent_pieces': 1,    # 相手の駒位置（種類不明）
+            'known_opponent_good': 1, # 確認済み相手善玉
+            'known_opponent_bad': 1,  # 確認済み相手悪玉
+            'legal_moves': 1,        # 移動可能位置
+            'escape_positions': 1,   # 脱出可能位置
+            ${config.stateChannels >= 12 ? `
+            'opponent_escape_routes': 1,  # 相手の脱出経路
+            'attack_positions': 1,        # 攻撃可能位置
+            'danger_zones': 1,            # 危険地帯
+            'territory_control': 1,       # 制圧領域
+            'escape_blocking': 1,         # 脱出阻止位置
+            ` : ''}
+            ${config.stateChannels >= 16 ? `
+            'piece_value_map': 1,         # 駒価値マップ
+            'movement_history': 1,        # 移動履歴
+            'turn_phase': 1,              # ゲーム段階
+            'opponent_intention': 1,      # 相手意図推定
+            ` : ''}
+        },
+        'legal_moves_only': True, # 合法手のみ考慮
+        'game_engine': 'DebugGeisterGame',  # 使用するゲームエンジン
+        'move_validation': True   # 手の有効性検証
     },
     
     # モジュール5: 行動選択
@@ -1609,25 +1762,57 @@ hyperparameters = {
     'loss_function': '${document.getElementById('lossFunction').value}',`}
 }
 
-# ===== モデル構築 =====
-class QuantumBattleAI(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        self.config = config
+# ===== モデル構築（修正されたエンジン対応） =====
+class CorrectedQuantumBattleAI(BaseAI, nn.Module):
+    def __init__(self, name="QuantumBattleAI", player_id="B"):
+        BaseAI.__init__(self, name, player_id)
+        nn.Module.__init__(self)
+        self.config = module_config
         
         # CQCNNエンコーダ
         self.quantum_encoder = self._build_quantum_encoder()
         
-        # 古典的デコーダ
+        # 古典的デコーダ（脱出アクション対応）
         self.classical_decoder = nn.Sequential(
-            nn.Linear(config['quantum']['n_qubits'], 128),
+            nn.Linear(self.config['quantum']['n_qubits'], 128),
             nn.ReLU(),
             nn.Dropout(hyperparameters['dropout_rate']),
             nn.Linear(128, 64),
             nn.ReLU(),
             nn.Dropout(hyperparameters['dropout_rate']),
-            nn.Linear(64, 4)  # 4方向の行動
+            nn.Linear(64, 5)  # 4方向 + 脱出アクション
         )
+    
+    def get_move(self, game_state, legal_moves):
+        """修正されたエンジン用の手選択（BaseAI抽象メソッド実装）"""
+        if not legal_moves:
+            return None
+        
+        # 脱出可能手を最優先
+        escape_moves = [move for move in legal_moves if isinstance(move[1], str) and move[1] == "ESCAPE"]
+        if escape_moves and self.config['reward']['strategy'] == 'escape':
+            return escape_moves[0]
+        
+        # 量子ネットワークで評価
+        state_tensor = self._encode_game_state(game_state)
+        q_values = self.forward(state_tensor)
+        
+        # 合法手のみから選択
+        best_move = None
+        best_value = float('-inf')
+        
+        for move in legal_moves:
+            move_idx = self._move_to_index(move)
+            if move_idx < len(q_values) and q_values[move_idx] > best_value:
+                best_value = q_values[move_idx]
+                best_move = move
+        
+        return best_move if best_move else legal_moves[0]
+    
+    def choose_action(self, game_state):
+        """human_vs_ai_battle.py用のアクション選択"""
+        legal_moves = game_state.get_legal_moves(self.player_id)
+        return self.get_move(game_state, legal_moves)
     
     def _build_quantum_encoder(self):
         # 量子回路の構築
@@ -1668,6 +1853,67 @@ class QuantumBattleAI(nn.Module):
             return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
         
         return quantum_circuit
+    
+    def _encode_game_state(self, game_state):
+        """ゲーム状態を7チャンネルテンソルにエンコード"""
+        import torch
+        import numpy as np
+        
+        # 6x6x7のテンソルを初期化
+        state_tensor = torch.zeros(7, 6, 6)
+        
+        # チャンネル0: 自分の善玉位置
+        my_pieces = game_state.player_a_pieces if self.player_id == "A" else game_state.player_b_pieces
+        for (x, y), piece_type in my_pieces.items():
+            if piece_type == "good":
+                state_tensor[0, y, x] = 1
+        
+        # チャンネル1: 自分の悪玉位置
+        for (x, y), piece_type in my_pieces.items():
+            if piece_type == "bad":
+                state_tensor[1, y, x] = 1
+        
+        # チャンネル2: 相手の駒位置（種類不明）
+        opponent_pieces = game_state.player_b_pieces if self.player_id == "A" else game_state.player_a_pieces
+        for (x, y), piece_type in opponent_pieces.items():
+            state_tensor[2, y, x] = 1
+        
+        # チャンネル3&4: 確認済み相手善玉・悪玉（簡易実装）
+        # 実際の実装では、過去の捕獲情報から推定
+        
+        # チャンネル5: 移動可能位置
+        legal_moves = game_state.get_legal_moves(self.player_id)
+        for move in legal_moves:
+            if len(move) == 2 and isinstance(move[1], tuple):
+                from_pos, to_pos = move
+                x, y = to_pos
+                state_tensor[5, y, x] = 1
+        
+        # チャンネル6: 脱出可能位置
+        escape_positions = self.config['placement']['escape_positions']
+        if self.player_id in escape_positions:
+            for x, y in escape_positions[self.player_id]:
+                state_tensor[6, y, x] = 1
+        
+        return state_tensor.flatten()  # 252次元に平坦化
+    
+    def _move_to_index(self, move):
+        """移動を行動インデックスに変換"""
+        if len(move) == 2 and move[1] == "ESCAPE":
+            return 4  # 脱出アクション
+        
+        # 4方向移動を0-3にマップ
+        if len(move) == 2:
+            from_pos, to_pos = move
+            dx = to_pos[0] - from_pos[0]
+            dy = to_pos[1] - from_pos[1]
+            
+            if dx == 0 and dy == -1: return 0  # 上
+            elif dx == 1 and dy == 0: return 1  # 右
+            elif dx == 0 and dy == 1: return 2  # 下
+            elif dx == -1 and dy == 0: return 3  # 左
+        
+        return 0  # デフォルト
     
     def forward(self, x):
         # 量子エンコーディング
@@ -1832,7 +2078,7 @@ def train_model(model, config, hyperparameters):
 # ===== メイン実行 =====
 if __name__ == "__main__":
     # モデル初期化
-    model = QuantumBattleAI(module_config)
+    model = CorrectedQuantumBattleAI()
     
     print("========================================")
     print("Quantum Battle System - Training Started")

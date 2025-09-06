@@ -22,27 +22,29 @@ class DebugGeisterGame:
         self.turn = 0
         self.current_player = "A"
 
-        # 初期配置（デフォルト）
+        # 初期配置（正しいガイスター配置）
+        # プレイヤーA（青/先手）は下側（y=4,5）に配置
         self.player_a_pieces = {
-            (1, 0): "good",
-            (2, 0): "good",
-            (3, 0): "good",
-            (4, 0): "good",
-            (1, 1): "bad",
-            (2, 1): "bad",
-            (3, 1): "bad",
-            (4, 1): "bad",
+            (1, 4): "good",
+            (2, 4): "good",
+            (3, 4): "good",
+            (4, 4): "good",
+            (1, 5): "bad",
+            (2, 5): "bad",
+            (3, 5): "bad",
+            (4, 5): "bad",
         }
 
+        # プレイヤーB（赤/後手）は上側（y=0,1）に配置
         self.player_b_pieces = {
-            (1, 5): "good",
-            (2, 5): "good",
-            (3, 5): "good",
-            (4, 5): "good",
-            (1, 4): "bad",
-            (2, 4): "bad",
-            (3, 4): "bad",
-            (4, 4): "bad",
+            (1, 1): "good",
+            (2, 1): "good",
+            (3, 1): "good",
+            (4, 1): "good",
+            (1, 0): "bad",
+            (2, 0): "bad",
+            (3, 0): "bad",
+            (4, 0): "bad",
         }
 
         # ボードに駒を配置
@@ -68,11 +70,11 @@ class DebugGeisterGame:
         pieces = self.player_a_pieces if player == "A" else self.player_b_pieces
         legal_moves = []
 
-        # 正しい脱出口の定義
+        # 正しい脱出口の定義（プレイヤーAは下側、Bは上側に配置）
         if player == "A":
-            escape_positions = [(0, 5), (5, 5)]  # Aは相手陣地（上側）から脱出
+            escape_positions = [(0, 0), (5, 0)]  # Aは相手陣地（上側）から脱出
         else:
-            escape_positions = [(0, 0), (5, 0)]  # Bは相手陣地（下側）から脱出
+            escape_positions = [(0, 5), (5, 5)]  # Bは相手陣地（下側）から脱出
 
         for pos in pieces.keys():
             x, y = pos
@@ -156,9 +158,9 @@ class DebugGeisterGame:
         print(f"📋 手#{self.turn}: {self.current_player} {from_pos} → {to_pos} ({piece_type})")
 
         # 脱出口到達の通知（正しい脱出口）
-        if self.current_player == "A" and (to_pos == (0, 5) or to_pos == (5, 5)) and piece_type == "good":
+        if self.current_player == "A" and (to_pos == (0, 0) or to_pos == (5, 0)) and piece_type == "good":
             print(f"🚪 プレイヤーAの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能")
-        elif self.current_player == "B" and (to_pos == (0, 0) or to_pos == (5, 0)) and piece_type == "good":
+        elif self.current_player == "B" and (to_pos == (0, 5) or to_pos == (5, 5)) and piece_type == "good":
             print(f"🚪 プレイヤーBの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能")
 
         # その他の勝利判定
@@ -244,8 +246,8 @@ class DebugGUI:
         self.title_font = pygame.font.Font(None, 36)
 
         # レイアウト
-        self.board_size = 400
-        self.cell_size = self.board_size // 6
+        self.cell_size = 70  # 6で割り切れる値に変更
+        self.board_size = self.cell_size * 6  # 420
         self.board_x = 50
         self.board_y = 100
 
@@ -265,12 +267,16 @@ class DebugGUI:
     def get_cell_from_mouse(self, mouse_pos):
         """マウス位置からセル座標を取得"""
         mx, my = mouse_pos
+        # 境界チェックを修正（最後のピクセルも含める）
         if (
-            self.board_x <= mx <= self.board_x + self.board_size
-            and self.board_y <= my <= self.board_y + self.board_size
+            self.board_x <= mx < self.board_x + self.board_size
+            and self.board_y <= my < self.board_y + self.board_size
         ):
             x = (mx - self.board_x) // self.cell_size
             y = (my - self.board_y) // self.cell_size
+            # デバッグ出力
+            if y == 5:  # 最下段の場合
+                print(f"Debug: Mouse at ({mx}, {my}) -> Cell ({x}, {y})")
             if 0 <= x < 6 and 0 <= y < 6:
                 return (x, y)
         return None
@@ -304,10 +310,10 @@ class DebugGUI:
 
                 # 脱出可能かチェック（正しい脱出口）
                 escape_positions = (
-                    [(0, 5), (5, 5)]
-                    if self.game.current_player == "A"  # Aは相手陣地から脱出
-                    else [(0, 0), (5, 0)]
-                )  # Bは相手陣地から脱出
+                    [(0, 0), (5, 0)]
+                    if self.game.current_player == "A"  # Aは相手陣地（上側）から脱出
+                    else [(0, 5), (5, 5)]
+                )  # Bは相手陣地（下側）から脱出
                 if cell in escape_positions and piece_type == "good":
                     print("🚪 この駒は相手陣地の脱出口にいます！右クリックまたはESCキーで脱出")
         else:
@@ -360,8 +366,8 @@ class DebugGUI:
         pygame.draw.rect(self.screen, self.colors["board"], board_rect)
 
         # 脱出口をハイライト（正しい脱出口）
-        escape_positions_a = [(0, 5), (5, 5)]  # Aの脱出口（相手陣地）
-        escape_positions_b = [(0, 0), (5, 0)]  # Bの脱出口（相手陣地）
+        escape_positions_a = [(0, 0), (5, 0)]  # Aの脱出口（相手陣地・上側）
+        escape_positions_b = [(0, 5), (5, 5)]  # Bの脱出口（相手陣地・下側）
 
         for x, y in escape_positions_a + escape_positions_b:
             cell_rect = pygame.Rect(

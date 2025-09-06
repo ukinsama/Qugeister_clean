@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Geister AI Demo - 3 Step Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* ステップナビゲーション */
+        .step-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin: 0 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-number {
+            background: #667eea;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .step-item.completed .step-number {
+            background: #4CAF50;
+        }
+
+        .step-label {
+            font-weight: 500;
+            color: #666;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        .step-item.active .step-label {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .step-item.completed .step-label {
+            color: #4CAF50;
+        }
+
+        /* ステップコンテンツ */
+        .step-content {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Step 1: 量子推定器選択 */
+        .estimator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .estimator-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .estimator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .estimator-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .estimator-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .estimator-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .estimator-specs {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .estimator-description {
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        /* Step 2: パラメータ設定 */
+        .param-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .param-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .param-section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .param-item {
+            margin-bottom: 20px;
+        }
+
+        .param-label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .value-display {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* Step 3: コード生成 */
+        .code-section {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .code-title {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .copy-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .code-display {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* ナビゲーションボタン */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .nav-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .nav-button.next {
+            background: #4CAF50;
+        }
+
+        .nav-button.next:hover {
+            background: #45a049;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .param-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-navigation {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .step-item {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダー -->
+        <div class="header">
+            <h1>🔮 Quantum Geister AI Demo</h1>
+            <p>量子計算による敵コマ推定システム - 3ステップでAI構築</p>
+        </div>
+
+        <!-- ステップナビゲーション -->
+        <div class="step-navigation">
+            <div class="step-item active" id="nav-step1" onclick="goToStep(1)">
+                <div class="step-number">1</div>
+                <div class="step-label">推定器選択</div>
+            </div>
+            <div class="step-item" id="nav-step2" onclick="goToStep(2)">
+                <div class="step-number">2</div>
+                <div class="step-label">パラメータ設定</div>
+            </div>
+            <div class="step-item" id="nav-step3" onclick="goToStep(3)">
+                <div class="step-number">3</div>
+                <div class="step-label">コード生成</div>
+            </div>
+        </div>
+
+        <!-- Step 1: 量子推定器選択 -->
+        <div class="step-content active" id="step1">
+            <div class="step-title">⚛️ 量子推定器を選択</div>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                ゲームの用途に応じて最適な敵コマ推定方式を選択してください
+            </p>
+            
+            <div class="estimator-grid">
+                <div class="estimator-card" id="probabilistic-card" onclick="selectEstimator('probabilistic')">
+                    <div class="estimator-icon">🎲</div>
+                    <div class="estimator-title">確率的推定器</div>
+                    <div class="estimator-specs">
+                        <strong>精度:</strong> 70-75% | <strong>速度:</strong> 10ms<br>
+                        <strong>メモリ:</strong> 50MB | <strong>複雑度:</strong> 低
+                    </div>
+                    <div class="estimator-description">
+                        各敵コマを独立して善玉確率を推定。シンプルで理解しやすく、初心者向けAIや高速対戦に最適。
+                    </div>
+                </div>
+
+                <div class="estimator-card" id="correlative-card" onclick="selectEstimator('correlative')">
+                    <div class="estimator-icon">🔗</div>
+                    <div class="estimator-title">相関型推定器</div>
+                    <div class="estimator-specs">
+                        <strong>精度:</strong> 80-85% | <strong>速度:</strong> 15ms<br>
+                        <strong>メモリ:</strong> 80MB | <strong>複雑度:</strong> 中
+                    </div>
+                    <div class="estimator-description">
+                        コマ間の相関を量子エンタングルメントで表現。相手の配置戦略を推定し、大会レベルの対戦に対応。
+                    </div>
+                </div>
+
+                <div class="estimator-card" id="temporal-card" onclick="selectEstimator('temporal')">
+                    <div class="estimator-icon">⏰</div>
+                    <div class="estimator-title">時系列推定器</div>
+                    <div class="estimator-specs">
+                        <strong>精度:</strong> 85-90% | <strong>速度:</strong> 20ms<br>
+                        <strong>メモリ:</strong> 120MB | <strong>複雑度:</strong> 高
+                    </div>
+                    <div class="estimator-description">
+                        過去の行動履歴から学習。相手の癖や戦略パターンを検出し、マスターレベルの対戦に対応。
+                    </div>
+                </div>
+
+                <div class="estimator-card" id="ensemble-card" onclick="selectEstimator('ensemble')">
+                    <div class="estimator-icon">🎭</div>
+                    <div class="estimator-title">アンサンブル推定器</div>
+                    <div class="estimator-specs">
+                        <strong>精度:</strong> 90-95% | <strong>速度:</strong> 35ms<br>
+                        <strong>メモリ:</strong> 200MB | <strong>複雑度:</strong> 最高
+                    </div>
+                    <div class="estimator-description">
+                        複数推定器を統合した最高精度版。研究用途や最重要対戦での使用を想定。計算コストが高い。
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="nav-button" disabled>← 前へ</button>
+                <button class="nav-button next" onclick="nextStep()" id="step1-next" disabled>次へ →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: パラメータ設定 -->
+        <div class="step-content" id="step2">
+            <div class="step-title">⚙️ パラメータ設定</div>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                選択した推定器の動作パラメータを調整してください
+            </p>
+
+            <div class="param-grid">
+                <!-- 量子回路パラメータ -->
+                <div class="param-section">
+                    <div class="param-section-title">
+                        <span>⚛️</span>量子回路設定
+                    </div>
+                    
+                    <div class="param-item">
+                        <label class="param-label">量子ビット数 (n_qubits)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="qubitsSlider" 
+                                   min="4" max="8" value="4" 
+                                   oninput="updateQuantumParams()">
+                            <div class="value-display" id="qubitsValue">4</div>
+                        </div>
+                    </div>
+
+                    <div class="param-item">
+                        <label class="param-label">レイヤー数 (n_layers)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="layersSlider" 
+                                   min="2" max="5" value="3" 
+                                   oninput="updateQuantumParams()">
+                            <div class="value-display" id="layersValue">3</div>
+                        </div>
+                    </div>
+
+                    <div class="param-item" id="memoryParam" style="display: none;">
+                        <label class="param-label">メモリ長 (時系列用)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="memorySlider" 
+                                   min="3" max="10" value="5" 
+                                   oninput="updateQuantumParams()">
+                            <div class="value-display" id="memoryValue">5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学習パラメータ -->
+                <div class="param-section">
+                    <div class="param-section-title">
+                        <span>📚</span>学習設定
+                    </div>
+                    
+                    <div class="param-item">
+                        <label class="param-label">学習率 (learning_rate)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="lrSlider" 
+                                   min="-4" max="-2" value="-3" step="0.1" 
+                                   oninput="updateLearningParams()">
+                            <div class="value-display" id="lrValue">0.001</div>
+                        </div>
+                    </div>
+
+                    <div class="param-item">
+                        <label class="param-label">探索率 (epsilon)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="epsilonSlider" 
+                                   min="0.05" max="0.3" value="0.1" step="0.01" 
+                                   oninput="updateLearningParams()">
+                            <div class="value-display" id="epsilonValue">0.1</div>
+                        </div>
+                    </div>
+
+                    <div class="param-item">
+                        <label class="param-label">探索減衰率 (epsilon_decay)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" id="decaySlider" 
+                                   min="0.990" max="0.999" value="0.995" step="0.001" 
+                                   oninput="updateLearningParams()">
+                            <div class="value-display" id="decayValue">0.995</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- パラメータ説明 -->
+            <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h4 style="color: #667eea; margin-bottom: 10px;">📝 パラメータの説明</h4>
+                <div id="paramExplanation">推定器を選択すると、パラメータの詳細説明が表示されます。</div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="nav-button" onclick="prevStep()">← 前へ</button>
+                <button class="nav-button next" onclick="nextStep()">次へ →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: コード生成 -->
+        <div class="step-content" id="step3">
+            <div class="step-title">🚀 AI構築コード生成</div>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                設定に基づいてPythonコードを自動生成します
+            </p>
+
+            <!-- 設定サマリー -->
+            <div style="background: #f0f4ff; padding: 25px; border-radius: 15px; margin-bottom: 30px;">
+                <h4 style="color: #667eea; margin-bottom: 15px;">📋 構成サマリー</h4>
+                <div id="configSummary">
+                    設定を完了すると、AI構成の詳細が表示されます。
+                </div>
+            </div>
+
+            <!-- コード出力 -->
+            <div class="code-section">
+                <div class="code-header">
+                    <div class="code-title">📝 生成されたPythonコード</div>
+                    <button class="copy-button" onclick="copyCode()" id="copyBtn" disabled>📋 コピー</button>
+                </div>
+                <div class="code-display" id="generatedCode">
+                    ここに生成されたコードが表示されます...
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="nav-button" onclick="prevStep()">← 前へ</button>
+                <button class="nav-button next" onclick="generateFinalCode()" style="background: #4CAF50;">🚀 最終コード生成</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // グローバル変数
+        let currentStep = 1;
+        let selectedEstimator = null;
+        let config = {
+            estimator_type: null,
+            n_qubits: 4,
+            n_layers: 3,
+            memory_length: 5,
+            learning_rate: 0.001,
+            epsilon: 0.1,
+            epsilon_decay: 0.995
+        };
+
+        // ステップ切り替え
+        function goToStep(step) {
+            if (step < currentStep || (step === currentStep + 1 && validateCurrentStep())) {
+                // 現在のステップを非表示
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                document.getElementById(`nav-step${currentStep}`).classList.remove('active');
+                
+                // 新しいステップを表示
+                currentStep = step;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                document.getElementById(`nav-step${currentStep}`).classList.add('active');
+                
+                // 完了したステップをマーク
+                for (let i = 1; i < currentStep; i++) {
+                    document.getElementById(`nav-step${i}`).classList.add('completed');
+                }
+                
+                // ステップ固有の処理
+                if (currentStep === 2) {
+                    updateParameterVisibility();
+                } else if (currentStep === 3) {
+                    updateConfigSummary();
+                    generateCode();
+                }
+            }
+        }
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        function validateCurrentStep() {
+            if (currentStep === 1) {
+                return selectedEstimator !== null;
+            }
+            return true;
+        }
+
+        // 推定器選択
+        function selectEstimator(estimatorType) {
+            // 前の選択をリセット
+            document.querySelectorAll('.estimator-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 新しい選択をマーク
+            document.getElementById(`${estimatorType}-card`).classList.add('selected');
+            selectedEstimator = estimatorType;
+            config.estimator_type = estimatorType;
+            
+            // 次へボタンを有効化
+            document.getElementById('step1-next').disabled = false;
+            
+            // デフォルトパラメータを設定
+            setDefaultParams(estimatorType);
+        }
+
+        function setDefaultParams(estimatorType) {
+            switch(estimatorType) {
+                case 'probabilistic':
+                    config.n_qubits = 4;
+                    config.n_layers = 3;
+                    break;
+                case 'correlative':
+                    config.n_qubits = 6;
+                    config.n_layers = 4;
+                    break;
+                case 'temporal':
+                    config.n_qubits = 6;
+                    config.n_layers = 4;
+                    config.memory_length = 8;
+                    break;
+                case 'ensemble':
+                    config.n_qubits = 8;
+                    config.n_layers = 5;
+                    break;
+            }
+            
+            // UIを更新
+            if (currentStep === 2) {
+                updateParameterSliders();
+            }
+        }
+
+        function updateParameterVisibility() {
+            const memoryParam = document.getElementById('memoryParam');
+            if (selectedEstimator === 'temporal' || selectedEstimator === 'ensemble') {
+                memoryParam.style.display = 'block';
+            } else {
+                memoryParam.style.display = 'none';
+            }
+            
+            updateParameterSliders();
+            updateParamExplanation();
+        }
+
+        function updateParameterSliders() {
+            document.getElementById('qubitsSlider').value = config.n_qubits;
+            document.getElementById('qubitsValue').textContent = config.n_qubits;
+            
+            document.getElementById('layersSlider').value = config.n_layers;
+            document.getElementById('layersValue').textContent = config.n_layers;
+            
+            document.getElementById('memorySlider').value = config.memory_length;
+            document.getElementById('memoryValue').textContent = config.memory_length;
+            
+            document.getElementById('lrSlider').value = Math.log10(config.learning_rate);
+            document.getElementById('lrValue').textContent = config.learning_rate;
+            
+            document.getElementById('epsilonSlider').value = config.epsilon;
+            document.getElementById('epsilonValue').textContent = config.epsilon;
+            
+            document.getElementById('decaySlider').value = config.epsilon_decay;
+            document.getElementById('decayValue').textContent = config.epsilon_decay;
+        }
+
+        function updateQuantumParams() {
+            config.n_qubits = parseInt(document.getElementById('qubitsSlider').value);
+            config.n_layers = parseInt(document.getElementById('layersSlider').value);
+            config.memory_length = parseInt(document.getElementById('memorySlider').value);
+            
+            document.getElementById('qubitsValue').textContent = config.n_qubits;
+            document.getElementById('layersValue').textContent = config.n_layers;
+            document.getElementById('memoryValue').textContent = config.memory_length;
+        }
+
+        function updateLearningParams() {
+            config.learning_rate = Math.pow(10, parseFloat(document.getElementById('lrSlider').value));
+            config.epsilon = parseFloat(document.getElementById('epsilonSlider').value);
+            config.epsilon_decay = parseFloat(document.getElementById('decaySlider').value);
+            
+            document.getElementById('lrValue').textContent = config.learning_rate.toFixed(4);
+            document.getElementById('epsilonValue').textContent = config.epsilon.toFixed(2);
+            document.getElementById('decayValue').textContent = config.epsilon_decay.toFixed(3);
+        }
+
+        function updateParamExplanation() {
+            const explanations = {
+                'probabilistic': `
+                    <strong>確率的推定器の特徴:</strong><br>
+                    • 量子ビット数: 各敵コマの特徴数（位置、移動、周辺、戦術）<br>
+                    • レイヤー数: 量子回路の深さ（深いほど複雑なパターンを学習）<br>
+                    • 計算量: O(n_qubits × n_layers) - 軽量で高速
+                `,
+                'correlative': `
+                    <strong>相関型推定器の特徴:</strong><br>
+                    • 量子ビット数: 全敵コマを同時処理（エンタングルメント用）<br>
+                    • レイヤー数: 相関学習の深さ（コマ間関係の複雑さ）<br>
+                    • 計算量: O(n_qubits² × n_layers) - 中程度の負荷
+                `,
+                'temporal': `
+                    <strong>時系列推定器の特徴:</strong><br>
+                    • メモリ長: 過去何手分を記憶するか（長いほど精度向上）<br>
+                    • レイヤー数: 時系列パターンの学習深度<br>
+                    • 計算量: O(memory_length × n_qubits × n_layers) - やや重い
+                `,
+                'ensemble': `
+                    <strong>アンサンブル推定器の特徴:</strong><br>
+                    • 全推定器を統合: 確率的 + 相関型 + 時系列<br>
+                    • 最高の精度と信頼性を実現<br>
+                    • 計算量: 他の手法の合計 - 最も重い
+                `
+            };
+            
+            document.getElementById('paramExplanation').innerHTML = 
+                explanations[selectedEstimator] || 'パラメータの説明がありません。';
+        }
+
+        function updateConfigSummary() {
+            const estimatorNames = {
+                'probabilistic': '確率的推定器',
+                'correlative': '相関型推定器', 
+                'temporal': '時系列推定器',
+                'ensemble': 'アンサンブル推定器'
+            };
+            
+            const summary = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <strong>🔮 推定器タイプ:</strong> ${estimatorNames[selectedEstimator]}<br>
+                        <strong>⚛️ 量子ビット数:</strong> ${config.n_qubits}<br>
+                        <strong>📚 レイヤー数:</strong> ${config.n_layers}<br>
+                        ${selectedEstimator === 'temporal' || selectedEstimator === 'ensemble' ? 
+                          `<strong>⏰ メモリ長:</strong> ${config.memory_length}<br>` : ''}
+                    </div>
+                    <div>
+                        <strong>🎓 学習率:</strong> ${config.learning_rate}<br>
+                        <strong>🎲 探索率:</strong> ${config.epsilon}<br>
+                        <strong>📉 減衰率:</strong> ${config.epsilon_decay}<br>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('configSummary').innerHTML = summary;
+        }
+
+        function generateCode() {
+            const code = `#!/usr/bin/env python3
+"""
+${getEstimatorDescription()}
+自動生成されたQuantum Geister AIコード
+"""
+
+import torch
+import torch.nn as nn
+import pennylane as qml
+import numpy as np
+
+class ${getEstimatorClassName()}(nn.Module):
+    def __init__(self):
+        super().__init__()
+        
+        # 量子パラメータ
+        self.n_qubits = ${config.n_qubits}
+        self.n_layers = ${config.n_layers}
+        ${selectedEstimator === 'temporal' || selectedEstimator === 'ensemble' ? 
+          `self.memory_length = ${config.memory_length}` : ''}
+        
+        # 量子デバイス
+        self.dev = qml.device('default.qubit', wires=self.n_qubits)
+        
+        # 学習パラメータ
+        self.learning_rate = ${config.learning_rate}
+        self.epsilon = ${config.epsilon}
+        self.epsilon_decay = ${config.epsilon_decay}
+        
+        ${getEstimatorSpecificCode()}
+        
+    def forward(self, state_vector):
+        """
+        敵コマ推定の実行
+        
+        Args:
+            state_vector: [batch, 252] 状態ベクトル
+        Returns:
+            opponent_features: [batch, ${getOutputDimension()}] 敵推定結果
+        """
+        ${getForwardCode()}
+
+${getQuantumCircuitCode()}
+
+# 使用例
+if __name__ == "__main__":
+    print("🔮 ${getEstimatorDescription()}")
+    print("=" * 50)
+    
+    # モデル初期化
+    model = ${getEstimatorClassName()}()
+    print(f"✅ モデル作成完了")
+    print(f"   出力次元: ${getOutputDimension()}")
+    print(f"   量子ビット: {config.n_qubits}")
+    print(f"   レイヤー数: {config.n_layers}")
+    
+    # サンプル推定
+    sample_state = torch.randn(1, 252)
+    with torch.no_grad():
+        result = model(sample_state)
+        print(f"   推定結果shape: {result.shape}")
+    
+    print("🚀 Quantum Geister AI 準備完了!")`;
+            
+            document.getElementById('generatedCode').textContent = code;
+            document.getElementById('copyBtn').disabled = false;
+        }
+
+        function getEstimatorDescription() {
+            const descriptions = {
+                'probabilistic': 'Probabilistic Quantum Estimator - 確率的量子推定器',
+                'correlative': 'Correlative Quantum Estimator - 相関型量子推定器',
+                'temporal': 'Temporal Quantum Estimator - 時系列量子推定器',
+                'ensemble': 'Ensemble Quantum Estimator - アンサンブル量子推定器'
+            };
+            return descriptions[selectedEstimator];
+        }
+
+        function getEstimatorClassName() {
+            const classNames = {
+                'probabilistic': 'ProbabilisticQuantumEstimator',
+                'correlative': 'CorrelativeQuantumEstimator',
+                'temporal': 'TemporalQuantumEstimator',
+                'ensemble': 'EnsembleQuantumEstimator'
+            };
+            return classNames[selectedEstimator];
+        }
+
+        function getOutputDimension() {
+            const dimensions = {
+                'probabilistic': 16,  // 8確率 + 8信頼度
+                'correlative': 24,    // 8確率 + 16相関
+                'temporal': 20,       // 8確率 + 12時系列特徴
+                'ensemble': 32        // 全特徴統合
+            };
+            return dimensions[selectedEstimator];
+        }
+
+        function getEstimatorSpecificCode() {
+            switch(selectedEstimator) {
+                case 'probabilistic':
+                    return `        # 8個の敵コマ用パラメータ
+        self.weights = nn.Parameter(
+            torch.randn(8, self.n_layers, self.n_qubits, 2) * 0.1
+        )`;
+                case 'correlative':
+                    return `        # 全敵コマ相関用パラメータ
+        self.weights = nn.Parameter(
+            torch.randn(self.n_layers, self.n_qubits, self.n_qubits) * 0.1
+        )`;
+                case 'temporal':
+                    return `        # 時系列記憶バッファ
+        self.memory_buffer = torch.zeros(self.memory_length, 8, 4)
+        self.weights = nn.Parameter(
+            torch.randn(self.n_layers + self.memory_length, self.n_qubits, 2) * 0.1
+        )`;
+                case 'ensemble':
+                    return `        # 複数推定器の統合
+        self.prob_estimator = ProbabilisticQuantumEstimator()
+        self.corr_estimator = CorrelativeQuantumEstimator()
+        self.temp_estimator = TemporalQuantumEstimator()
+        self.fusion_layer = nn.Linear(60, 32)`;
+            }
+        }
+
+        function getForwardCode() {
+            switch(selectedEstimator) {
+                case 'probabilistic':
+                    return `        batch_size = state_vector.size(0)
+        probabilities = torch.zeros(batch_size, 8)
+        confidences = torch.zeros(batch_size, 8)
+        
+        # 各敵コマを独立推定
+        for i in range(8):
+            prob, conf = self.estimate_single_piece(state_vector, i)
+            probabilities[:, i] = prob
+            confidences[:, i] = conf
+        
+        return torch.cat([probabilities, confidences], dim=1)`;
+                default:
+                    return `        # ${selectedEstimator}推定器の実装
+        return self.quantum_estimation_circuit(state_vector)`;
+            }
+        }
+
+        function getQuantumCircuitCode() {
+            return `
+    @qml.qnode(device, interface="torch")
+    def quantum_circuit(self, features, weights):
+        """量子回路による推定"""
+        # エンコーディング層
+        for i in range(self.n_qubits):
+            qml.RY(features[i] * np.pi, wires=i)
+        
+        # 変分量子回路
+        for layer in range(self.n_layers):
+            # エンタングルメント
+            for i in range(self.n_qubits - 1):
+                qml.CNOT(wires=[i, i + 1])
+            
+            # パラメータ化回転
+            for i in range(self.n_qubits):
+                qml.RY(weights[layer, i, 0], wires=i)
+                qml.RZ(weights[layer, i, 1], wires=i)
+        
+        # 測定
+        return [qml.expval(qml.PauliZ(i)) for i in range(self.n_qubits)]`;
+        }
+
+        function copyCode() {
+            const codeElement = document.getElementById('generatedCode');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const copyBtn = document.getElementById('copyBtn');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = '✅ コピー完了!';
+            copyBtn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.style.background = '#667eea';
+            }, 2000);
+        }
+
+        function generateFinalCode() {
+            generateCode();
+            alert('🚀 Quantum Geister AI の構築が完了しました!\n\nコードをコピーして、Python環境で実行してください。\n\n必要なライブラリ:\n- torch\n- pennylane\n- numpy');
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateParamExplanation();
+        });
+    </script>
+</body>
+</html>

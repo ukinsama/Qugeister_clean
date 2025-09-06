@@ -63,3 +63,21 @@ tournament_results/*.csv
 # Temporary files
 test*.py
 temp*.py
+
+# Sensitive internal documents (not for public)
+HANDOFF_DOCUMENT.md
+parameter_impact_analysis.json
+
+# Learning experiments and analysis (internal research)
+learning/trained_models/ebi/
+learning/trained_models/kamei/
+learning/trained_models/test*/
+learning/trained_models/corrected_engine_*/
+
+# Development and testing scripts (internal)
+corrected_engine_test.py
+simple_corrected_training.py
+rl_loss_analysis.py
+
+# Large model directories with weights
+integrated_ais/*/

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Battle System - 3 Step Designer</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> 外部CSSファイル不要 -->
     <style>
         * {
             margin: 0;
@@ -554,15 +554,11 @@
             background: #ef9a9a; 
             color: #c62828;
         }
-        .board-cell.player-b-good { 
+        .board-cell.player-b-unknown { 
             background: #bdbdbd; 
             color: #616161;
             cursor: not-allowed;
-        }
-        .board-cell.player-b-bad { 
-            background: #9e9e9e; 
-            color: #424242;
-            cursor: not-allowed;
+            font-weight: bold;
         }
 
         /* 配置可能エリアのハイライト */
@@ -663,17 +659,17 @@
 
         <!-- ステップナビゲーション -->
         <div class="step-navigation">
-            <div class="step-item active" id="nav-step1" onclick="goToStep(1)">
+            <div class="step-item active" id="nav-step1" onclick="showStep(1)">
                 <div class="step-number">1</div>
                 <div class="step-label">学習方法選択</div>
             </div>
             <div class="step-connector" id="connector1"></div>
-            <div class="step-item" id="nav-step2" onclick="goToStep(2)">
+            <div class="step-item" id="nav-step2" onclick="showStep(2)">
                 <div class="step-number">2</div>
                 <div class="step-label">モジュール設計</div>
             </div>
             <div class="step-connector" id="connector2"></div>
-            <div class="step-item" id="nav-step3" onclick="goToStep(3)">
+            <div class="step-item" id="nav-step3" onclick="showStep(3)">
                 <div class="step-number">3</div>
                 <div class="step-label">パラメータ設定</div>
             </div>
@@ -745,7 +741,7 @@
                         <div class="board-legend">
                             <div class="legend-item" style="background: #a5d6a7;">A善玉（編集可能）</div>
                             <div class="legend-item" style="background: #ef9a9a;">A悪玉（編集可能）</div>
-                            <div class="legend-item" style="background: #bdbdbd; color: #616161;">B駒（未知・編集不可）</div>
+                            <div class="legend-item" style="background: #bdbdbd; color: #616161; font-weight: bold;">相手駒?（未知・編集不可）</div>
                             <div class="legend-item" style="background: rgba(76, 175, 80, 0.3);">A脱出口</div>
                             <div class="legend-item" style="background: rgba(33, 150, 243, 0.3);">B脱出口</div>
                         </div>
@@ -836,28 +832,13 @@
                                     <div class="option-button selected" onclick="selectModule('stateChannels', '7', event)">
                                         7CH (252次元)
                                     </div>
-                                    <div class="option-button" onclick="selectModule('stateChannels', '12', event)">
-                                        12CH (432次元) 🌟
-                                    </div>
-                                    <div class="option-button" onclick="selectModule('stateChannels', '16', event)">
-                                        16CH (576次元)
-                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 説明欄 -->
                         <div class="module-description">
-                            <h5>🔬 確率的量子推定システムの説明</h5>
-                            <div class="description-content">
-                                <strong>確率的量子推定器 (Probabilistic Quantum Estimator)</strong><br>
-                                • 8個の4qubit回路で各敵コマを独立推定<br>
-                                • 各コマの善玉確率を量子重ね合わせで計算<br>
-                                • 位置、移動パターン、周辺状況、戦術価値の4特徴を活用<br>
-                                • 70-75%の推定精度、10ms高速推論<br>
-                                • 252次元→16次元で情報損失を最小化<br>
-                                • 確率的推定により不確実性を含んだ戦略判断が可能
-                            </div>
+                            <h5>🔬 量子推定システムの説明</h5>
                         </div>
                         
                         <button class="run-button" onclick="runQuantumConfig()">▶ 量子回路を構築</button>
@@ -925,16 +906,6 @@
                         <!-- 説明欄 -->
                         <div class="module-description">
                             <h5>🗺️ Q値学習方式の説明</h5>
-                            <div class="description-content">
-                                <strong>修正エンジン対応 Deep Q-Network (DQN) - 拡張可能チャンネル</strong><br>
-                                • 6×6×7の状態空間を252次元で表現<br>
-                                • 基本7チャンネル：自分善玉・悪玉、相手駒、確認済み相手善玉・悪玉、移動可能位置、脱出位置<br>
-                                • 5つのアクション（4方向移動 + 脱出）に対応<br>
-                                • DebugGeisterGameエンジンとの完全統合<br>
-                                • 経験再生によるサンプル効率の向上<br>
-                                • 価値関数近似による複雑な戦略学習<br>
-                                • 量子推定器との統合で高精度判断を実現
-                            </div>
                         </div>
                         
                         <button class="run-button" onclick="runQMap()">▶ Q値マップを生成</button>
@@ -960,17 +931,6 @@
                             </div>
                         </div>
 
-                        <!-- 説明欄 -->
-                        <div class="module-description">
-                            <h5>🎯 行動選択戦略の説明</h5>
-                            <textarea id="actionDescription" placeholder="行動選択の方式について説明してください...&#10;例：&#10;- ε-greedyの探索率設定理由&#10;- 温度パラメータの調整方針&#10;- 学習段階での戦略変更">ε-greedy戦略
-- 初期探索率ε=0.1で未知の行動も試行
-- 学習進行に従いε減衰(0.995)で徐々に活用重視
-- 最小探索率0.01で常に新しい可能性を保持
-- 量子推定の不確実性を考慮した適度な探索
-- ガイスター特有の情報戦に対応した慎重な戦略</textarea>
-                            <div class="description-hint">探索と活用のバランスをどのように調整するかを説明してください</div>
-                        </div>
                         
                         <button class="run-button" onclick="runAction()">▶ 行動選択戦略を設定</button>
                         <div class="output-area" id="actionOutput"></div>
@@ -979,7 +939,7 @@
             </div>
 
             <div class="button-container">
-                <button class="btn btn-secondary" onclick="goToStep(1)">← 戻る</button>
+                <button class="btn btn-secondary" onclick="showStep(1)">← 戻る</button>
                 <button class="btn btn-primary" onclick="proceedToStep3()">次へ進む →</button>
             </div>
         </div>
@@ -997,6 +957,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>📊</span> 学習率 (Learning Rate)
+                                <small style="color: #666; font-weight: normal;">- AIの学習速度を制御</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="-4" max="-1" value="-3" step="0.1"
@@ -1007,6 +968,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>📦</span> バッチサイズ
+                                <small style="color: #666; font-weight: normal;">- 一度に処理する経験数</small>
                             </label>
                             <select class="param-input" id="batchSize">
                                 <option value="16">16</option>
@@ -1019,12 +981,14 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>🔄</span> エポック数
+                                <small style="color: #666; font-weight: normal;">- 学習の繰り返し回数</small>
                             </label>
                             <input type="number" class="param-input" id="epochs" value="100" min="10" max="1000">
                         </div>
                         <div class="param-item">
                             <label class="param-label">
                                 <span>🎯</span> 検証データ割合
+                                <small style="color: #666; font-weight: normal;">- 学習効果の検証用データ比率</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="0.1" max="0.4" value="0.2" step="0.05"
@@ -1045,6 +1009,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>🎰</span> ε (Epsilon)
+                                <small style="color: #666; font-weight: normal;">- ランダム探索の確率</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="0" max="1" value="0.1" step="0.01"
@@ -1055,6 +1020,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>📉</span> ε減衰率
+                                <small style="color: #666; font-weight: normal;">- 探索率を徐々に減らす速度</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="0.99" max="1" value="0.995" step="0.001"
@@ -1065,6 +1031,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>💾</span> リプレイバッファサイズ
+                                <small style="color: #666; font-weight: normal;">- 過去の経験を記憶する容量</small>
                             </label>
                             <select class="param-input" id="replayBuffer">
                                 <option value="1000">1,000</option>
@@ -1076,6 +1043,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>🎯</span> 割引率 (γ)
+                                <small style="color: #666; font-weight: normal;">- 未来報酬の重視度</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="0.9" max="1" value="0.99" step="0.01"
@@ -1097,6 +1065,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>⚡</span> オプティマイザ
+                                <small style="color: #666; font-weight: normal;">- 重み更新の方法</small>
                             </label>
                             <select class="param-input" id="optimizer">
                                 <option value="adam" selected>Adam</option>
@@ -1108,6 +1077,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>📈</span> 学習率スケジューラ
+                                <small style="color: #666; font-weight: normal;">- 学習率の動的調整</small>
                             </label>
                             <select class="param-input" id="scheduler">
                                 <option value="none">なし</option>
@@ -1119,6 +1089,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>💧</span> Dropout率
+                                <small style="color: #666; font-weight: normal;">- 過学習防止のための無効化率</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="0" max="0.5" value="0.2" step="0.05"
@@ -1129,6 +1100,7 @@
                         <div class="param-item">
                             <label class="param-label">
                                 <span>🔒</span> L2正則化
+                                <small style="color: #666; font-weight: normal;">- 重みの大きさにペナルティ</small>
                             </label>
                             <div class="slider-container">
                                 <input type="range" class="slider" min="-5" max="-2" value="-4" step="0.5"
@@ -1140,7 +1112,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button class="btn btn-secondary" onclick="goToStep(2)">← 戻る</button>
+                    <button class="btn btn-secondary" onclick="showStep(2)">← 戻る</button>
                     <button class="btn btn-success" onclick="generateCode()">コード生成 🚀</button>
                 </div>
             </div>
@@ -1231,13 +1203,13 @@
                         cell.textContent = '🚪';
                     }
                     
-                    // 敵エリア（上2行）以外にクリックイベントを設定
-                    if (i > 1) {
+                    // プレイヤーAエリア（下側2行）のみクリック可能
+                    if ((i === 0 || i === 1) && (j >= 1 && j <= 4)) {
                         cell.onclick = () => togglePiece(i, j);
-                    } else {
-                        // 敵エリアには警告メッセージのみ
+                    } else if ((i === 4 || i === 5) && (j >= 1 && j <= 4)) {
+                        // 相手エリアには警告メッセージのみ
                         cell.onclick = () => {
-                            alert('相手の駒エリアは編集できません（ガイスタールール）');
+                            alert('相手の駒エリアは編集できません（ガイスタールール準拠）');
                         };
                     }
                     board.appendChild(cell);
@@ -1326,7 +1298,7 @@ ${strategies[config.action]}`;
                 [1, 1], [1, 2], [1, 3], [1, 4]
             ];
             
-            // プレイヤーB: 上側2行（4-5行）中央4列（1-4列）にランダム配置  
+            // プレイヤーB: 上側2行（4-5行）中央4列（1-4列） - グレー駒として表示
             const playerBPositions = [
                 [4, 1], [4, 2], [4, 3], [4, 4],
                 [5, 1], [5, 2], [5, 3], [5, 4]
@@ -1335,7 +1307,7 @@ ${strategies[config.action]}`;
             // 駒の種類をランダムに配置（善玉4個、悪玉4個）
             const pieceTypes = ['good', 'good', 'good', 'good', 'bad', 'bad', 'bad', 'bad'];
             
-            // プレイヤーAの配置
+            // プレイヤーAの配置（編集可能）
             const shuffledTypesA = [...pieceTypes].sort(() => Math.random() - 0.5);
             playerAPositions.forEach(([row, col], index) => {
                 const type = shuffledTypesA[index];
@@ -1343,11 +1315,12 @@ ${strategies[config.action]}`;
                 config.playerAPieces[type].push([row, col]);
             });
             
-            // プレイヤーBの配置
+            // プレイヤーBの配置（内部でのみ管理、表示は全てグレー駒）
             const shuffledTypesB = [...pieceTypes].sort(() => Math.random() - 0.5);
             playerBPositions.forEach(([row, col], index) => {
                 const type = shuffledTypesB[index];
-                config.board[row][col] = type === 'good' ? 2 : -2; // B善玉=2, B悪玉=-2
+                // ボードには未知駒として統一値を設定（種類を隠蔽）
+                config.board[row][col] = 9; // 9 = 相手の駒（種類不明）
                 config.playerBPieces[type].push([row, col]);
             });
             
@@ -1389,59 +1362,39 @@ ${strategies[config.action]}`;
                 if (value === 1) {
                     cell.classList.add('player-a-good');
                     cell.textContent = '○';
-                    cell.title = 'プレイヤーA 善玉';
+                    cell.title = 'プレイヤーA 善玉（編集可能）';
                 } else if (value === -1) {
                     cell.classList.add('player-a-bad');
                     cell.textContent = '●';
-                    cell.title = 'プレイヤーA 悪玉';
-                } else if (value === 2) {
-                    cell.classList.add('player-b-good');
-                    cell.textContent = '○';
-                    cell.title = '相手駒（善玉/悪玉不明）';
-                } else if (value === -2) {
-                    cell.classList.add('player-b-bad');
-                    cell.textContent = '●';
-                    cell.title = '相手駒（善玉/悪玉不明）';
+                    cell.title = 'プレイヤーA 悪玉（編集可能）';
+                } else if (value === 9) {
+                    // 相手の駒は全て未知のグレー駒として表示
+                    cell.classList.add('player-b-unknown');
+                    cell.textContent = '?';
+                    cell.title = '相手の駒（善玉/悪玉不明・編集不可）';
                 }
             });
         }
 
         // ピース切り替え（カスタムモード時）
         function togglePiece(row, col) {
-            // 敵エリア（上2行）はクリック不可
-            if (row <= 1) {
-                alert('相手の駒エリアは編集できません（ガイスタールール）');
-                return;
-            }
-
             if (config.placement !== 'custom') {
                 alert('カスタムモードを選択してから駒を編集してください');
                 return;
             }
             
-            // 配置可能エリアの確認
+            // プレイヤーAエリアの確認（下側2行の中央4列のみ）
             const isPlayerAArea = (row === 0 || row === 1) && (col >= 1 && col <= 4);
-            const isPlayerBArea = (row === 4 || row === 5) && (col >= 1 && col <= 4);
-            const isEscapeZone = (row === 0 && (col === 0 || col === 5)) || (row === 5 && (col === 0 || col === 5));
             
-            if (!isPlayerAArea && !isPlayerBArea && !isEscapeZone) {
-                alert('この位置には駒を配置できません');
-                return;
-            }
-            
-            if (isEscapeZone) {
-                alert('脱出口には駒を配置できません');
+            if (!isPlayerAArea) {
+                alert('この位置には駒を配置できません（ガイスタールール準拠）');
                 return;
             }
             
             const current = config.board[row][col];
-            let next = 0;
             
-            if (isPlayerAArea) {
-                // プレイヤーAエリア: 0 → 1(善玉) → -1(悪玉) → 0
-                next = current === 0 ? 1 : current === 1 ? -1 : 0;
-            }
-            // プレイヤーBエリアは編集不可（ガイスタールール準拠）
+            // プレイヤーAエリアのみ編集可能: 0 → 1(善玉) → -1(悪玉) → 0
+            const next = current === 0 ? 1 : current === 1 ? -1 : 0;
             
             config.board[row][col] = next;
             updateBoardDisplay();
@@ -1464,59 +1417,65 @@ ${strategies[config.action]}`;
 
         // ステップ2へ進む
         function proceedToStep2() {
-            if (!config.learningMethod) {
-                alert('学習方法を選択してください');
-                return;
-            }
-            goToStep(2);
+            console.log('proceedToStep2 called');
+            // 強制的に強化学習を設定
+            config.learningMethod = 'reinforcement';
+            console.log('Set learningMethod to:', config.learningMethod);
+            // 直接Step2を表示
+            showStep(2);
         }
 
         // ステップ3へ進む
         function proceedToStep3() {
-            goToStep(3);
-            
-            // 学習方法に応じてパラメータセクションを表示/非表示
-            // 強化学習のみ
-            document.getElementById('rlParams').style.display = 'block';
+            console.log('proceedToStep3 called');
+            showStep(3);
+            // 強化学習パラメータを表示
+            const rlParams = document.getElementById('rlParams');
+            if (rlParams) {
+                rlParams.style.display = 'block';
+            }
         }
 
-        // ステップ遷移
-        function goToStep(stepNum) {
+        // シンプルで確実なステップ表示
+        function showStep(stepNum) {
+            console.log('showStep called with:', stepNum);
+            
             // すべてのステップを非表示
             document.querySelectorAll('.step-content').forEach(content => {
                 content.classList.remove('active');
             });
             
-            // 指定されたステップを表示
-            document.getElementById(`step${stepNum}`).classList.add('active');
+            // すべてのナビゲーションを非アクティブ
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.classList.remove('active', 'completed');
+            });
             
-            // ナビゲーション更新
-            for (let i = 1; i <= 3; i++) {
-                const navItem = document.getElementById(`nav-step${i}`);
-                if (i < stepNum) {
-                    navItem.classList.add('completed');
-                    navItem.classList.remove('active');
-                } else if (i === stepNum) {
-                    navItem.classList.add('active');
-                    navItem.classList.remove('completed');
-                } else {
-                    navItem.classList.remove('active', 'completed');
+            // 指定されたステップを表示
+            const targetStep = document.getElementById(`step${stepNum}`);
+            const navItem = document.getElementById(`nav-step${stepNum}`);
+            
+            if (targetStep) {
+                targetStep.classList.add('active');
+                console.log('Added active to:', targetStep.id);
+            }
+            
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            // 完了済みステップにマーク
+            for (let i = 1; i < stepNum; i++) {
+                const prevNav = document.getElementById(`nav-step${i}`);
+                const connector = document.getElementById(`connector${i}`);
+                if (prevNav) {
+                    prevNav.classList.add('completed');
+                }
+                if (connector) {
+                    connector.classList.add('completed');
                 }
             }
-            
-            // コネクタ更新
-            if (stepNum > 1) {
-                document.getElementById('connector1').classList.add('completed');
-            } else {
-                document.getElementById('connector1').classList.remove('completed');
-            }
-            
-            if (stepNum > 2) {
-                document.getElementById('connector2').classList.add('completed');
-            } else {
-                document.getElementById('connector2').classList.remove('completed');
-            }
         }
+
 
         // モジュール選択
         function selectModule(type, value, event) {
@@ -1580,22 +1539,24 @@ ${strategies[config.action]}`;
 
         // コード生成
         function generateCode() {
-            // 説明欄の内容を取得（textareaとdivの両方に対応）
+            console.log('generateCode called');
+            
+            // ハイパーパラメータの取得
+            const batchSize = document.getElementById('batchSize')?.value || '32';
+            const epochs = document.getElementById('epochs')?.value || '100';
+            const optimizer = document.getElementById('optimizer')?.value || 'adam';
+            const scheduler = document.getElementById('scheduler')?.value || 'cosine';
+            const replayBuffer = document.getElementById('replayBuffer')?.value || '10000';
+            
+            console.log('Parameters collected:', {batchSize, epochs, optimizer, scheduler});
+            
+            // 説明欄の内容を取得
             const placementDesc = document.getElementById('placementDescription')?.value || 
-                                document.querySelector('#step2 .module-card:nth-child(1) .description-content')?.textContent?.trim() ||
                                 '修正エンジン対応配置：ガイスタールール準拠';
-            const quantumDesc = document.getElementById('quantumDescription')?.value || 
-                              document.querySelector('#step2 .module-card:nth-child(2) .description-content')?.textContent?.trim() ||
-                              '確率的量子推定器による敵コマの善玉/悪玉確率推定';
-            const rewardDesc = document.getElementById('rewardDescription')?.value || 
-                             document.querySelector('#step2 .module-card:nth-child(3) .description-content')?.textContent?.trim() ||
-                             'バランス型報酬関数：捕獲・脱出・戦略的行動を総合評価';
-            const qmapDesc = document.getElementById('qmapDescription')?.value || 
-                           document.querySelector('#step2 .module-card:nth-child(4) .description-content')?.textContent?.trim() ||
-                           'DQNによるQ値学習：深層強化学習で価値関数を近似';
-            const actionDesc = document.getElementById('actionDescription')?.value || 
-                             document.querySelector('#step2 .module-card:nth-child(5) .description-content')?.textContent?.trim() ||
-                             'ε-greedy戦略：探索と活用のバランスを動的調整';
+            const quantumDesc = '確率的量子推定器による敵コマの善玉/悪玉確率推定';
+            const rewardDesc = 'バランス型報酬関数：捕獲・脱出・戦略的行動を総合評価';
+            const qmapDesc = 'DQNによるQ値学習：深層強化学習で価値関数を近似';
+            const actionDesc = 'ε-greedy戦略：探索と活用のバランスを動的調整';
 
             const code = `# ============================================
 # Quantum Battle System - Auto-Generated Code
@@ -1917,7 +1878,8 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
     
     def forward(self, x):
         # 量子エンコーディング
-        quantum_features = self.quantum_encoder(x)
+        weights = torch.randn(self.config['quantum']['n_layers'], self.config['quantum']['n_qubits'], 2) * 0.1
+        quantum_features = torch.tensor(self.quantum_encoder(x[:self.config['quantum']['n_qubits']], weights))
         
         # 古典的処理
         output = self.classical_decoder(quantum_features)
@@ -2083,11 +2045,11 @@ if __name__ == "__main__":
     print("========================================")
     print("Quantum Battle System - Training Started")
     print("========================================")
-    print(f"学習方法: ${config.learningMethod === 'reinforcement' ? '強化学習' : '教師あり学習'}")
+    print("学習方法: 強化学習")
     print(f"量子ビット数: {module_config['quantum']['n_qubits']}")
     print(f"レイヤー数: {module_config['quantum']['n_layers']}")
     print(f"総パラメータ数: {sum(p.numel() for p in model.parameters())}")
-    print("========================================\\n")
+    print("========================================")
     
     # 学習実行
     trained_model = train_model(model, module_config, hyperparameters)
@@ -2120,6 +2082,6 @@ if __name__ == "__main__":
             });
         }
     </script>
-    <script src="scripts.js"></script>
+    <!-- <script src="scripts.js"></script> 外部スクリプト不要 -->
 </body>
 </html>

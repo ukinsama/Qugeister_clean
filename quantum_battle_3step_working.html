@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Battle System - 3 Step Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* ステップナビゲーション */
+        .step-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-number {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        .step-item.completed .step-number {
+            background: #4CAF50;
+        }
+
+        .step-label {
+            font-weight: 500;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .step-item.active .step-label {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .step-item.completed .step-label {
+            color: #4CAF50;
+        }
+
+        /* ステップコンテンツ */
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ボタン */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+        }
+
+        /* コード出力 */
+        .code-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .code-title {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .copy-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 設定項目 */
+        .setting-group {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .setting-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .setting-item {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .setting-label {
+            min-width: 150px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .setting-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .value-display {
+            min-width: 60px;
+            text-align: center;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Quantum Battle System Designer</h1>
+            <p>3ステップでAI戦略を設計・学習・実行</p>
+        </div>
+
+        <!-- ステップナビゲーション -->
+        <div class="step-navigation">
+            <div class="step-item active" id="nav-step1" onclick="showStep(1)">
+                <div class="step-number">1</div>
+                <div class="step-label">学習方法選択</div>
+            </div>
+            <div class="step-item" id="nav-step2" onclick="showStep(2)">
+                <div class="step-number">2</div>
+                <div class="step-label">モジュール設計</div>
+            </div>
+            <div class="step-item" id="nav-step3" onclick="showStep(3)">
+                <div class="step-number">3</div>
+                <div class="step-label">パラメータ設定</div>
+            </div>
+        </div>
+
+        <!-- ステップ1: 学習方法選択 -->
+        <div class="step-content active" id="step1">
+            <h2>Step 1: 学習方法選択</h2>
+            <div class="setting-group">
+                <div class="setting-title">🎮 強化学習 (Reinforcement Learning)</div>
+                <p>量子回路を活用したDeep Q-Network (DQN)により、エージェントが試行錯誤を通じて最適な戦略を学習します。</p>
+                <ul style="margin: 15px 0 0 20px;">
+                    <li>量子推定器による敵コマ判別</li>
+                    <li>DQN</li>
+                    <li>ε-greedy探索戦略</li>
+                </ul>
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-success" onclick="showStep(2)">
+                    モジュール設計へ進む →
+                </button>
+            </div>
+        </div>
+
+        <!-- ステップ2: モジュール設計 -->
+        <div class="step-content" id="step2">
+            <h2>Step 2: モジュール設計</h2>
+            
+            <div class="setting-group">
+                <div class="setting-title">⚛️ 量子推定器設定</div>
+                <div class="setting-item">
+                    <label class="setting-label">量子ビット数</label>
+                    <input type="range" class="slider" id="qubitsSlider" min="4" max="12" value="8" 
+                           oninput="updateValue('qubits', this.value)">
+                    <div class="value-display" id="qubitsValue">8</div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">レイヤー数</label>
+                    <input type="range" class="slider" id="layersSlider" min="1" max="5" value="3" 
+                           oninput="updateValue('layers', this.value)">
+                    <div class="value-display" id="layersValue">3</div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-title">🎯 モジュール構成</div>
+                <p><strong>確率的量子推定器:</strong> 8個の4qubit回路で各敵コマを独立推定</p>
+                <p><strong>DQN学習:</strong> Deep Q-Networkによる価値関数学習</p>
+                <p><strong>ε-greedy行動選択:</strong> 探索と活用のバランス調整</p>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="showStep(1)">← 戻る</button>
+                <button class="btn btn-primary" onclick="showStep(3)">パラメータ設定へ →</button>
+            </div>
+        </div>
+
+        <!-- ステップ3: パラメータ設定 -->
+        <div class="step-content" id="step3">
+            <h2>Step 3: ハイパーパラメータ設定</h2>
+            
+            <div class="setting-group">
+                <div class="setting-title">⚙️ 学習設定</div>
+                <div class="setting-item">
+                    <label class="setting-label">学習率</label>
+                    <input type="range" class="slider" min="-4" max="-1" value="-3" step="0.1"
+                           oninput="updateLearningRate(this.value)">
+                    <div class="value-display" id="lrValue">0.001</div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">バッチサイズ</label>
+                    <select class="setting-input" id="batchSize">
+                        <option value="16">16</option>
+                        <option value="32" selected>32</option>
+                        <option value="64">64</option>
+                        <option value="128">128</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">エポック数</label>
+                    <input type="number" class="setting-input" id="epochs" value="100" min="10" max="1000">
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-title">🎮 強化学習パラメータ</div>
+                <div class="setting-item">
+                    <label class="setting-label">ε (Epsilon)</label>
+                    <input type="range" class="slider" min="0" max="1" value="0.1" step="0.01"
+                           oninput="updateValue('epsilon', this.value)">
+                    <div class="value-display" id="epsilonValue">0.1</div>
+                </div>
+                <div class="setting-item">
+                    <label class="setting-label">γ (Gamma)</label>
+                    <input type="range" class="slider" min="0.9" max="1" value="0.99" step="0.01"
+                           oninput="updateValue('gamma', this.value)">
+                    <div class="value-display" id="gammaValue">0.99</div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button class="btn btn-secondary" onclick="showStep(2)">← 戻る</button>
+                <button class="btn btn-success" onclick="generateCode()">🚀 AIコード生成</button>
+            </div>
+
+            <!-- コード出力エリア -->
+            <div class="code-output" id="codeOutput">
+                <div class="code-header">
+                    <div class="code-title">📝 Generated Python Code</div>
+                    <button class="copy-button" onclick="copyCode()">📋 コピー</button>
+                </div>
+                <pre id="generatedCode"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 設定管理
+        const config = {
+            qubits: 8,
+            layers: 3,
+            learningRate: 0.001,
+            batchSize: 32,
+            epochs: 100,
+            epsilon: 0.1,
+            gamma: 0.99
+        };
+
+        // ステップ表示
+        function showStep(stepNum) {
+            console.log('Showing step:', stepNum);
+            
+            // すべてのステップを非表示
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // すべてのナビゲーションを非アクティブ
+            document.querySelectorAll('.step-item').forEach(item => {
+                item.classList.remove('active', 'completed');
+            });
+            
+            // 指定されたステップを表示
+            const targetStep = document.getElementById(`step${stepNum}`);
+            const navItem = document.getElementById(`nav-step${stepNum}`);
+            
+            if (targetStep) {
+                targetStep.classList.add('active');
+            }
+            
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            // 完了済みステップにマーク
+            for (let i = 1; i < stepNum; i++) {
+                const prevNav = document.getElementById(`nav-step${i}`);
+                if (prevNav) {
+                    prevNav.classList.add('completed');
+                }
+            }
+        }
+
+        // 値更新
+        function updateValue(param, value) {
+            document.getElementById(`${param}Value`).textContent = value;
+            config[param] = parseFloat(value);
+        }
+
+        // 学習率更新（対数スケール）
+        function updateLearningRate(value) {
+            const lr = Math.pow(10, parseFloat(value));
+            config.learningRate = lr;
+            document.getElementById('lrValue').textContent = lr.toFixed(4);
+        }
+
+        // コード生成
+        function generateCode() {
+            const code = `# ============================================
+# Quantum Battle System - Auto-Generated Code
+# ============================================
+# 生成日時: ${new Date().toLocaleString('ja-JP')}
+
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from collections import deque
+import random
+
+# ===== 設定 =====
+config = {
+    'quantum': {
+        'n_qubits': ${config.qubits},
+        'n_layers': ${config.layers}
+    },
+    'training': {
+        'learning_rate': ${config.learningRate},
+        'batch_size': ${config.batchSize},
+        'epochs': ${config.epochs},
+        'epsilon': ${config.epsilon},
+        'gamma': ${config.gamma}
+    }
+}
+
+# ===== 量子強化学習AI =====
+class QuantumBattleAI(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.config = config
+        
+        # 量子推定器（簡略版）
+        self.quantum_encoder = nn.Linear(252, self.config['quantum']['n_qubits'])
+        
+        # 古典的デコーダ
+        self.classical_decoder = nn.Sequential(
+            nn.Linear(self.config['quantum']['n_qubits'], 128),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 5)  # 4方向 + 脱出
+        )
+    
+    def forward(self, x):
+        # 量子エンコーディング
+        quantum_features = self.quantum_encoder(x)
+        quantum_features = torch.tanh(quantum_features)  # 正規化
+        
+        # 古典的処理
+        output = self.classical_decoder(quantum_features)
+        return output
+
+# ===== 学習プロセス =====
+def train_model():
+    model = QuantumBattleAI()
+    optimizer = optim.Adam(model.parameters(), lr=config['training']['learning_rate'])
+    
+    # 強化学習設定
+    replay_buffer = deque(maxlen=10000)
+    epsilon = config['training']['epsilon']
+    
+    print("🚀 Quantum Battle AI Training Started!")
+    print(f"⚛️  Quantum Qubits: {config['quantum']['n_qubits']}")
+    print(f"🧠 Layers: {config['quantum']['n_layers']}")
+    print(f"📊 Learning Rate: {config['training']['learning_rate']}")
+    print(f"🎯 Epsilon: {config['training']['epsilon']}")
+    print("========================================")
+    print()
+    
+    for episode in range(config['training']['epochs']):
+        # ダミー学習ループ（実際にはゲーム環境と統合）
+        state = torch.randn(252)  # ダミー状態
+        
+        # ε-greedy行動選択
+        if random.random() < epsilon:
+            action = random.choice(range(5))
+        else:
+            with torch.no_grad():
+                q_values = model(state)
+                action = q_values.argmax().item()
+        
+        # ダミー経験を保存
+        reward = random.uniform(-1, 1)
+        next_state = torch.randn(252)
+        replay_buffer.append((state, action, reward, next_state, False))
+        
+        # バッチ学習
+        if len(replay_buffer) >= config['training']['batch_size']:
+            # 簡略化した学習ステップ
+            loss = torch.tensor(0.1)  # ダミー損失
+            optimizer.zero_grad()
+            # 実際の学習処理をここに実装
+            optimizer.step()
+        
+        # ε減衰
+        epsilon = max(0.01, epsilon * 0.995)
+        
+        if episode % 10 == 0:
+            print(f"Episode {episode}: ε = {epsilon:.4f}")
+    
+    return model
+
+# ===== メイン実行 =====
+if __name__ == "__main__":
+    trained_model = train_model()
+    
+    # モデル保存
+    torch.save({
+        'model_state_dict': trained_model.state_dict(),
+        'config': config
+    }, 'quantum_battle_ai.pth')
+    
+    print("✅ Training Complete! Model saved as 'quantum_battle_ai.pth'")
+    print("🎮 Ready for battle!")`;
+
+            document.getElementById('generatedCode').textContent = code;
+            document.getElementById('codeOutput').style.display = 'block';
+            document.getElementById('codeOutput').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // コードコピー
+        function copyCode() {
+            const code = document.getElementById('generatedCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ コードをクリップボードにコピーしました！');
+            });
+        }
+
+        // 初期化
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded successfully');
+            
+            // 初期値設定
+            updateValue('qubits', 8);
+            updateValue('layers', 3);
+            updateValue('epsilon', 0.1);
+            updateValue('gamma', 0.99);
+        });
+    </script>
+</body>
+</html>

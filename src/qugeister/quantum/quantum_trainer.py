@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-高速量子回路シミュレーショントレーナー
-量子回路を使いながら実用的な速度で学習を実現
+Fast Quantum Circuit Simulation Trainer
+
+Quantum circuit-based trainer that achieves practical learning speeds
+while maintaining quantum advantages for Geister game AI.
 """
 
 import torch
@@ -13,20 +15,22 @@ from collections import deque
 import random
 import time
 from tqdm import tqdm
-
-# Import updated FastQuantumCircuit
-from .quantum_circuit import FastQuantumCircuit
+from typing import Dict, List, Tuple, Optional, Any, Union
 import pickle
 from functools import lru_cache
 import hashlib
 
-# ===== 量子回路はquantum_circuit.pyから import =====
+# Import updated FastQuantumCircuit
+from .quantum_circuit import FastQuantumCircuit
 
-# ===== ハイブリッド量子-古典ニューラルネットワーク =====
+# ===== Quantum circuits imported from quantum_circuit.py =====
+
+# ===== Hybrid Quantum-Classical Neural Network =====
 class FastQuantumNeuralNetwork(nn.Module):
-    """高速化された量子ニューラルネットワーク（ユーザー設定対応）"""
+    """Fast quantum neural network with user configuration support"""
     
-    def __init__(self, input_dim=252, output_dim=36, n_qubits=4, n_layers=2, embedding='angle', entanglement='linear'):
+    def __init__(self, input_dim: int = 252, output_dim: int = 36, n_qubits: int = 4, 
+                 n_layers: int = 2, embedding: str = 'angle', entanglement: str = 'linear') -> None:
         super().__init__()
         self.n_qubits = n_qubits
         self.n_layers = n_layers

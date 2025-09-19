@@ -81,3 +81,29 @@ rl_loss_analysis.py
 
 # Large model directories with weights
 integrated_ais/*/
+
+# Test coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+
+# Development environments
+.env
+.venv
+ENV/
+
+# Debug and temporary web files
+debug_*.html
+*_simple.html
+*_test.html
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Node modules (if any)
+node_modules/
+
+# MacOS extended
+.AppleDouble
+.LSOverride

@@ -6,23 +6,32 @@ escape zone validation and quantum AI integration support.
 """
 
 import numpy as np
-from typing import List, Tuple, Optional, Dict
+from typing import List, Tuple, Optional, Dict, Literal
 from dataclasses import dataclass
 from .game_state import GameState
+
+# Game constants
+BOARD_SIZE = 6
+EMPTY_CELL = 0
+PLAYER_A = 1
+PLAYER_B = -1
+
+PieceType = Literal["good", "bad"]
+PlayerType = Literal["A", "B"]
 
 
 class GeisterEngine:
     """6x6ガイスターゲーム実装（正しい脱出判定版）"""
 
     def __init__(self):
-        self.board_size = 6
+        self.board_size = BOARD_SIZE
         self.reset_game()
 
     def reset_game(self):
         """ゲーム状態をリセット"""
-        self.board = np.zeros((6, 6), dtype=int)  # 0:空, 1:A, -1:B
+        self.board = np.zeros((BOARD_SIZE, BOARD_SIZE), dtype=int)
         self.turn = 0
-        self.current_player = "A"
+        self.current_player: PlayerType = "A"
 
         # 初期配置（デフォルト）
         self.player_a_pieces = {

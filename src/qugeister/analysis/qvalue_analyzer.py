@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 """
-モジュール4: Q値マップ完全出力システム
-Geisterゲームの全盤面状態に対するQ値を完全に可視化・分析
+Q-Value Complete Output System
+
+Complete visualization and analysis of Q-values for all board states
+in the Geister game, providing comprehensive strategic insights.
 """
 
-import torch
-import torch.nn as nn
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib.patches import Rectangle
+from collections import defaultdict
+import itertools
 import json
 import pickle
 from pathlib import Path
-import itertools
-from collections import defaultdict
+from typing import Dict, List, Tuple, Optional, Any, Union
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+import torch
+import torch.nn as nn
+from matplotlib.patches import Rectangle
 
 class GeisterStateEncoder:
-    """Geister盤面状態のエンコーダー"""
+    """Encoder for Geister board states"""
     
     def __init__(self):
         self.board_size = 6

@@ -1991,6 +1991,11 @@ ${strategies[config.action]}`;
         function generateCode() {
             console.log('generateCode called');
             
+            // 学習方法が設定されていない場合のデフォルト
+            if (!config.learningMethod) {
+                config.learningMethod = 'reinforcement';
+            }
+            
             // ハイパーパラメータの取得
             const batchSize = document.getElementById('batchSize')?.value || '32';
             const epochs = document.getElementById('epochs')?.value || '100';
@@ -2044,11 +2049,11 @@ from pathlib import Path
 # 修正されたゲームエンジンのインポート
 sys.path.append(str(Path(__file__).parent))
 sys.path.append(str(Path(__file__).parent / "src"))
-from src.qugeister_competitive.debug_game_viewer import DebugGeisterGame
-from src.qugeister_competitive.ai_base import BaseAI
+# from src.qugeister_competitive.debug_game_viewer import DebugGeisterGame
+# from src.qugeister_competitive.ai_base import BaseAI
 
 # ===== ゲームエンジン初期化（修正版） =====
-game_engine = DebugGeisterGame()
+# game_engine = DebugGeisterGame()
 
 # ===== 学習方法の設定 =====
 learning_config = {
@@ -2064,7 +2069,7 @@ module_config = {
         'player_a_bottom': True,    # プレイヤーAは下側（y=4,5）に配置
         'player_b_top': True,       # プレイヤーBは上側（y=0,1）に配置
         'my_pieces_only': np.array([
-${config.board.slice(4, 6).map(row => '            ' + JSON.stringify(row.map(val => (val === 1 || val === -1) ? val : 0))).join(',\n')}
+${(config.board && config.board.length >= 6) ? config.board.slice(4, 6).map(row => '            ' + JSON.stringify(row.map(val => (val === 1 || val === -1) ? val : 0))).join(',\n') : '            [0, 0, 0, 0, 0, 0],\n            [0, 0, 0, 0, 0, 0]'}
         ]),
         'escape_positions': {
             'player_a': [(0, 0), (5, 0)],  # A脱出口：相手陣地（上側角）
@@ -2140,7 +2145,7 @@ ${config.board.slice(4, 6).map(row => '            ' + JSON.stringify(row.map(va
     # モジュール5: 行動選択
     'action': {
         'strategy': '${config.action}',
-        'epsilon': ${config.action === 'epsilon' ? hyperparams.epsilon : 'None'},
+        'epsilon': ${config.action === 'epsilon' ? (hyperparams.epsilon || 0.1) : 'None'},
         'temperature': ${config.action === 'boltzmann' ? '1.0' : 'None'}
     }
 }
@@ -2149,13 +2154,13 @@ ${config.board.slice(4, 6).map(row => '            ' + JSON.stringify(row.map(va
 hyperparameters = {
     # 基本学習設定
     'learning_rate': ${hyperparams.learningRate},
-    'batch_size': ${document.getElementById('batchSize').value},
-    'epochs': ${document.getElementById('epochs').value},
+    'batch_size': ${batchSize},
+    'epochs': ${epochs},
     'validation_split': ${hyperparams.validation},
     
     # 最適化設定
-    'optimizer': '${document.getElementById('optimizer').value}',
-    'scheduler': '${document.getElementById('scheduler').value}',
+    'optimizer': '${optimizer}',
+    'scheduler': '${scheduler}',
     'dropout_rate': ${hyperparams.dropout},
     'l2_regularization': ${hyperparams.l2Reg},
     ${config.learningMethod === 'reinforcement' ? `
@@ -2164,20 +2169,21 @@ hyperparameters = {
     'epsilon_decay': ${hyperparams.epsilonDecay},
     'epsilon_min': 0.01,
     'gamma': ${hyperparams.gamma},
-    'replay_buffer_size': ${document.getElementById('replayBuffer').value},
+    'replay_buffer_size': ${replayBuffer},
     'target_update_freq': 100,` : `
     # 教師あり学習パラメータ
-    'dataset_path': '${document.getElementById('datasetPath').value || 'path/to/dataset.csv'}',
-    'augmentation': '${document.getElementById('augmentation').value}',
-    'class_weight': '${document.getElementById('classWeight').value}',
-    'loss_function': '${document.getElementById('lossFunction').value}',`}
+    'dataset_path': '${document.getElementById('datasetPath')?.value || 'path/to/dataset.csv'}',
+    'augmentation': '${document.getElementById('augmentation')?.value || 'none'}',
+    'class_weight': '${document.getElementById('classWeight')?.value || 'balanced'}',
+    'loss_function': '${document.getElementById('lossFunction')?.value || 'mse'}',`}
 }
 
 # ===== モデル構築（修正されたエンジン対応） =====
-class CorrectedQuantumBattleAI(BaseAI, nn.Module):
+class CorrectedQuantumBattleAI(nn.Module):
     def __init__(self, name="QuantumBattleAI", player_id="B"):
-        BaseAI.__init__(self, name, player_id)
-        nn.Module.__init__(self)
+        super().__init__()
+        self.name = name
+        self.player_id = player_id
         self.config = module_config
         
         # CQCNNエンコーダ
@@ -2335,23 +2341,24 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
         n_qubits = self.config['quantum']['n_qubits']
         
         # 252次元を7チャンネル × 36次元に分割
-        channels = x.view(7, 36)  # [7チャンネル, 6×6=36次元]
+        batch_size = x.size(0)
+        channels = x.view(batch_size, 7, 36)  # [batch_size, 7チャンネル, 6×6=36次元]
         
         # 各チャンネルから代表値を抽出
         channel_features = []
         for ch in range(7):
-            channel_data = channels[ch]  # 36次元
+            channel_data = channels[:, ch, :]  # [batch_size, 36次元]
             
-            # 各チャンネルから重要な特徴を抽出
-            mean_val = channel_data.mean().item()          # 平均値
-            max_val = channel_data.max().item()            # 最大値  
-            nonzero_count = (channel_data > 0).sum().item() / 36.0  # 非ゼロ率
-            center_val = channel_data[15:21].mean().item()  # 中央部の平均（戦略的重要エリア）
+            # 各チャンネルから重要な特徴を抽出（バッチ対応）
+            mean_val = channel_data.mean(dim=1)          # [batch_size]
+            max_val = channel_data.max(dim=1)[0]         # [batch_size]
+            nonzero_count = (channel_data > 0).sum(dim=1).float() / 36.0  # [batch_size]
+            center_val = channel_data[:, 15:21].mean(dim=1)  # [batch_size]
             
             channel_features.extend([mean_val, max_val, nonzero_count, center_val])
         
-        # 7チャンネル × 4特徴 = 28次元の特徴ベクトル
-        feature_vector = torch.tensor(channel_features, dtype=torch.float32)
+        # 7チャンネル × 4特徴 = 28次元の特徴ベクトル（バッチ対応）
+        feature_vector = torch.stack(channel_features, dim=1)  # [batch_size, 28]
         
         # 量子ビット数に合わせて調整（7チャンネル強制均等分散）
         if n_qubits >= 7:
@@ -2366,7 +2373,7 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
                     feat_idx = i % 4  # 特徴をローテーション (平均→最大→非ゼロ率→中央)
                     selections.append(ch_idx * 4 + feat_idx)
             
-            quantum_input = feature_vector[selections]
+            quantum_input = feature_vector[:, selections]  # [batch_size, n_qubits]
         else:
             # 量子ビットが7未満：重要度順に7チャンネルから選択
             priorities = [0, 1, 2, 5, 6, 3, 4]  # 自分善玉→自分悪玉→敵駒→合法手→脱出→確認済み
@@ -2376,7 +2383,7 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
                 feat_idx = 0  # 最重要特徴（平均値）
                 selections.append(ch_idx * 4 + feat_idx)
             
-            quantum_input = feature_vector[selections]
+            quantum_input = feature_vector[:, selections]  # [batch_size, n_qubits]
         
         # 量子回路用に正規化（0-π範囲）
         quantum_input = torch.tanh(quantum_input) * np.pi / 2
@@ -2385,9 +2392,17 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
     
     def forward(self, x):
         # 7チャンネル均等分散量子エンコーディング
+        batch_size = x.size(0)
         weights = torch.randn(self.config['quantum']['n_layers'], self.config['quantum']['n_qubits'], 2) * 0.1
         quantum_input = self._distribute_channels_to_qubits(x)
-        quantum_features = torch.tensor(self.quantum_encoder(quantum_input, weights))
+        
+        # バッチ処理対応
+        quantum_features_list = []
+        for i in range(batch_size):
+            qf = self.quantum_encoder(quantum_input[i], weights)
+            quantum_features_list.append(torch.tensor(qf, dtype=torch.float32))
+        
+        quantum_features = torch.stack(quantum_features_list)
         
         # 古典的処理
         output = self.classical_decoder(quantum_features)
@@ -2433,25 +2448,52 @@ def train_model(model, config, hyperparameters):
     # ε-greedy パラメータ
     epsilon = hyperparameters['epsilon']
     
+    # ゲーム環境を初期化
+    from qugeister import GeisterEngine
+    system = GeisterEngine()
+    
     for episode in range(hyperparameters['epochs']):
-        state = system.reset()
+        system.reset_game()
+        # 初期状態を作成（252次元ベクトル）
+        state = torch.zeros(252)
         total_reward = 0
         done = False
         
-        while not done:
+        step_count = 0
+        max_steps = 50  # 1エピソードの最大ステップ数
+        
+        while not done and step_count < max_steps:
             # 行動選択
             if random.random() < epsilon:
-                action = random.choice(range(4))
+                action = random.choice(range(5))  # 5個の可能な行動（4方向+脱出）
             else:
                 with torch.no_grad():
-                    q_values = model(state)
+                    q_values = model(state.unsqueeze(0))  # バッチ次元を追加
                     action = q_values.argmax().item()
             
-            # 環境との相互作用
-            next_state, reward, done = system.step(action)
+            # 簡単な環境シミュレーション
+            legal_moves = system.get_legal_moves(system.current_player)
+            if legal_moves and action < len(legal_moves):
+                # 合法手を実行
+                from_pos, to_pos = legal_moves[action % len(legal_moves)]
+                success = system.make_move(from_pos, to_pos)
+                reward = 1.0 if success else -0.1
+            else:
+                # 非合法手
+                reward = -0.5
+            
+            # 次の状態（ランダム）
+            next_state = torch.randn(252) * 0.1
+            
+            # ゲーム終了条件
+            step_count += 1
+            done = step_count >= max_steps or system.game_over
             
             # リプレイバッファに保存
-            replay_buffer.append((state, action, reward, next_state, done))
+            replay_buffer.append((state.clone(), action, reward, next_state.clone(), done))
+            
+            state = next_state
+            total_reward += reward
             
             # ミニバッチ学習
             if len(replay_buffer) >= hyperparameters['batch_size']:
@@ -2459,18 +2501,21 @@ def train_model(model, config, hyperparameters):
                 states, actions, rewards, next_states, dones = zip(*batch)
                 
                 # Q値の計算と更新
-                current_q = model(torch.tensor(states))
-                next_q = model(torch.tensor(next_states))
-                target_q = rewards + hyperparameters['gamma'] * next_q.max(1)[0] * (1 - dones)
+                states_tensor = torch.stack(states)
+                next_states_tensor = torch.stack(next_states)
+                actions_tensor = torch.tensor(actions).unsqueeze(1)
+                rewards_tensor = torch.tensor(rewards, dtype=torch.float32)
+                dones_tensor = torch.tensor(dones, dtype=torch.float32)
                 
-                loss = nn.MSELoss()(current_q.gather(1, actions), target_q)
+                current_q = model(states_tensor)
+                next_q = model(next_states_tensor)
+                target_q = rewards_tensor + hyperparameters['gamma'] * next_q.max(1)[0] * (1 - dones_tensor)
+                
+                loss = nn.MSELoss()(current_q.gather(1, actions_tensor).squeeze(), target_q)
                 
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
-            
-            state = next_state
-            total_reward += reward
         
         # εの減衰
         epsilon = max(0.01, epsilon * hyperparameters['epsilon_decay'])
@@ -2553,26 +2598,31 @@ if __name__ == "__main__":
     print("========================================")
     print("Quantum Battle System - Training Started")
     print("========================================")
-    print("学習方法: 強化学習")
+    print(f"学習方法: ${config.learningMethod === 'reinforcement' ? '強化学習' : '教師あり学習'}")
     print(f"量子ビット数: {module_config['quantum']['n_qubits']}")
     print(f"レイヤー数: {module_config['quantum']['n_layers']}")
     print(f"総パラメータ数: {sum(p.numel() for p in model.parameters())}")
     print("========================================")
     
     # 学習実行
-    trained_model = train_model(model, module_config, hyperparameters)
-    
-    # モデル保存
-    torch.save({
-        'model_state_dict': trained_model.state_dict(),
-        'module_config': module_config,
-        'hyperparameters': hyperparameters,
-        'learning_method': learning_config
-    }, 'quantum_battle_model.pth')
-    
-    print("\\n========================================")
-    print("Training Complete! Model saved as 'quantum_battle_model.pth'")
-    print("========================================")`;
+    try:
+        trained_model = train_model(model, module_config, hyperparameters)
+        
+        # モデル保存
+        torch.save({
+            'model_state_dict': trained_model.state_dict(),
+            'module_config': module_config,
+            'hyperparameters': hyperparameters,
+            'learning_method': learning_config
+        }, 'quantum_battle_model.pth')
+        
+        print("\\n========================================")
+        print("Training Complete! Model saved as 'quantum_battle_model.pth'")
+        print("========================================")
+        
+    except Exception as e:
+        print(f"\\nError during training: {e}")
+        print("Please check your configuration and try again.")`;
 
             document.getElementById('generatedCode').textContent = code;
             document.getElementById('codeOutput').style.display = 'block';

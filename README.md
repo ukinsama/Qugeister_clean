@@ -1,6 +1,16 @@
-# Qugeister - Quantum Geister AI Competition System
+# 🌌 Qugeister - Quantum Geister AI Competition System
 
 A sophisticated quantum-enhanced AI system for playing the Geister board game, featuring quantum neural networks, advanced reinforcement learning, and comprehensive analysis tools.
+
+## 🚀 Live Demo
+
+**🌐 GitHub Pages: [https://ukinsama.github.io/Qugeister_clean/](https://ukinsama.github.io/Qugeister_clean/)**
+
+### Available Tools:
+- **🎮 Quantum AI Playground**: Visualize and adjust quantum neural networks
+- **🔬 Quantum Designer**: Design custom quantum AI in 3 steps  
+- **🐛 Debug Tools**: Developer debugging utilities
+- **🔗 IBM Quantum Integration**: Export/import with IBM Quantum Composer
 
 ## 🚀 Features
 

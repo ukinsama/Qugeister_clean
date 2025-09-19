@@ -1,0 +1,1602 @@
+[
+  {
+    "game_id": "game_1",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_2",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_3",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_4",
+    "winner": "B",
+    "turns": 34,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_5",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_6",
+    "winner": "B",
+    "turns": 38,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_7",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_8",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_9",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_10",
+    "winner": "A",
+    "turns": 31,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_11",
+    "winner": "A",
+    "turns": 9,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_12",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_13",
+    "winner": "B",
+    "turns": 36,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_14",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_15",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_16",
+    "winner": "B",
+    "turns": 36,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_17",
+    "winner": "B",
+    "turns": 42,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_18",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_19",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_20",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_21",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_22",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_23",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_24",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_25",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_26",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_27",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_28",
+    "winner": "A",
+    "turns": 30,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_29",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_30",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_31",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_32",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_33",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_34",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_35",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_36",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_37",
+    "winner": "A",
+    "turns": 32,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_38",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_39",
+    "winner": "A",
+    "turns": 22,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_40",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_41",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_42",
+    "winner": "A",
+    "turns": 13,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_43",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_44",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_45",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_46",
+    "winner": "A",
+    "turns": 31,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_47",
+    "winner": "A",
+    "turns": 36,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_48",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_49",
+    "winner": "A",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_50",
+    "winner": "A",
+    "turns": 46,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_51",
+    "winner": "A",
+    "turns": 30,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_52",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_53",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_54",
+    "winner": "B",
+    "turns": 46,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_55",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_56",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_57",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_58",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_59",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_60",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_61",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_62",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_63",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_64",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_65",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_66",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_67",
+    "winner": "B",
+    "turns": 39,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_68",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_69",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_70",
+    "winner": "A",
+    "turns": 40,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_71",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_72",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_73",
+    "winner": "B",
+    "turns": 40,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_74",
+    "winner": "B",
+    "turns": 32,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_75",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_76",
+    "winner": "B",
+    "turns": 34,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_77",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_78",
+    "winner": "A",
+    "turns": 26,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_79",
+    "winner": "B",
+    "turns": 38,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_80",
+    "winner": "B",
+    "turns": 42,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_81",
+    "winner": "A",
+    "turns": 31,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_82",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_83",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_84",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_85",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_86",
+    "winner": "A",
+    "turns": 38,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_87",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_88",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_89",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_90",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_91",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_92",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_93",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_94",
+    "winner": "A",
+    "turns": 33,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_95",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_96",
+    "winner": "A",
+    "turns": 32,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_97",
+    "winner": "A",
+    "turns": 31,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_98",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_99",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_100",
+    "winner": "A",
+    "turns": 37,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_101",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_102",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_103",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_104",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_105",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_106",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_107",
+    "winner": "B",
+    "turns": 38,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_108",
+    "winner": "B",
+    "turns": 44,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_109",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_110",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_111",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_112",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_113",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_114",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_115",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_116",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_117",
+    "winner": "B",
+    "turns": 48,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_118",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_119",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_120",
+    "winner": "A",
+    "turns": 24,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_121",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_122",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_123",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_124",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_125",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_126",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_127",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_128",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_129",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_130",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_131",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_132",
+    "winner": "B",
+    "turns": 28,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_133",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_134",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_135",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_136",
+    "winner": "B",
+    "turns": 32,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_137",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_138",
+    "winner": "A",
+    "turns": 25,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_139",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_140",
+    "winner": "A",
+    "turns": 23,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_141",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_142",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_143",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_144",
+    "winner": "A",
+    "turns": 38,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_145",
+    "winner": "B",
+    "turns": 30,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_146",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_147",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_148",
+    "winner": "A",
+    "turns": 42,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_149",
+    "winner": "B",
+    "turns": 34,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_150",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_151",
+    "winner": "B",
+    "turns": 42,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_152",
+    "winner": "B",
+    "turns": 32,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_153",
+    "winner": "A",
+    "turns": 42,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_154",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_155",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_156",
+    "winner": "B",
+    "turns": 44,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_157",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_158",
+    "winner": "A",
+    "turns": 32,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_159",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_160",
+    "winner": "A",
+    "turns": 13,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_161",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_162",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_163",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_164",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_165",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_166",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_167",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "Defensive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_168",
+    "winner": "A",
+    "turns": 40,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_169",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_170",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_171",
+    "winner": "B",
+    "turns": 31,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_172",
+    "winner": "A",
+    "turns": 19,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_173",
+    "winner": "A",
+    "turns": 34,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_174",
+    "winner": "A",
+    "turns": 44,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_175",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Defensive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_176",
+    "winner": "B",
+    "turns": 38,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_177",
+    "winner": "A",
+    "turns": 50,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_178",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_179",
+    "winner": "B",
+    "turns": 14,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_180",
+    "winner": "B",
+    "turns": 16,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_181",
+    "winner": "B",
+    "turns": 18,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_182",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_183",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_184",
+    "winner": "A",
+    "turns": 50,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_185",
+    "winner": "A",
+    "turns": 29,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_186",
+    "winner": "B",
+    "turns": 22,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_187",
+    "winner": "B",
+    "turns": 24,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_188",
+    "winner": "B",
+    "turns": 26,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_189",
+    "winner": "A",
+    "turns": 15,
+    "ai1_name": "Balanced",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_190",
+    "winner": "A",
+    "turns": 26,
+    "ai1_name": "Defensive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_191",
+    "winner": "B",
+    "turns": 42,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_192",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Balanced",
+    "ai2_name": "Aggressive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_193",
+    "winner": "A",
+    "turns": 27,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_194",
+    "winner": "A",
+    "turns": 32,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_195",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "EscapeFocus",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_196",
+    "winner": "A",
+    "turns": 21,
+    "ai1_name": "Aggressive",
+    "ai2_name": "EscapeFocus",
+    "game_over": true
+  },
+  {
+    "game_id": "game_197",
+    "winner": "B",
+    "turns": 46,
+    "ai1_name": "Balanced",
+    "ai2_name": "Balanced",
+    "game_over": true
+  },
+  {
+    "game_id": "game_198",
+    "winner": "A",
+    "turns": 17,
+    "ai1_name": "Balanced",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_199",
+    "winner": "B",
+    "turns": 32,
+    "ai1_name": "Aggressive",
+    "ai2_name": "Defensive",
+    "game_over": true
+  },
+  {
+    "game_id": "game_200",
+    "winner": "B",
+    "turns": 20,
+    "ai1_name": "Defensive",
+    "ai2_name": "Balanced",
+    "game_over": true
+  }
+]

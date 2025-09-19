@@ -1,0 +1,7 @@
+{
+  "name": "test10",
+  "type": "quantum_cqcnn",
+  "trained_at": "2025-09-07T06:02:06.278972",
+  "epochs": 100,
+  "final_loss": 0.944244921207428
+}

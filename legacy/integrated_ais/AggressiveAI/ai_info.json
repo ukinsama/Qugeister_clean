@@ -1,0 +1,39 @@
+{
+  "name": "AggressiveAI",
+  "creation_time": "2025-09-03T19:25:25.739057",
+  "config": {
+    "placement": {
+      "strategy": "aggressive",
+      "good_forward_ratio": 0.75
+    },
+    "reward": {
+      "forward_bonus": 2.0,
+      "center_bonus": 1.5
+    },
+    "qmap": {
+      "strategy": "aggressive"
+    },
+    "action": {
+      "epsilon": 0.1
+    },
+    "estimator": {
+      "n_layers": 2,
+      "learning_rate": 0.001
+    },
+    "name": "AggressiveAI"
+  },
+  "modules": {
+    "placement": "標準配置",
+    "estimator": "CQCNN推定器",
+    "reward": "攻撃的報酬",
+    "qmap": "戦略的Q値マップ (aggressive)",
+    "action": "ε-貪欲選択 (ε=0.1)"
+  },
+  "model": {
+    "class_name": "CQCNNModel",
+    "n_qubits": 6,
+    "n_layers": 3,
+    "total_parameters": 27030
+  },
+  "training_results": null
+}

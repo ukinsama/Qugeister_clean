@@ -1,0 +1,39 @@
+{
+  "name": "DefensiveAI",
+  "creation_time": "2025-09-03T19:25:25.744378",
+  "config": {
+    "placement": {
+      "strategy": "defensive",
+      "good_back_ratio": 0.75
+    },
+    "reward": {
+      "retreat_bonus": 1.0,
+      "edge_bonus": 1.5
+    },
+    "qmap": {
+      "strategy": "defensive"
+    },
+    "action": {
+      "temperature": 0.8
+    },
+    "estimator": {
+      "n_layers": 2,
+      "learning_rate": 0.001
+    },
+    "name": "DefensiveAI"
+  },
+  "modules": {
+    "placement": "標準配置",
+    "estimator": "CQCNN推定器",
+    "reward": "防御的報酬",
+    "qmap": "戦略的Q値マップ (defensive)",
+    "action": "ボルツマン選択 (T=0.8)"
+  },
+  "model": {
+    "class_name": "CQCNNModel",
+    "n_qubits": 6,
+    "n_layers": 3,
+    "total_parameters": 27030
+  },
+  "training_results": null
+}

@@ -634,6 +634,36 @@
             font-style: italic;
         }
 
+        /* Q値マップ説明の切り替え */
+        .description-variant {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .description-variant.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .qmap-output {
+            margin-top: 10px;
+        }
+        
+        .qmap-output h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .qmap-output pre {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #2c3e50;
+        }
+
         /* 説明欄の折りたたみ機能 */
         .description-toggle {
             background: none;
@@ -692,7 +722,7 @@
                         </div>
                         <div class="feature-item">
                             <span class="feature-icon">✓</span>
-                            Q学習・DQNアルゴリズム
+                            Q学習
                         </div>
                         <div class="feature-item">
                             <span class="feature-icon">✓</span>
@@ -787,18 +817,18 @@
                             <div class="config-item">
                                 <label class="config-label">🔢 量子ビット数（n_qubits）:</label>
                                 <div class="slider-container">
-                                    <input type="range" class="slider" id="qubitsSlider" min="4" max="12" value="6" 
+                                    <input type="range" class="slider" id="qubitsSlider" min="4" max="12" value="4" 
                                            oninput="updateSliderValue('qubits', this.value)">
-                                    <div class="value-display" id="qubitsValue">6</div>
+                                    <div class="value-display" id="qubitsValue">4</div>
                                 </div>
                             </div>
                             
                             <div class="config-item">
                                 <label class="config-label">📚 レイヤー数（n_layers）:</label>
                                 <div class="slider-container">
-                                    <input type="range" class="slider" id="layersSlider" min="1" max="5" value="2" 
+                                    <input type="range" class="slider" id="layersSlider" min="1" max="5" value="1" 
                                            oninput="updateSliderValue('layers', this.value)">
-                                    <div class="value-display" id="layersValue">2</div>
+                                    <div class="value-display" id="layersValue">1</div>
                                 </div>
                             </div>
                             
@@ -889,7 +919,7 @@
                 <div class="module-card">
                     <div class="module-title">
                         <span class="module-icon">🗺️</span>
-                        モジュール4: Q値マップ
+                        モジュール4: Q値
                     </div>
                     
                     <div class="notebook-cell">
@@ -900,15 +930,76 @@
                                 <div class="option-button selected" onclick="selectModule('qmap', 'dqn', event)">
                                     🧠 DQN
                                 </div>
+                                <div class="option-button" onclick="selectModule('qmap', 'full_output', event)">
+                                    🗺️ 全状態マップ出力
+                                </div>
+                                <div class="option-button" onclick="selectModule('qmap', 'heatmap_analysis', event)">
+                                    🔥 ヒートマップ分析
+                                </div>
+                                <div class="option-button" onclick="selectModule('qmap', 'strategic_pattern', event)">
+                                    🎯 戦略パターン分析
+                                </div>
+                                <div class="option-button" onclick="selectModule('qmap', 'comparative_analysis', event)">
+                                    📊 比較分析モード
+                                </div>
+                                <div class="option-button" onclick="selectModule('qmap', 'spatial_36d', event)">
+                                    🌐 36次元空間マップ
+                                </div>
                             </div>
                         </div>
 
                         <!-- 説明欄 -->
                         <div class="module-description">
                             <h5>🗺️ Q値学習方式の説明</h5>
+                            <div class="description-content" id="qmapDescription">
+                                <div id="qmap-dqn" class="description-variant active">
+                                    <strong>🧠 DQN (Deep Q-Network)</strong><br>
+                                    • 標準的な深層強化学習手法<br>
+                                    • 経験リプレイとターゲットネットワークを使用<br>
+                                    • 安定した学習で基本的なQ値を計算<br>
+                                    • 一般的な用途に適用可能
+                                </div>
+                                <div id="qmap-full_output" class="description-variant">
+                                    <strong>🗺️ 全状態マップ出力</strong><br>
+                                    • <strong>すべての可能な盤面状態のQ値を完全計算</strong><br>
+                                    • 1,000〜10,000状態の大規模分析<br>
+                                    • JSON/CSV/可視化形式で詳細出力<br>
+                                    • 戦略パターンの包括的理解が可能<br>
+                                    • <em>計算時間: 5-15分（状態数による）</em>
+                                </div>
+                                <div id="qmap-heatmap_analysis" class="description-variant">
+                                    <strong>🔥 ヒートマップ分析</strong><br>
+                                    • Q値を色分けした視覚的マップ<br>
+                                    • 行動別の価値分布を一目で把握<br>
+                                    • 高Q値エリアと低Q値エリアを識別<br>
+                                    • 戦略的要地の特定に有効
+                                </div>
+                                <div id="qmap-strategic_pattern" class="description-variant">
+                                    <strong>🎯 戦略パターン分析</strong><br>
+                                    • 攻撃型・守備型・脱出型・バランス型に分類<br>
+                                    • 各パターンの出現頻度と特徴を分析<br>
+                                    • AIの戦略傾向を定量的に評価<br>
+                                    • 学習の偏りや改善点を発見
+                                </div>
+                                <div id="qmap-comparative_analysis" class="description-variant">
+                                    <strong>📊 比較分析モード</strong><br>
+                                    • 異なるパラメータ設定での結果比較<br>
+                                    • 量子ビット数・レイヤー数の影響評価<br>
+                                    • 学習前後のQ値変化を追跡<br>
+                                    • 最適な設定の発見をサポート
+                                </div>
+                                <div id="qmap-spatial_36d" class="description-variant">
+                                    <strong>🌐 36次元空間マップ</strong><br>
+                                    • <strong>6x6空間グリッドでQ値を36次元出力</strong><br>
+                                    • 従来の5行動から空間的な価値マップへ進化<br>
+                                    • 盤面の各位置における価値を直接可視化<br>
+                                    • 局所的な戦略パターンと空間分布を解析<br>
+                                    • <em>5行動Q値との比較分析も同時実行</em>
+                                </div>
+                            </div>
                         </div>
                         
-                        <button class="run-button" onclick="runQMap()">▶ Q値マップを生成</button>
+                        <button class="run-button" onclick="runQMap()">▶ Q値を生成</button>
                         <div class="output-area" id="qmapOutput"></div>
                     </div>
                 </div>
@@ -971,10 +1062,10 @@
                                 <small style="color: #666; font-weight: normal;">- 一度に処理する経験数</small>
                             </label>
                             <select class="param-input" id="batchSize">
+                                <option value="4">4</option>
+                                <option value="8" selected>8</option>
                                 <option value="16">16</option>
-                                <option value="32" selected>32</option>
-                                <option value="64">64</option>
-                                <option value="128">128</option>
+                                <option value="32">32</option>
                                 <option value="256">256</option>
                             </select>
                         </div>
@@ -983,7 +1074,7 @@
                                 <span>🔄</span> エポック数
                                 <small style="color: #666; font-weight: normal;">- 学習の繰り返し回数</small>
                             </label>
-                            <input type="number" class="param-input" id="epochs" value="100" min="10" max="1000">
+                            <input type="number" class="param-input" id="epochs" value="5" min="1" max="1000">
                         </div>
                         <div class="param-item">
                             <label class="param-label">
@@ -1034,9 +1125,9 @@
                                 <small style="color: #666; font-weight: normal;">- 過去の経験を記憶する容量</small>
                             </label>
                             <select class="param-input" id="replayBuffer">
-                                <option value="1000">1,000</option>
-                                <option value="5000">5,000</option>
-                                <option value="10000" selected>10,000</option>
+                                <option value="500">500</option>
+                                <option value="1000" selected>1,000</option>
+                                <option value="10000">10,000</option>
                                 <option value="50000">50,000</option>
                             </select>
                         </div>
@@ -1133,8 +1224,8 @@
         const config = {
             learningMethod: '',
             placement: 'standard',
-            qubits: 8,
-            layers: 3,
+            qubits: 4,
+            layers: 1,
             embedding: 'angle',
             entanglement: 'linear',
             reward: 'balanced',
@@ -1147,12 +1238,12 @@
 
         const hyperparams = {
             learningRate: 0.001,
-            batchSize: 32,
-            epochs: 100,
+            batchSize: 8,
+            epochs: 5,
             validation: 0.2,
             epsilon: 0.1,
             epsilonDecay: 0.995,
-            replayBuffer: 10000,
+            replayBuffer: 1000,
             gamma: 0.99,
             dropout: 0.2,
             l2Reg: 0.0001,
@@ -1265,10 +1356,181 @@ ${rewards[config.reward]}`;
         function runQMap() {
             const output = document.getElementById('qmapOutput');
             output.style.display = 'block';
-            output.textContent = `✅ Q値マップ生成完了
-方法: ${config.qmap}
-状態空間: 6x6x4 = 144次元
-行動空間: 4方向`;
+            
+            // Q値マップタイプ別の処理
+            const qmapDescriptions = {
+                'dqn': {
+                    title: '✅ DQN Q値マップ生成完了',
+                    content: `方法: Deep Q-Network
+状態空間: 252次元（7チャンネル）
+行動空間: 5方向（上下左右+脱出）
+推定計算時間: 30秒`
+                },
+                'full_output': {
+                    title: '🗺️ 全状態マップ出力開始',
+                    content: `🚀 完全Q値マップ分析を実行中...
+
+分析内容:
+• 1,000〜10,000状態の完全計算
+• 戦略パターン分析（攻撃型・守備型・脱出型・バランス型）
+• ヒートマップ生成
+• JSON/CSV/可視化出力
+
+💡 コマンドライン実行:
+python qvalue_full_output_module.py 2
+
+推定時間: 5-15分
+結果保存: qvalue_analysis_results/`
+                },
+                'heatmap_analysis': {
+                    title: '🔥 Q値ヒートマップ分析',
+                    content: `視覚化内容:
+• 5つの行動別Q値分布
+• 高価値エリア（赤色）の特定
+• 低価値エリア（青色）の特定
+• 戦略的要地マップ
+
+出力形式: PNG, SVG, インタラクティブHTML`
+                },
+                'strategic_pattern': {
+                    title: '🎯 戦略パターン分析',
+                    content: `分析パターン:
+• 攻撃型: 前進重視戦略
+• 守備型: 後退・保守戦略  
+• 脱出型: 脱出最優先戦略
+• バランス型: 状況適応戦略
+
+統計出力:
+• 各パターンの出現頻度
+• Q値分散の比較
+• 最適戦略の推奨`
+                },
+                'comparative_analysis': {
+                    title: '📊 比較分析モード',
+                    content: `比較項目:
+• 量子ビット数の影響（2, 4, 6, 8ビット）
+• レイヤー数の影響（1, 2, 3レイヤー）
+• 学習率の影響
+• 学習前後の変化追跡
+
+グラフ出力:
+• パフォーマンス比較チャート
+• パラメータ感度分析
+• 収束速度比較`
+                },
+                'spatial_36d': {
+                    title: '🌐 36次元空間Q値マップ生成',
+                    content: `🚀 新世代36次元Q値マップ分析
+
+出力形式:
+• 36次元ベクトル → 6x6空間マップ変換
+• 従来5行動Q値との同時出力・比較
+• 空間的ホットスポット検出と可視化
+
+分析内容:
+• 6x6グリッド各位置の価値分布
+• 空間分散と局所パターン解析
+• 5行動システムとの戦略比較
+• 位置別最適行動マッピング
+
+💡 実行コマンド:
+python qvalue_full_output_module.py 2
+
+推定時間: 5-10分
+結果: 空間マップPNG + 比較分析チャート`
+                }
+            };
+            
+            const description = qmapDescriptions[config.qmap] || qmapDescriptions['dqn'];
+            
+            output.innerHTML = `<div class="qmap-output">
+                <h4>${description.title}</h4>
+                <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 12px;">${description.content}</pre>
+                ${(config.qmap === 'full_output' || config.qmap === 'spatial_36d') ? 
+                    `<div style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="executeQMapAnalysis()" style="margin-right: 10px;">
+                            🚀 分析実行
+                        </button>
+                        <button class="btn btn-secondary" onclick="viewPreviousResults()">
+                            📁 過去の結果を表示
+                        </button>
+                        ${config.qmap === 'spatial_36d' ? 
+                            `<button class="btn btn-info" onclick="showSpatialMapInfo()" style="margin-left: 10px;">
+                                🌐 36次元マップ詳細
+                            </button>` : ''
+                        }
+                    </div>` : ''
+                }
+            </div>`;
+        }
+        
+        function executeQMapAnalysis() {
+            const output = document.getElementById('qmapOutput');
+            const analyzeType = config.qmap === 'spatial_36d' ? '36次元空間Q値マップ' : 'Q値マップ';
+            
+            output.innerHTML += `
+                <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px; border-left: 4px solid #2196f3;">
+                    <strong>📊 ${analyzeType}実行ステータス:</strong><br>
+                    1. 学習済みモデル確認中...<br>
+                    2. 盤面状態生成中...<br>
+                    3. ${config.qmap === 'spatial_36d' ? '36次元Q値計算実行中...<br>4. 6x6空間マップ変換中...<br>5. 5行動Q値比較実行中...' : 'Q値計算実行中...<br>4. 戦略パターン分析中...'}<br>
+                    ${config.qmap === 'spatial_36d' ? '6. 空間ホットスポット解析中...<br>7. 可視化生成中...' : '5.'} 結果出力中...<br><br>
+                    
+                    <em>💡 実際の実行は、fast_quantum_trainer.pyで学習完了後に行ってください。</em><br>
+                    <code>python qvalue_full_output_module.py</code>
+                    ${config.qmap === 'spatial_36d' ? '<br><em>※ 36次元空間マップモードでは追加の可視化ファイルが生成されます</em>' : ''}
+                </div>`;
+        }
+        
+        function showSpatialMapInfo() {
+            const output = document.getElementById('qmapOutput');
+            output.innerHTML += `
+                <div style="margin-top: 15px; padding: 15px; background: #f3e5f5; border-radius: 8px; border: 2px solid #9c27b0;">
+                    <h5 style="color: #7b1fa2; margin-bottom: 10px;">🌐 36次元空間Q値マップ詳細解説</h5>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <h6 style="color: #4a148c;">📐 技術仕様:</h6>
+                            <ul style="font-size: 12px; margin: 5px 0;">
+                                <li>出力次元: 36 (6×6グリッド)</li>
+                                <li>入力: 252次元 (7チャンネル)</li>
+                                <li>量子ビット: 4量子ビット</li>
+                                <li>後処理: 4→32→36次元</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6 style="color: #4a148c;">📊 出力ファイル:</h6>
+                            <ul style="font-size: 12px; margin: 5px 0;">
+                                <li>*_spatial.png: 9個サンプル空間マップ</li>
+                                <li>*_comparison.png: 5行動vs36次元比較</li>
+                                <li>JSON: ホットスポット座標データ</li>
+                                <li>CSV: 空間分散統計</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #fce4ec; padding: 10px; border-radius: 5px; font-size: 12px;">
+                        <strong>🔬 分析ポイント:</strong><br>
+                        • 6×6グリッドの各セルが盤面位置の価値を表現<br>
+                        • 従来の上下左右脱出(5行動)を空間的に拡張<br>
+                        • 局所的な価値パターンと大域的戦略の両方を可視化<br>
+                        • AIが「どの位置を重要視するか」を直接観察可能
+                    </div>
+                </div>`;
+        }
+        
+        function viewPreviousResults() {
+            const output = document.getElementById('qmapOutput');
+            output.innerHTML += `
+                <div style="margin-top: 15px; padding: 10px; background: #f3e5f5; border-radius: 5px; border-left: 4px solid #9c27b0;">
+                    <strong>📂 過去の分析結果:</strong><br>
+                    • qvalue_analysis_results/qvalue_full_output.json<br>
+                    • qvalue_analysis_results/qvalue_heatmap.png<br>
+                    • qvalue_analysis_results/qvalue_summary.csv<br>
+                    • qvalue_analysis_results/qvalue_complete_data.pkl<br><br>
+                    
+                    <em>結果ファイルが存在する場合、ブラウザで確認できます。</em>
+                </div>`;
         }
 
         function runAction() {
@@ -1498,6 +1760,17 @@ ${strategies[config.action]}`;
                     setDefensivePlacement();
                 }
                 // customの場合は現在の配置を保持
+            }
+            
+            // Q値マップの説明切り替え
+            if (type === 'qmap') {
+                document.querySelectorAll('.description-variant').forEach(desc => {
+                    desc.classList.remove('active');
+                });
+                const targetDesc = document.getElementById(`qmap-${value}`);
+                if (targetDesc) {
+                    targetDesc.classList.add('active');
+                }
             }
         }
         
@@ -1734,14 +2007,11 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
         self.quantum_encoder = self._build_quantum_encoder()
         
         # 古典的デコーダ（脱出アクション対応）
+        # 古典的デコーダ（軽量化版）
         self.classical_decoder = nn.Sequential(
-            nn.Linear(self.config['quantum']['n_qubits'], 128),
+            nn.Linear(self.config['quantum']['n_qubits'], 32),
             nn.ReLU(),
-            nn.Dropout(hyperparameters['dropout_rate']),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Dropout(hyperparameters['dropout_rate']),
-            nn.Linear(64, 5)  # 4方向 + 脱出アクション
+            nn.Linear(32, 5)  # 4方向 + 脱出アクション（軽量化）
         )
     
     def get_move(self, game_state, legal_moves):
@@ -1783,7 +2053,11 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
         n_qubits = self.config['quantum']['n_qubits']
         n_layers = self.config['quantum']['n_layers']
         
-        dev = qml.device('default.qubit', wires=n_qubits)
+        # lightning.qubitが使えない場合はdefault.qubitを使用
+        try:
+            dev = qml.device('lightning.qubit', wires=n_qubits)
+        except (ImportError, Exception):
+            dev = qml.device('default.qubit', wires=n_qubits)
         
         @qml.qnode(dev)
         def quantum_circuit(inputs, weights):
@@ -1876,10 +2150,67 @@ class CorrectedQuantumBattleAI(BaseAI, nn.Module):
         
         return 0  # デフォルト
     
+    def _distribute_channels_to_qubits(self, x):
+        """7チャンネル（252次元）を量子ビット数に均等分散"""
+        import torch
+        import numpy as np
+        
+        n_qubits = self.config['quantum']['n_qubits']
+        
+        # 252次元を7チャンネル × 36次元に分割
+        channels = x.view(7, 36)  # [7チャンネル, 6×6=36次元]
+        
+        # 各チャンネルから代表値を抽出
+        channel_features = []
+        for ch in range(7):
+            channel_data = channels[ch]  # 36次元
+            
+            # 各チャンネルから重要な特徴を抽出
+            mean_val = channel_data.mean().item()          # 平均値
+            max_val = channel_data.max().item()            # 最大値  
+            nonzero_count = (channel_data > 0).sum().item() / 36.0  # 非ゼロ率
+            center_val = channel_data[15:21].mean().item()  # 中央部の平均（戦略的重要エリア）
+            
+            channel_features.extend([mean_val, max_val, nonzero_count, center_val])
+        
+        # 7チャンネル × 4特徴 = 28次元の特徴ベクトル
+        feature_vector = torch.tensor(channel_features, dtype=torch.float32)
+        
+        # 量子ビット数に合わせて調整（7チャンネル強制均等分散）
+        if n_qubits >= 7:
+            # 量子ビットが7以上：各チャンネルから最低1つ選択
+            selections = []
+            base_per_channel = n_qubits // 7
+            extra = n_qubits % 7
+            
+            for ch_idx in range(7):
+                count = base_per_channel + (1 if ch_idx < extra else 0)
+                for i in range(count):
+                    feat_idx = i % 4  # 特徴をローテーション (平均→最大→非ゼロ率→中央)
+                    selections.append(ch_idx * 4 + feat_idx)
+            
+            quantum_input = feature_vector[selections]
+        else:
+            # 量子ビットが7未満：重要度順に7チャンネルから選択
+            priorities = [0, 1, 2, 5, 6, 3, 4]  # 自分善玉→自分悪玉→敵駒→合法手→脱出→確認済み
+            selections = []
+            for i in range(n_qubits):
+                ch_idx = priorities[i]
+                feat_idx = 0  # 最重要特徴（平均値）
+                selections.append(ch_idx * 4 + feat_idx)
+            
+            quantum_input = feature_vector[selections]
+        
+        # 量子回路用に正規化（0-π範囲）
+        quantum_input = torch.tanh(quantum_input) * np.pi / 2
+        
+        return quantum_input
+    
     def forward(self, x):
-        # 量子エンコーディング
+        # 7チャンネル均等分散量子エンコーディング
         weights = torch.randn(self.config['quantum']['n_layers'], self.config['quantum']['n_qubits'], 2) * 0.1
-        quantum_features = torch.tensor(self.quantum_encoder(x[:self.config['quantum']['n_qubits']], weights))
+        quantum_input = self._distribute_channels_to_qubits(x)
+        quantum_features = torch.tensor(self.quantum_encoder(quantum_input, weights))
         
         # 古典的処理
         output = self.classical_decoder(quantum_features)
@@ -2064,14 +2395,54 @@ if __name__ == "__main__":
     
     print("\\n========================================")
     print("Training Complete! Model saved as 'quantum_battle_model.pth'")
-    print("========================================")
-`;
+    print("========================================")`;
 
             document.getElementById('generatedCode').textContent = code;
             document.getElementById('codeOutput').style.display = 'block';
             
+            // 設定をローカルストレージに保存（Playground連携用）
+            const playgroundConfig = {
+                source: '3step_system',
+                timestamp: new Date().toISOString(),
+                config: config,
+                hyperparameters: {
+                    batchSize: batchSize,
+                    epochs: epochs,
+                    optimizer: optimizer,
+                    scheduler: scheduler,
+                    replayBuffer: replayBuffer
+                },
+                descriptions: {
+                    placement: placementDesc,
+                    quantum: quantumDesc,
+                    reward: rewardDesc,
+                    qmap: qmapDesc,
+                    action: actionDesc
+                }
+            };
+            localStorage.setItem('3step_config', JSON.stringify(playgroundConfig));
+            
+            // Playgroundへ移動ボタンを表示
+            showPlaygroundButton();
+            
             // スクロール
             document.getElementById('codeOutput').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Playgroundへ移動ボタンを表示
+        function showPlaygroundButton() {
+            const existingBtn = document.getElementById('goToPlayground');
+            if (!existingBtn) {
+                const btn = document.createElement('button');
+                btn.id = 'goToPlayground';
+                btn.className = 'btn btn-primary';
+                btn.style.marginTop = '20px';
+                btn.innerHTML = '🎨 Playgroundで詳細設計 →';
+                btn.onclick = () => {
+                    window.open('quantum_ai_playground.html', '_blank');
+                };
+                document.getElementById('codeOutput').appendChild(btn);
+            }
         }
 
         // コードコピー

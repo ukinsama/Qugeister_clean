@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum AI Playground - Simplified</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 左サイドバー - 簡易化 */
+        .sidebar-left {
+            width: 200px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2a5298;
+            border-bottom: 2px solid #2a5298;
+            padding-bottom: 5px;
+        }
+
+        /* メインビジュアライザー */
+        .main-visualizer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .network-canvas {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        /* 右サイドバー - 出力設定 */
+        .sidebar-right {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* SVG ネットワーク */
+        #network-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ノード（ニューロン/量子ビット） */
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .node:hover {
+            filter: brightness(1.2);
+        }
+
+        .classical-node {
+            fill: #4CAF50;
+            stroke: #2E7D32;
+            stroke-width: 2;
+        }
+
+        .quantum-node {
+            fill: #9C27B0;
+            stroke: #6A1B9A;
+            stroke-width: 2;
+        }
+
+        .input-node {
+            fill: #2196F3;
+            stroke: #1565C0;
+            stroke-width: 2;
+        }
+
+        .output-node {
+            fill: #FF9800;
+            stroke: #E65100;
+            stroke-width: 2;
+        }
+
+        /* エッジ（接続） */
+        .edge {
+            stroke: #666;
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.6;
+        }
+
+        .quantum-edge {
+            stroke: #9C27B0;
+            stroke-width: 2;
+            stroke-dasharray: 5,5;
+            /* アニメーション削除 */
+        }
+
+
+        /* コントロールパネル */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        /* ボタン */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+
+        .btn-quantum {
+            background: #9C27B0;
+            color: white;
+        }
+
+        .btn-quantum:hover {
+            background: #7B1FA2;
+        }
+
+        /* データフロー可視化 */
+        .data-flow {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFC107;
+            border-radius: 50%;
+            /* アニメーション削除 */
+            pointer-events: none;
+            box-shadow: 0 0 10px #FFC107;
+        }
+
+
+        /* 量子状態表示 */
+        .quantum-state {
+            background: rgba(156, 39, 176, 0.1);
+            border: 2px solid #9C27B0;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .superposition {
+            color: #9C27B0;
+            font-weight: bold;
+        }
+
+        /* ツールチップ */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* メトリクス表示 */
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .metric-card {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* アニメーション制御 */
+        .static-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* レイヤー選択 */
+        .layer-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .layer-btn {
+            padding: 5px 10px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .layer-btn.active {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+
+        .layer-btn.quantum {
+            border-color: #9C27B0;
+        }
+
+        .layer-btn.quantum.active {
+            background: #9C27B0;
+            border-color: #9C27B0;
+        }
+
+        /* ヘッダー */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 250px;
+            right: 250px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            color: #2a5298;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 左サイドバー：量子設定 -->
+        <div class="sidebar-left">
+            <div class="sidebar-title">⚛️ 量子設定</div>
+            
+            <div class="control-group">
+                <label class="control-label">量子ビット数</label>
+                <input type="range" class="slider" id="qubit-slider" 
+                       min="4" max="12" value="8" 
+                       oninput="updateQubits(this.value)">
+                <div style="text-align: center; font-weight: bold; margin-top: 5px;">
+                    <span id="qubit-count">8</span> qubits
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">量子層数</label>
+                <input type="range" class="slider" id="layer-slider" 
+                       min="1" max="5" value="3" 
+                       oninput="updateLayers(this.value)">
+                <div style="text-align: center; font-weight: bold; margin-top: 5px;">
+                    <span id="layer-count">3</span> layers
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">エンタングルメント</label>
+                <select class="control-input" onchange="updateEntanglement(this.value)">
+                    <option value="linear">Linear</option>
+                    <option value="circular">Circular</option>
+                    <option value="full">Full</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- メインビジュアライザー -->
+        <div class="main-visualizer">
+            <!-- ヘッダー -->
+            <div class="header">
+                <h1>🌌 Quantum AI Playground</h1>
+                <div class="subtitle">ガイスター量子AIの構造可視化 (簡易版)</div>
+            </div>
+
+            <!-- ネットワーク描画エリア -->
+            <div class="network-canvas" id="network-canvas">
+                <svg id="network-svg"></svg>
+                <div class="tooltip" id="tooltip"></div>
+            </div>
+
+            <!-- コントロールパネル -->
+            <div class="control-panel">
+                <div class="static-controls">
+                    <button class="btn btn-quantum" onclick="toggleQuantumMode()">⚛️ 量子モード</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右サイドバー：量子回路詳細とコンポーザー連携 -->
+        <div class="sidebar-right">
+            <div class="sidebar-title">⚛️ 量子回路詳細</div>
+            
+            <div class="quantum-state">
+                <div style="font-weight: bold; margin-bottom: 5px;">量子状態</div>
+                <div class="superposition">
+                    |ψ⟩ = α|0⟩ + β|1⟩
+                </div>
+                <div style="margin-top: 10px; font-size: 0.9em;">
+                    確率振幅: α=0.707, β=0.707
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">回路構成</label>
+                <div style="background: #f0f8ff; padding: 10px; border-radius: 8px; font-size: 11px; border: 1px solid #9c27b0;">
+                    <div style="margin: 3px 0;"><strong>入力:</strong> 角度エンコーディング</div>
+                    <div style="margin: 3px 0;"><strong>ゲート:</strong> RY, RZ, CNOT</div>
+                    <div style="margin: 3px 0;"><strong>測定:</strong> Pauli-Z</div>
+                    <div style="margin: 3px 0; color: #9c27b0;"><strong>パラメータ:</strong> <span id="param-count">32</span>個</div>
+                </div>
+            </div>
+            
+            <!-- コンポーザー連携 -->
+            <div class="sidebar-title" style="margin-top: 20px; color: #9C27B0;">🔗 ワークフロー</div>
+            <div class="control-group">
+                <button class="btn btn-quantum" style="width: 100%;" onclick="exportToQiskit()">
+                    🌐 IBM Quantum Composerへ →
+                </button>
+                <div style="font-size: 0.8em; color: #666; margin-top: 5px; text-align: center;">
+                    OpenQASMコードを生成してComposerで実行
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ネットワーク構造の定義
+        let networkStructure = {
+            input: 252,
+            quantum: 8,
+            hidden: [128, 64],
+            output: 5
+        };
+
+        let isQuantumMode = true;
+        let dataFlowElements = [];
+
+        // SVG要素の初期化
+        function initializeNetwork() {
+            const svg = document.getElementById('network-svg');
+            const rect = svg.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            // クリア
+            svg.innerHTML = '';
+
+            // 層の配置
+            const layers = [];
+            
+            // 入力層（7チャンネル表示）
+            layers.push({
+                type: 'input',
+                nodes: 7,  // 7チャンネルを表示
+                x: width * 0.1,
+                labels: ['自分善玉', '自分悪玉', '敵駒', '確認済善玉', '確認済悪玉', '合法手', '脱出位置']
+            });
+
+            // 量子層
+            if (isQuantumMode) {
+                layers.push({
+                    type: 'quantum',
+                    nodes: networkStructure.quantum,
+                    x: width * 0.35
+                });
+            }
+
+            // 隠れ層
+            layers.push({
+                type: 'hidden',
+                nodes: 8,  // 簡略化表示
+                x: width * 0.6
+            });
+
+            layers.push({
+                type: 'hidden',
+                nodes: 6,  // 簡略化表示
+                x: width * 0.75
+            });
+
+            // 出力層
+            layers.push({
+                type: 'output',
+                nodes: 5,
+                x: width * 0.9
+            });
+
+            // ノードの描画
+            layers.forEach((layer, layerIndex) => {
+                const nodeSpacing = height / (layer.nodes + 1);
+                
+                for (let i = 0; i < layer.nodes; i++) {
+                    const y = nodeSpacing * (i + 1);
+                    
+                    // ノード作成
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', layer.x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', layer.type === 'quantum' ? 15 : 10);
+                    circle.setAttribute('class', `node ${layer.type}-node`);
+                    circle.setAttribute('id', `node-${layerIndex}-${i}`);
+                    
+                    // ツールチップイベント
+                    circle.addEventListener('mouseenter', (e) => showTooltip(e, layer, i));
+                    circle.addEventListener('mouseleave', hideTooltip);
+                    
+                    svg.appendChild(circle);
+
+                    // ラベル
+                    if (layer.type === 'output') {
+                        const labels = ['↑', '→', '↓', '←', '🚪'];
+                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        text.setAttribute('x', layer.x + 25);
+                        text.setAttribute('y', y + 5);
+                        text.setAttribute('fill', '#333');
+                        text.setAttribute('font-size', '14');
+                        text.textContent = labels[i];
+                        svg.appendChild(text);
+                    } else if (layer.type === 'input' && layer.labels) {
+                        // 入力層のチャンネルラベル
+                        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                        text.setAttribute('x', layer.x - 60);
+                        text.setAttribute('y', y + 5);
+                        text.setAttribute('fill', '#333');
+                        text.setAttribute('font-size', '10');
+                        text.textContent = layer.labels[i];
+                        svg.appendChild(text);
+                    }
+                }
+
+                // エッジの描画（次の層への接続）
+                if (layerIndex < layers.length - 1) {
+                    const nextLayer = layers[layerIndex + 1];
+                    const currentNodeSpacing = height / (layer.nodes + 1);
+                    const nextNodeSpacing = height / (nextLayer.nodes + 1);
+
+                    // 7チャンネル均等分散に基づく接続表示
+                    if (layer.type === 'input' && nextLayer.type === 'quantum') {
+                        // 入力→量子: 7チャンネルから量子ビットへの分散を表示
+                        for (let i = 0; i < layer.nodes; i++) {
+                            for (let j = 0; j < nextLayer.nodes; j++) {
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            const y1 = currentNodeSpacing * (i + 1);
+                            const y2 = nextNodeSpacing * (j + 1);
+                            
+                                const d = `M ${layer.x} ${y1} Q ${(layer.x + nextLayer.x) / 2} ${(y1 + y2) / 2} ${nextLayer.x} ${y2}`;
+                                path.setAttribute('d', d);
+                                path.setAttribute('class', 'input-quantum-edge');
+                                path.setAttribute('stroke', `hsl(${i * 360 / layer.nodes}, 70%, 50%)`);
+                                path.setAttribute('stroke-width', '1.5');
+                                path.setAttribute('opacity', '0.6');
+                                path.setAttribute('id', `edge-${layerIndex}-${i}-${j}`);
+                                
+                                svg.appendChild(path);
+                            }
+                        }
+                    } else {
+                        // その他の接続: 簡略化表示
+                        for (let i = 0; i < layer.nodes; i++) {
+                            for (let j = 0; j < Math.min(nextLayer.nodes, layer.nodes); j++) {
+                                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                                const y1 = currentNodeSpacing * (i + 1);
+                                const y2 = nextNodeSpacing * (j + 1);
+                                
+                                const d = `M ${layer.x} ${y1} Q ${(layer.x + nextLayer.x) / 2} ${(y1 + y2) / 2} ${nextLayer.x} ${y2}`;
+                                path.setAttribute('d', d);
+                                path.setAttribute('class', layer.type === 'quantum' ? 'quantum-edge' : 'edge');
+                                path.setAttribute('id', `edge-${layerIndex}-${i}-${j}`);
+                                
+                                svg.appendChild(path);
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 量子ゲート表示（量子モード時）
+            if (isQuantumMode) {
+                addQuantumGates(svg, width, height);
+            }
+        }
+
+        // 量子ゲートの追加
+        function addQuantumGates(svg, width, height) {
+            const quantumX = width * 0.35;
+            const gateSize = 30;
+            
+            // RYゲート
+            const ryGate = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            ryGate.setAttribute('x', quantumX - 60);
+            ryGate.setAttribute('y', height * 0.3);
+            ryGate.setAttribute('width', gateSize);
+            ryGate.setAttribute('height', gateSize);
+            ryGate.setAttribute('fill', '#E91E63');
+            ryGate.setAttribute('rx', 5);
+            
+            const ryText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            ryText.setAttribute('x', quantumX - 45);
+            ryText.setAttribute('y', height * 0.3 + 20);
+            ryText.setAttribute('fill', 'white');
+            ryText.setAttribute('font-size', '12');
+            ryText.setAttribute('text-anchor', 'middle');
+            ryText.textContent = 'RY';
+            
+            svg.appendChild(ryGate);
+            svg.appendChild(ryText);
+
+            // CNOTゲート
+            const cnotGate = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const cnotX = quantumX + 60;
+            
+            const control = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            control.setAttribute('cx', cnotX);
+            control.setAttribute('cy', height * 0.4);
+            control.setAttribute('r', 5);
+            control.setAttribute('fill', '#3F51B5');
+            
+            const target = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            target.setAttribute('cx', cnotX);
+            target.setAttribute('cy', height * 0.6);
+            target.setAttribute('r', 8);
+            target.setAttribute('fill', 'none');
+            target.setAttribute('stroke', '#3F51B5');
+            target.setAttribute('stroke-width', 2);
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', cnotX);
+            line.setAttribute('y1', height * 0.4);
+            line.setAttribute('x2', cnotX);
+            line.setAttribute('y2', height * 0.6);
+            line.setAttribute('stroke', '#3F51B5');
+            line.setAttribute('stroke-width', 2);
+            
+            cnotGate.appendChild(line);
+            cnotGate.appendChild(control);
+            cnotGate.appendChild(target);
+            svg.appendChild(cnotGate);
+        }
+
+        // 強化CNN可視化制御
+        function toggleCNNVisualization(layerType) {
+            const buttons = document.querySelectorAll('button[onclick*="toggleCNNVisualization"]');
+            
+            // Reset all buttons
+            buttons.forEach(btn => {
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            });
+            
+            // Highlight selected button
+            const selectedBtn = document.querySelector(`button[onclick="toggleCNNVisualization('${layerType}')"]`);
+            if (selectedBtn) {
+                selectedBtn.style.backgroundColor = '#4caf50';
+                selectedBtn.style.color = 'white';
+            }
+            
+            // Update visualization based on layer type
+            switch(layerType) {
+                case 'preprocessing':
+                    visualizePreprocessingLayers();
+                    break;
+                case 'postprocessing':
+                    visualizePostprocessingLayers();
+                    break;
+                case 'quantum':
+                    visualizeQuantumLayers();
+                    break;
+                case 'gradients':
+                    visualizeGradientFlow();
+                    break;
+            }
+        }
+        
+        function visualizePreprocessingLayers() {
+            // Simulate preprocessing layer visualization
+            const svg = document.getElementById('network-svg');
+            
+            // Add preprocessing layer indicators
+            const layers = [252, 512, 256, 128, 64, 4];
+            const colors = ['#ff9800', '#ff5722', '#f44336', '#e91e63', '#9c27b0', '#673ab7'];
+            
+            // Clear previous indicators
+            const oldIndicators = svg.querySelectorAll('.preprocessing-indicator');
+            oldIndicators.forEach(ind => ind.remove());
+            
+            layers.forEach((size, i) => {
+                const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                indicator.setAttribute('class', 'preprocessing-indicator');
+                indicator.setAttribute('x', 50 + i * 70);
+                indicator.setAttribute('y', 50);
+                indicator.setAttribute('width', Math.min(60, size / 10));
+                indicator.setAttribute('height', 20);
+                indicator.setAttribute('fill', colors[i]);
+                indicator.setAttribute('opacity', '0.7');
+                
+                // Add text label
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', 50 + i * 70 + 5);
+                label.setAttribute('y', 65);
+                label.setAttribute('font-size', '10');
+                label.setAttribute('fill', 'white');
+                label.textContent = size;
+                label.setAttribute('class', 'preprocessing-indicator');
+                
+                svg.appendChild(indicator);
+                svg.appendChild(label);
+            });
+        }
+        
+        function visualizePostprocessingLayers() {
+            const svg = document.getElementById('network-svg');
+            
+            // Add postprocessing layer indicators
+            const layers = [4, 128, 256, 512, 256, 128, 64, 36];
+            const colors = ['#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a'];
+            
+            const oldIndicators = svg.querySelectorAll('.postprocessing-indicator');
+            oldIndicators.forEach(ind => ind.remove());
+            
+            layers.forEach((size, i) => {
+                const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                indicator.setAttribute('class', 'postprocessing-indicator');
+                indicator.setAttribute('x', 50 + i * 70);
+                indicator.setAttribute('y', 200);
+                indicator.setAttribute('width', Math.min(60, size / 10));
+                indicator.setAttribute('height', 20);
+                indicator.setAttribute('fill', colors[i]);
+                indicator.setAttribute('opacity', '0.7');
+                
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', 50 + i * 70 + 5);
+                label.setAttribute('y', 215);
+                label.setAttribute('font-size', '10');
+                label.setAttribute('fill', 'white');
+                label.textContent = size;
+                label.setAttribute('class', 'postprocessing-indicator');
+                
+                svg.appendChild(indicator);
+                svg.appendChild(label);
+            });
+        }
+        
+        function visualizeQuantumLayers() {
+            const svg = document.getElementById('network-svg');
+            
+            // Add quantum circuit visualization
+            const oldIndicators = svg.querySelectorAll('.quantum-indicator');
+            oldIndicators.forEach(ind => ind.remove());
+            
+            // Draw quantum circuit representation
+            for (let qubit = 0; qubit < 4; qubit++) {
+                // Qubit line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('class', 'quantum-indicator');
+                line.setAttribute('x1', 200);
+                line.setAttribute('y1', 120 + qubit * 30);
+                line.setAttribute('x2', 450);
+                line.setAttribute('y2', 120 + qubit * 30);
+                line.setAttribute('stroke', '#9c27b0');
+                line.setAttribute('stroke-width', '2');
+                svg.appendChild(line);
+                
+                // Quantum gates
+                for (let layer = 0; layer < 2; layer++) {
+                    const gate = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    gate.setAttribute('class', 'quantum-indicator');
+                    gate.setAttribute('cx', 250 + layer * 80);
+                    gate.setAttribute('cy', 120 + qubit * 30);
+                    gate.setAttribute('r', 8);
+                    gate.setAttribute('fill', '#e91e63');
+                    gate.setAttribute('stroke', 'white');
+                    gate.setAttribute('stroke-width', '2');
+                    svg.appendChild(gate);
+                }
+            }
+            
+            // Add enhancement layer indicator
+            const enhancer = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            enhancer.setAttribute('class', 'quantum-indicator');
+            enhancer.setAttribute('x', 180);
+            enhancer.setAttribute('y', 100);
+            enhancer.setAttribute('width', 40);
+            enhancer.setAttribute('height', 120);
+            enhancer.setAttribute('fill', '#ff9800');
+            enhancer.setAttribute('opacity', '0.3');
+            enhancer.setAttribute('stroke', '#ff5722');
+            enhancer.setAttribute('stroke-width', '2');
+            svg.appendChild(enhancer);
+            
+            const enhancerLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            enhancerLabel.setAttribute('class', 'quantum-indicator');
+            enhancerLabel.setAttribute('x', 200);
+            enhancerLabel.setAttribute('y', 95);
+            enhancerLabel.setAttribute('text-anchor', 'middle');
+            enhancerLabel.setAttribute('font-size', '10');
+            enhancerLabel.setAttribute('fill', '#ff5722');
+            enhancerLabel.textContent = '量子特徴増強';
+            svg.appendChild(enhancerLabel);
+        }
+        
+        function visualizeGradientFlow() {
+            const svg = document.getElementById('network-svg');
+            
+            // Add gradient flow indicators
+            const oldIndicators = svg.querySelectorAll('.gradient-indicator');
+            oldIndicators.forEach(ind => ind.remove());
+            
+            // Simulate gradient flow with animated arrows
+            for (let i = 0; i < 5; i++) {
+                const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                arrow.setAttribute('class', 'gradient-indicator');
+                arrow.setAttribute('d', `M ${100 + i * 100} 300 L ${150 + i * 100} 290 L ${150 + i * 100} 310 Z`);
+                arrow.setAttribute('fill', '#f44336');
+                arrow.setAttribute('opacity', '0.8');
+                
+                // 静的な矢印（アニメーションなし）
+                
+                svg.appendChild(arrow);
+            }
+            
+            // Add gradient norm indicators
+            const gradNorms = [2.5, 1.8, 3.2, 1.1, 2.9];
+            gradNorms.forEach((norm, i) => {
+                const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                indicator.setAttribute('class', 'gradient-indicator');
+                indicator.setAttribute('x', 100 + i * 100);
+                indicator.setAttribute('y', 330);
+                indicator.setAttribute('font-size', '12');
+                indicator.setAttribute('fill', '#f44336');
+                indicator.textContent = `∇: ${norm}`;
+                svg.appendChild(indicator);
+            });
+        }
+        
+        // Update 36D spatial Q-value map
+        function updateSpatialQValueMap() {
+            const cells = document.querySelectorAll('.qvalue-cell');
+            
+            cells.forEach(cell => {
+                // Simulate dynamic Q-value updates
+                const newValue = (Math.random() * 0.9 + 0.1).toFixed(1);
+                cell.textContent = newValue;
+                
+                // Update color based on value
+                const value = parseFloat(newValue);
+                if (value > 0.7) {
+                    cell.style.background = '#4caf50'; // High value - green
+                } else if (value > 0.5) {
+                    cell.style.background = '#8bc34a'; // Medium-high - light green
+                } else if (value > 0.3) {
+                    cell.style.background = '#cddc39'; // Medium - yellow
+                } else if (value > 0.2) {
+                    cell.style.background = '#ffeb3b'; // Medium-low - bright yellow
+                } else {
+                    cell.style.background = '#ffc107'; // Low - orange
+                }
+            });
+        }
+        
+        // Performance monitoring
+        function updatePerformanceMetrics() {
+            // Simulate real-time performance updates
+            const fps = (190 + Math.random() * 20).toFixed(1);
+            const memory = (2.4 + Math.random() * 0.2).toFixed(2);
+            const cacheHit = Math.floor(60 + Math.random() * 15);
+            
+            document.getElementById('fps-counter').textContent = fps;
+            document.getElementById('memory-usage').textContent = memory;
+            document.getElementById('cache-hit-rate').textContent = cacheHit;
+        }
+        
+        // 初回表示のみ（アニメーションなし）
+        updatePerformanceMetrics();
+        updateSpatialQValueMap();
+
+
+        // 量子モード切り替え
+        function toggleQuantumMode() {
+            isQuantumMode = !isQuantumMode;
+            initializeNetwork();
+        }
+
+        // ツールチップ表示
+        function showTooltip(event, layer, nodeIndex) {
+            const tooltip = document.getElementById('tooltip');
+            const rect = event.target.getBoundingClientRect();
+            
+            let content = '';
+            if (layer.type === 'input') {
+                const channels = ['自分の善玉', '自分の悪玉', '敵駒', '確認済み善玉', '確認済み悪玉', '合法手', '脱出位置'];
+                const features = ['平均値', '最大値', '非ゼロ率', '中央部平均'];
+                content = `入力チャンネル: ${channels[nodeIndex]}<br>` +
+                         `次元: 36 (6×6)<br>` +
+                         `抽出特徴: ${features.join(', ')}<br>` +
+                         `7チャンネル×4特徴=28次元 (11.1%データ活用)<br>` +
+                         `✅ 強制均等分散: 全7チャンネル保証 (旧方式の4.6倍効率)`;
+            } else if (layer.type === 'quantum') {
+                const qubits = ['Channel混合1', 'Channel混合2', '善玉特徴', '悪玉特徴', '敵駒特徴', '合法手特徴', '脱出特徴', '戦略特徴'];
+                content = `量子ビット ${nodeIndex + 1}: ${qubits[nodeIndex] || '複合特徴'}<br>` +
+                         `状態: |ψ⟩ = α|0⟩ + β|1⟩<br>` +
+                         `✅ 強制均等分散により全7チャンネル統合<br>` +
+                         `改善: 等間隔→重要度順選択 (チャンネル欠損解消)`;
+            } else if (layer.type === 'hidden') {
+                content = `隠れ層ニューロン<br>` +
+                         `量子特徴の古典変換<br>` +
+                         `活性化: ${(Math.random() * 0.9 + 0.1).toFixed(2)}`;
+            } else if (layer.type === 'output') {
+                const actions = ['上移動', '右移動', '下移動', '左移動', '脱出'];
+                content = `出力: ${actions[nodeIndex]}<br>` +
+                         `Q値: ${(Math.random() * 0.9 + 0.1).toFixed(2)}<br>` +
+                         `全7チャンネル情報を統合した行動価値<br>` +
+                         `✅ 改善済み: 高効率データ活用 (4.6x)`;
+            }
+            
+            tooltip.innerHTML = content;
+            tooltip.style.left = rect.left + 'px';
+            tooltip.style.top = (rect.top - 50) + 'px';
+            tooltip.style.display = 'block';
+        }
+
+        // ツールチップ非表示
+        function hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        // 入力層の切り替え
+        function toggleInput(type) {
+            event.target.classList.toggle('active');
+            updateInputDim();
+        }
+
+        // 入力次元の更新
+        function updateInputDim(value) {
+            if (value) {
+                const dim = value * 36;
+                document.getElementById('input-dim').textContent = dim;
+                document.getElementById('input-total').textContent = dim;
+                document.getElementById('input-active').textContent = value;
+                networkStructure.input = dim;
+            }
+        }
+
+        // 量子ビット数の更新
+        function updateQubits(value) {
+            document.getElementById('qubit-count').textContent = value;
+            networkStructure.quantum = parseInt(value);
+            initializeNetwork();
+        }
+
+        // 量子層数の更新
+        function updateLayers(value) {
+            document.getElementById('layer-count').textContent = value;
+        }
+
+        // エンタングルメントの更新
+        function updateEntanglement(value) {
+            // エンタングルメントパターンの変更
+            console.log('Entanglement changed to:', value);
+            initializeNetwork();
+        }
+
+        // 行動予測
+        function predictAction() {
+            // Q値から最適行動を決定
+            const qValues = {
+                up: parseFloat(document.getElementById('q-up').textContent),
+                right: parseFloat(document.getElementById('q-right').textContent),
+                down: parseFloat(document.getElementById('q-down').textContent),
+                left: parseFloat(document.getElementById('q-left').textContent),
+                escape: parseFloat(document.getElementById('q-escape').textContent)
+            };
+            
+            const maxAction = Object.keys(qValues).reduce((a, b) => 
+                qValues[a] > qValues[b] ? a : b
+            );
+            
+            alert(`予測行動: ${maxAction === 'escape' ? '脱出' : maxAction + '移動'}\nQ値: ${qValues[maxAction]}`);
+        }
+
+        // 初期化
+        // 3Step設定の読み込み
+        function load3StepConfig() {
+            const configStr = localStorage.getItem('3step_config');
+            if (configStr) {
+                try {
+                    const config = JSON.parse(configStr);
+                    console.log('3Step設定を読み込みました:', config);
+                    
+                    // 設定を適用
+                    apply3StepConfig(config);
+                    
+                    // 読み込み完了通知
+                    showNotification('✅ 3Step設定を読み込みました');
+                    
+                    // ローカルストレージをクリア（一度だけ読み込む）
+                    localStorage.removeItem('3step_config');
+                    
+                    return true;
+                } catch (e) {
+                    console.error('3Step設定の読み込みエラー:', e);
+                }
+            }
+            return false;
+        }
+        
+        // 3Step設定の適用
+        function apply3StepConfig(config) {
+            // 量子ビット数の設定
+            if (config.config && config.config.qubits) {
+                const slider = document.getElementById('qubit-slider');
+                if (slider) {
+                    slider.value = config.config.qubits;
+                    updateQubits(config.config.qubits);
+                }
+            }
+            
+            // 層数の設定
+            if (config.config && config.config.layers) {
+                const slider = document.getElementById('layer-slider');
+                if (slider) {
+                    slider.value = config.config.layers;
+                    updateLayers(config.config.layers);
+                }
+            }
+            
+            // 設定情報を表示
+            displayConfigInfo(config);
+        }
+        
+        // 設定情報の表示
+        function displayConfigInfo(config) {
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'config-info';
+            infoDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(33, 150, 243, 0.95);
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                max-width: 300px;
+                z-index: 1000;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            `;
+            infoDiv.innerHTML = `
+                <h4 style="margin: 0 0 10px 0;">📥 3Step設定ロード完了</h4>
+                <p style="margin: 5px 0;">配置: ${config.config.placement}</p>
+                <p style="margin: 5px 0;">報酬: ${config.config.reward}</p>
+                <p style="margin: 5px 0;">行動: ${config.config.action}</p>
+                <p style="margin: 5px 0;">学習: ${config.config.learningMethod}</p>
+                <p style="margin: 5px 0;">量子ビット: ${config.config.qubits}</p>
+                <p style="margin: 5px 0;">層数: ${config.config.layers}</p>
+                <button onclick="this.parentElement.remove()" style="
+                    background: white;
+                    color: #2196F3;
+                    border: none;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin-top: 10px;
+                    width: 100%;
+                ">閉じる</button>
+            `;
+            document.body.appendChild(infoDiv);
+            
+            // 5秒後に自動削除
+            setTimeout(() => {
+                if (infoDiv.parentElement) {
+                    infoDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        // 通知表示
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                z-index: 10000;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        // IBM Quantum Composerへエクスポート
+        function exportToQiskit() {
+            // 現在の設定を収集
+            const n_qubits = networkStructure.quantum || 8;
+            const n_layers = parseInt(document.getElementById('layer-count')?.textContent || 3);
+            const entanglement = document.getElementById('entanglement-select')?.value || 'linear';
+            
+            // OpenQASMコードを生成
+            const qasmCode = generateOpenQASM(n_qubits, n_layers, entanglement);
+            
+            // Base64エンコード
+            const encodedQASM = btoa(qasmCode);
+            
+            // IBM Quantum ComposerのURLを構築
+            const composerURL = `https://quantum.cloud.ibm.com/composer?initial=${encodedQASM}`;
+            
+            // 設定情報をクリップボードにコピー
+            const configInfo = `# Quantum AI Configuration from Playground
+# Generated: ${new Date().toISOString()}
+# Qubits: ${n_qubits}
+# Layers: ${n_layers}
+# Entanglement: ${entanglement}
+
+${qasmCode}`;
+            
+            navigator.clipboard.writeText(configInfo).then(() => {
+                showNotification('📋 OpenQASMコードをクリップボードにコピーしました');
+            });
+            
+            // IBM Quantum Composerを新しいタブで開く
+            window.open(composerURL, '_blank');
+            
+            showNotification('🚀 IBM Quantum Composerを開いています...');
+        }
+        
+        // OpenQASMコード生成
+        function generateOpenQASM(n_qubits, n_layers, entanglement) {
+            let qasm = `// Quantum AI Circuit from Playground
+// Geister Game Quantum Model
+OPENQASM 2.0;
+include "qelib1.inc";
+
+// ${n_qubits} qubits for quantum processing
+qreg q[${n_qubits}];
+creg c[${n_qubits}];
+
+// Input encoding layer (angle encoding)
+`;
+            
+            // 入力エンコーディング層
+            for (let i = 0; i < n_qubits; i++) {
+                qasm += `ry(pi/4) q[${i}]; // Input feature ${i+1}\n`;
+            }
+            
+            qasm += `\n// Parameterized quantum layers (${n_layers} layers)\n`;
+            
+            // パラメータ化量子層
+            for (let layer = 0; layer < n_layers; layer++) {
+                qasm += `// Layer ${layer + 1}\n`;
+                
+                // 単一量子ビットゲート
+                for (let i = 0; i < n_qubits; i++) {
+                    qasm += `ry(pi/8) q[${i}];\n`;
+                    qasm += `rz(pi/8) q[${i}];\n`;
+                }
+                
+                // エンタングルメント
+                qasm += `// Entanglement: ${entanglement}\n`;
+                if (entanglement === 'linear') {
+                    for (let i = 0; i < n_qubits - 1; i++) {
+                        qasm += `cx q[${i}], q[${i+1}];\n`;
+                    }
+                } else if (entanglement === 'circular') {
+                    for (let i = 0; i < n_qubits - 1; i++) {
+                        qasm += `cx q[${i}], q[${i+1}];\n`;
+                    }
+                    if (n_qubits > 2) {
+                        qasm += `cx q[${n_qubits-1}], q[0]; // Circular connection\n`;
+                    }
+                } else if (entanglement === 'full') {
+                    for (let i = 0; i < n_qubits; i++) {
+                        for (let j = i + 1; j < n_qubits; j++) {
+                            qasm += `cz q[${i}], q[${j}];\n`;
+                        }
+                    }
+                }
+                qasm += '\n';
+            }
+            
+            // 測定
+            qasm += `// Measurement\n`;
+            for (let i = 0; i < n_qubits; i++) {
+                qasm += `measure q[${i}] -> c[${i}];\n`;
+            }
+            
+            return qasm;
+        }
+        
+        // シンプルなデモ用の可視化システム
+        
+        window.onload = () => {
+            // 3Step設定があれば読み込む
+            const configLoaded = load3StepConfig();
+            
+            // 通常の初期化
+            initializeNetwork();
+            
+            // シンプル可視化UI追加
+            addRealtimeVisualizationUI();
+            
+            // 設定が読み込まれた場合は再描画
+            if (configLoaded) {
+                setTimeout(() => {
+                    initializeNetwork();
+                }, 100);
+            }
+        };
+
+        // リアルタイム可視化UI追加
+        function addRealtimeVisualizationUI() {
+            // 右サイドバーにリアルタイム制御パネルを追加
+            const rightSidebar = document.querySelector('.sidebar-right');
+            if (!rightSidebar) return;
+            
+            const realtimePanel = document.createElement('div');
+            realtimePanel.className = 'realtime-panel';
+            realtimePanel.innerHTML = `
+                <div class="sidebar-title">🔬 CQCNN構造制御</div>
+                
+                <!-- アーキテクチャ情報 -->
+                <div class="architecture-section">
+                    <h4>🏗️ アーキテクチャ</h4>
+                    <div class="arch-item">
+                        <span>前処理CNN:</span>
+                        <span class="arch-value">252→512→256→128→64→4</span>
+                    </div>
+                    <div class="arch-item">
+                        <span>量子回路:</span>
+                        <span class="arch-value">4量子ビット, 2層</span>
+                    </div>
+                    <div class="arch-item">
+                        <span>後処理CNN:</span>
+                        <span class="arch-value">4→128→256→512→256→128→64→36</span>
+                    </div>
+                    <div class="arch-item">
+                        <span>パラメータ:</span>
+                        <span class="arch-value">647,044個</span>
+                    </div>
+                </div>
+                
+                <!-- 層表示制御 -->
+                <div class="layer-control-section">
+                    <h4>🎛️ 層表示制御</h4>
+                    <div class="layer-toggles">
+                        <label><input type="checkbox" id="showPreprocessor" checked onchange="toggleLayer('preprocessor')"> 前処理CNN</label>
+                        <label><input type="checkbox" id="showQuantum" checked onchange="toggleLayer('quantum')"> 量子回路</label>
+                        <label><input type="checkbox" id="showPostprocessor" checked onchange="toggleLayer('postprocessor')"> 後処理CNN</label>
+                        <label><input type="checkbox" id="showConnections" checked onchange="toggleLayer('connections')"> 接続線</label>
+                    </div>
+                </div>
+                
+                <!-- ネットワーク操作 -->
+                <div class="network-control-section">
+                    <h4>🔧 ネットワーク操作</h4>
+                    <button onclick="highlightDataFlow()" class="control-btn">データフロー強調表示</button>
+                    <button onclick="showLayerDetails()" class="control-btn">層詳細表示</button>
+                    <button onclick="showForwardPass()" class="control-btn">順伝播パス表示</button>
+                    <button onclick="resetVisualization()" class="control-btn secondary">リセット</button>
+                </div>
+                
+                <!-- 量子回路詳細 -->
+                <div class="quantum-details-section">
+                    <h4>⚛️ 量子回路詳細</h4>
+                    <div class="quantum-info">
+                        <div class="qubit-count">量子ビット数: <span id="qubitCount">4</span></div>
+                        <div class="gate-count">ゲート数: <span id="gateCount">16</span></div>
+                        <div class="entanglement-type">エンタングルメント: <span id="entanglementType">Linear</span></div>
+                    </div>
+                    <button onclick="showQuantumCircuit()" class="control-btn quantum">回路図表示</button>
+                </div>
+            `;
+            
+            rightSidebar.appendChild(realtimePanel);
+            
+            // CSS追加
+            addRealtimeCSS();
+        }
+        
+        function addRealtimeCSS() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .realtime-panel {
+                    margin-top: 20px;
+                    border-top: 2px solid #2a5298;
+                    padding-top: 15px;
+                }
+                
+                .architecture-section, .layer-control-section, .network-control-section, .quantum-details-section {
+                    margin-bottom: 15px;
+                    padding: 12px;
+                    background-color: rgba(0,0,0,0.05);
+                    border-radius: 8px;
+                    border-left: 3px solid #2a5298;
+                }
+                
+                .architecture-section h4, .layer-control-section h4, .network-control-section h4, .quantum-details-section h4 {
+                    margin: 0 0 10px 0;
+                    font-size: 0.9em;
+                    color: #2a5298;
+                    font-weight: bold;
+                }
+                
+                .arch-item {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 6px;
+                    font-size: 0.8em;
+                    align-items: center;
+                }
+                
+                .arch-value {
+                    font-family: 'Courier New', monospace;
+                    font-weight: bold;
+                    color: #1565c0;
+                    background: rgba(33, 150, 243, 0.1);
+                    padding: 2px 6px;
+                    border-radius: 3px;
+                    font-size: 0.75em;
+                }
+                
+                .layer-toggles {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                
+                .layer-toggles label {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 0.8em;
+                    cursor: pointer;
+                    padding: 4px;
+                    border-radius: 4px;
+                    transition: background-color 0.2s;
+                }
+                
+                .layer-toggles label:hover {
+                    background-color: rgba(42, 82, 152, 0.1);
+                }
+                
+                .layer-toggles input[type="checkbox"] {
+                    transform: scale(1.2);
+                }
+                
+                .control-btn {
+                    width: 100%;
+                    padding: 8px 10px;
+                    margin: 3px 0;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 0.8em;
+                    font-weight: bold;
+                    transition: all 0.2s ease;
+                }
+                
+                .control-btn {
+                    background-color: #2196f3;
+                    color: white;
+                }
+                
+                .control-btn:hover {
+                    background-color: #1976d2;
+                    transform: translateY(-1px);
+                }
+                
+                .control-btn.secondary {
+                    background-color: #666;
+                }
+                
+                .control-btn.secondary:hover {
+                    background-color: #555;
+                }
+                
+                .control-btn.quantum {
+                    background-color: #9c27b0;
+                }
+                
+                .control-btn.quantum:hover {
+                    background-color: #7b1fa2;
+                }
+                
+                .quantum-info {
+                    margin-bottom: 10px;
+                }
+                
+                .quantum-info > div {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 4px;
+                    font-size: 0.8em;
+                }
+                
+                .quantum-info span {
+                    font-weight: bold;
+                    color: #9c27b0;
+                }
+                
+                /* ネットワーク可視化強化用のスタイル */
+                .layer-highlighted {
+                    stroke: #ff5722 !important;
+                    stroke-width: 3 !important;
+                    filter: drop-shadow(0 0 8px #ff5722);
+                }
+                
+                .node-highlighted {
+                    fill: #ff5722 !important;
+                    stroke: #d84315 !important;
+                    stroke-width: 3 !important;
+                    filter: drop-shadow(0 0 6px #ff5722);
+                    transform: scale(1.2);
+                }
+                
+                .connection-highlighted {
+                    stroke: #4caf50 !important;
+                    stroke-width: 4 !important;
+                    stroke-dasharray: 10,5;
+                    /* アニメーション削除 */
+                }
+                
+                
+                .layer-hidden {
+                    opacity: 0.1;
+                    pointer-events: none;
+                }
+                
+                .quantum-circuit-popup {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 20px;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    z-index: 1000;
+                    max-width: 600px;
+                    max-height: 400px;
+                    overflow: auto;
+                }
+                
+                .popup-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    z-index: 999;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // CQCNN構造可視化と操作機能
+        let currentHighlight = null;
+        
+        function toggleLayer(layerType) {
+            console.log(`Toggling layer: ${layerType}`);
+            const checkbox = document.getElementById(`show${layerType.charAt(0).toUpperCase() + layerType.slice(1)}`);
+            const isVisible = checkbox.checked;
+            
+            // SVG内の該当する要素を取得
+            const nodes = document.querySelectorAll(`.${layerType}-node, .${layerType}`);
+            const connections = document.querySelectorAll(`.${layerType}-connection`);
+            
+            if (isVisible) {
+                // 表示
+                nodes.forEach(node => node.classList.remove('layer-hidden'));
+                connections.forEach(conn => conn.classList.remove('layer-hidden'));
+            } else {
+                // 非表示
+                nodes.forEach(node => node.classList.add('layer-hidden'));
+                connections.forEach(conn => conn.classList.add('layer-hidden'));
+            }
+            
+            // 特別処理: 量子ノード
+            if (layerType === 'quantum') {
+                const quantumNodes = document.querySelectorAll('.quantum-node');
+                quantumNodes.forEach(node => {
+                    if (isVisible) {
+                        node.classList.remove('layer-hidden');
+                    } else {
+                        node.classList.add('layer-hidden');
+                    }
+                });
+            }
+        }
+        
+        function highlightDataFlow() {
+            console.log('Highlighting data flow');
+            resetVisualization();
+            
+            const inputNodes = document.querySelectorAll('.input-node');
+            const quantumNodes = document.querySelectorAll('.quantum-node');
+            const outputNodes = document.querySelectorAll('.output-node');
+            const connections = document.querySelectorAll('line[stroke="rgba(100,100,100,0.6)"]');
+            
+            // 段階的にハイライト
+            setTimeout(() => {
+                inputNodes.forEach(node => node.classList.add('node-highlighted'));
+            }, 0);
+            
+            setTimeout(() => {
+                connections.forEach((conn, index) => {
+                    setTimeout(() => {
+                        conn.classList.add('connection-highlighted');
+                    }, index * 50);
+                });
+            }, 500);
+            
+            setTimeout(() => {
+                quantumNodes.forEach(node => node.classList.add('node-highlighted'));
+            }, 1000);
+            
+            setTimeout(() => {
+                outputNodes.forEach(node => node.classList.add('node-highlighted'));
+            }, 1500);
+            
+            currentHighlight = 'dataflow';
+        }
+        
+        function showLayerDetails() {
+            const layerInfo = {
+                'Preprocessor CNN': {
+                    layers: ['Input(252)', 'Dense(512)', 'LayerNorm', 'ReLU', 'Dropout(0.2)', 'Dense(256)', 'LayerNorm', 'ReLU', 'Dropout(0.2)', 'Dense(128)', 'LayerNorm', 'ReLU', 'Dropout(0.1)', 'Dense(64)', 'LayerNorm', 'ReLU', 'Dropout(0.1)', 'Dense(4)'],
+                    parameters: '331,844'
+                },
+                'Quantum Circuit': {
+                    layers: ['Input Encoding', 'Variational Layers(2)', 'Measurement'],
+                    parameters: '32'
+                },
+                'Postprocessor CNN': {
+                    layers: ['Dense(128)', 'LayerNorm', 'ReLU', 'Dropout(0.1)', 'Dense(256)', 'LayerNorm', 'ReLU', 'Dropout(0.2)', 'Dense(512)', 'LayerNorm', 'ReLU', 'Dropout(0.2)', 'Dense(256)', 'LayerNorm', 'ReLU', 'Dropout(0.2)', 'Dense(128)', 'LayerNorm', 'ReLU', 'Dropout(0.1)', 'Dense(64)', 'LayerNorm', 'ReLU', 'Dense(36)'],
+                    parameters: '315,168'
+                }
+            };
+            
+            let details = '<h3>🔍 CQCNN 層詳細情報</h3>';
+            Object.keys(layerInfo).forEach(layer => {
+                details += `<div style="margin: 15px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">`;
+                details += `<h4 style="color: #2a5298; margin: 0 0 8px 0;">${layer}</h4>`;
+                details += `<div style="font-size: 0.8em; margin-bottom: 5px;"><strong>パラメータ数:</strong> ${layerInfo[layer].parameters}</div>`;
+                details += `<div style="font-size: 0.8em;"><strong>構造:</strong> ${layerInfo[layer].layers.join(' → ')}</div>`;
+                details += '</div>';
+            });
+            
+            showPopup(details);
+        }
+        
+        function showForwardPass() {
+            console.log('Showing forward pass path');
+            resetVisualization();
+            
+            // 静的にすべてのノードをハイライト表示
+            const steps = ['.input-node', '.classical-node', '.quantum-node', '.output-node'];
+            steps.forEach(selector => {
+                const nodes = document.querySelectorAll(selector);
+                nodes.forEach(node => {
+                    node.classList.add('node-highlighted');
+                });
+            });
+        }
+        
+        function resetVisualization() {
+            console.log('Resetting visualization');
+            const highlightedElements = document.querySelectorAll('.node-highlighted, .connection-highlighted, .layer-highlighted');
+            highlightedElements.forEach(el => {
+                el.classList.remove('node-highlighted', 'connection-highlighted', 'layer-highlighted');
+                el.style.transition = '';
+            });
+            
+            closePopup();
+            currentHighlight = null;
+        }
+        
+        function showQuantumCircuit() {
+            const quantumInfo = document.getElementById('entanglementType').textContent;
+            const qubits = document.getElementById('qubitCount').textContent;
+            const gates = document.getElementById('gateCount').textContent;
+            
+            const circuitHtml = `
+                <h3>⚛️ 量子回路図</h3>
+                <div style="margin: 20px 0;">
+                    <div style="font-family: monospace; background: #f5f5f5; padding: 15px; border-radius: 5px;">
+                        <div>量子ビット数: ${qubits}</div>
+                        <div>ゲート数: ${gates}</div>
+                        <div>エンタングルメント: ${quantumInfo}</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="font-family: monospace; font-size: 0.9em; line-height: 1.6;">
+                        <div>q[0] ─|0⟩─ RY(θ₁) ─ RZ(φ₁) ─ ●─────── RY(θ₅) ─ RZ(φ₅) ─ M</div>
+                        <div>q[1] ─|0⟩─ RY(θ₂) ─ RZ(φ₂) ─ ⊕─ ●─── RY(θ₆) ─ RZ(φ₆) ─ M</div>
+                        <div>q[2] ─|0⟩─ RY(θ₃) ─ RZ(φ₃) ───── ⊕─ ●─ RY(θ₇) ─ RZ(φ₇) ─ M</div>
+                        <div>q[3] ─|0⟩─ RY(θ₄) ─ RZ(φ₄) ─────────── ⊕ RY(θ₈) ─ RZ(φ₈) ─ M</div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.8em; color: #666;">
+                        ● = Control, ⊕ = Target, RY/RZ = Rotation Gates, M = Measurement
+                    </div>
+                </div>
+                <button onclick="closePopup()" style="padding: 8px 16px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;">閉じる</button>
+            `;
+            
+            showPopup(circuitHtml);
+        }
+        
+        function showPopup(content) {
+            closePopup(); // 既存のポップアップを閉じる
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'popup-overlay';
+            overlay.onclick = closePopup;
+            
+            const popup = document.createElement('div');
+            popup.className = 'quantum-circuit-popup';
+            popup.innerHTML = content;
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(popup);
+        }
+        
+        function closePopup() {
+            const overlay = document.querySelector('.popup-overlay');
+            const popup = document.querySelector('.quantum-circuit-popup');
+            if (overlay) overlay.remove();
+            if (popup) popup.remove();
+        }
+        
+        // ウィンドウリサイズ対応
+        window.onresize = () => {
+            initializeNetwork();
+        };
+        
+        // ページアンロード時の清理（シンプル版では不要）
+    </script>
+</body>
+</html>

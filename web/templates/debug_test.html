@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - Bidirectional Data Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        .error {
+            background: #f44336;
+        }
+        .success {
+            background: #4CAF50;
+        }
+        #output {
+            background: #263238;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐛 Quantum Playground Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>基本機能テスト</h2>
+        <button onclick="testBasicFunctions()">基本機能テスト</button>
+        <button onclick="testQASMParsing()">QASMパーシングテスト</button>
+        <button onclick="testBidirectionalFlow()">双方向データフローテスト</button>
+        <button onclick="clearOutput()">出力クリア</button>
+    </div>
+
+    <div class="test-section">
+        <h2>手動テスト</h2>
+        <button onclick="testManualImport()">手動インポートテスト</button>
+        <button onclick="testExportWindow()">エクスポートウィンドウテスト</button>
+    </div>
+
+    <div class="test-section">
+        <h2>出力</h2>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            output.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+        }
+
+        // 基本的なQASM生成関数
+        function generateTestQASM(qubits = 4, layers = 2, entanglement = 'linear') {
+            let qasm = `OPENQASM 2.0;
+include "qelib1.inc";
+
+qreg q[${qubits}];
+creg c[${qubits}];
+
+// Quantum circuit with ${layers} layers
+`;
+
+            for (let layer = 0; layer < layers; layer++) {
+                qasm += `// Layer ${layer + 1}\n`;
+                for (let i = 0; i < qubits; i++) {
+                    qasm += `ry(${(Math.random() * Math.PI).toFixed(3)}) q[${i}];\n`;
+                }
+                
+                // エンタングルメント
+                if (entanglement === 'linear') {
+                    for (let i = 0; i < qubits - 1; i++) {
+                        qasm += `cx q[${i}], q[${i+1}];\n`;
+                    }
+                } else if (entanglement === 'circular') {
+                    for (let i = 0; i < qubits - 1; i++) {
+                        qasm += `cx q[${i}], q[${i+1}];\n`;
+                    }
+                    qasm += `cx q[${qubits-1}], q[0];\n`;
+                } else if (entanglement === 'full') {
+                    for (let i = 0; i < qubits; i++) {
+                        for (let j = i + 1; j < qubits; j++) {
+                            qasm += `cz q[${i}], q[${j}];\n`;
+                        }
+                    }
+                }
+                qasm += '\n';
+            }
+
+            // 測定
+            for (let i = 0; i < qubits; i++) {
+                qasm += `measure q[${i}] -> c[${i}];\n`;
+            }
+
+            return qasm;
+        }
+
+        // QASMパーシング関数
+        function parseQASMToConfig(qasmCode) {
+            const config = {
+                qubits: 8,
+                layers: 3,
+                entanglement: 'linear'
+            };
+            
+            try {
+                if (!qasmCode || typeof qasmCode !== 'string') {
+                    throw new Error('Invalid QASM code provided');
+                }
+                
+                // 量子ビット数を抽出
+                const qubitMatch = qasmCode.match(/qreg\s+q\[(\d+)\]/);
+                if (qubitMatch) {
+                    const qubits = parseInt(qubitMatch[1]);
+                    if (qubits > 0 && qubits <= 32) {
+                        config.qubits = qubits;
+                    }
+                }
+                
+                // 層数を推定
+                const rotationGates = qasmCode.match(/r[xyz]\(/g);
+                if (rotationGates && rotationGates.length > 0) {
+                    const totalRotations = rotationGates.length;
+                    const estimatedLayers = Math.ceil(totalRotations / config.qubits);
+                    config.layers = Math.max(1, Math.min(estimatedLayers, 10));
+                }
+                
+                // エンタングルメントタイプを判定
+                const cxGates = qasmCode.match(/cx\s+q\[\d+\],\s*q\[\d+\]/g) || [];
+                const czGates = qasmCode.match(/cz\s+q\[\d+\],\s*q\[\d+\]/g) || [];
+                
+                if (czGates.length > cxGates.length) {
+                    config.entanglement = 'full';
+                } else if (cxGates.length > 0) {
+                    const circularPattern = new RegExp(`cx\\s+q\\[${config.qubits-1}\\],\\s*q\\[0\\]`);
+                    if (circularPattern.test(qasmCode)) {
+                        config.entanglement = 'circular';
+                    } else {
+                        config.entanglement = 'linear';
+                    }
+                }
+                
+                return config;
+                
+            } catch (error) {
+                throw new Error(`QASM解析エラー: ${error.message}`);
+            }
+        }
+
+        function testBasicFunctions() {
+            log('=== 基本機能テスト開始 ===');
+            
+            try {
+                // QASM生成テスト
+                const qasm = generateTestQASM(6, 3, 'circular');
+                log(`QASM生成成功: ${qasm.length}文字`, 'success');
+                log(`先頭200文字: ${qasm.substring(0, 200)}...`);
+                
+                // QASMパーシングテスト
+                const config = parseQASMToConfig(qasm);
+                log(`QASM解析成功: ${JSON.stringify(config)}`, 'success');
+                
+                log('基本機能テスト完了', 'success');
+                
+            } catch (error) {
+                log(`基本機能テストエラー: ${error.message}`, 'error');
+            }
+        }
+
+        function testQASMParsing() {
+            log('=== QASMパーシングテスト開始 ===');
+            
+            const testCases = [
+                {
+                    name: 'Simple 4-qubit',
+                    qasm: `OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[4];
+creg c[4];
+ry(0.5) q[0];
+cx q[0], q[1];
+measure q[0] -> c[0];`
+                },
+                {
+                    name: 'Circular 6-qubit',
+                    qasm: `OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[6];
+creg c[6];
+ry(0.5) q[0];
+cx q[0], q[1];
+cx q[5], q[0];
+measure q[0] -> c[0];`
+                },
+                {
+                    name: 'Full 3-qubit',
+                    qasm: `OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[3];
+creg c[3];
+cz q[0], q[1];
+cz q[0], q[2];
+cz q[1], q[2];
+measure q[0] -> c[0];`
+                }
+            ];
+
+            testCases.forEach((test, index) => {
+                try {
+                    const result = parseQASMToConfig(test.qasm);
+                    log(`テスト${index + 1} (${test.name}): ${JSON.stringify(result)}`, 'success');
+                } catch (error) {
+                    log(`テスト${index + 1} (${test.name}) エラー: ${error.message}`, 'error');
+                }
+            });
+
+            log('QASMパーシングテスト完了', 'success');
+        }
+
+        function testBidirectionalFlow() {
+            log('=== 双方向データフローテスト開始 ===');
+            
+            // メッセージリスナーを設定
+            window.addEventListener('message', (event) => {
+                if (event.data.type === 'COMPOSER_QASM_IMPORT') {
+                    log(`メッセージ受信: ${event.data.qasm.substring(0, 100)}...`, 'success');
+                    try {
+                        const config = parseQASMToConfig(event.data.qasm);
+                        log(`設定パース成功: ${JSON.stringify(config)}`, 'success');
+                    } catch (error) {
+                        log(`設定パースエラー: ${error.message}`, 'error');
+                    }
+                }
+            });
+
+            // テストメッセージを送信
+            const testQASM = generateTestQASM(5, 2, 'linear');
+            const testMessage = {
+                type: 'COMPOSER_QASM_IMPORT',
+                qasm: testQASM
+            };
+
+            log('テストメッセージを送信中...');
+            window.postMessage(testMessage, '*');
+
+            log('双方向データフローテスト完了', 'success');
+        }
+
+        function testManualImport() {
+            const qasmCode = prompt('QASMコードを入力してください:', 
+                `OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[8];
+creg c[8];
+ry(0.5) q[0];
+cx q[0], q[1];
+measure q[0] -> c[0];`);
+            
+            if (qasmCode) {
+                try {
+                    const config = parseQASMToConfig(qasmCode);
+                    log(`手動インポート成功: ${JSON.stringify(config)}`, 'success');
+                } catch (error) {
+                    log(`手動インポートエラー: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        function testExportWindow() {
+            log('エクスポートウィンドウテスト開始');
+            
+            const qasm = generateTestQASM(4, 2, 'linear');
+            const newWindow = window.open("", "_blank");
+            
+            if (newWindow) {
+                newWindow.document.write(`
+                    <html>
+                    <head><title>Test Export Window</title></head>
+                    <body>
+                        <h1>テストエクスポートウィンドウ</h1>
+                        <pre>${qasm}</pre>
+                        <button onclick="sendBack()">結果を戻す</button>
+                        <script>
+                            function sendBack() {
+                                if (window.opener) {
+                                    window.opener.postMessage({
+                                        type: 'COMPOSER_QASM_IMPORT',
+                                        qasm: '${qasm.replace(/'/g, "\\'")}'
+                                    }, '*');
+                                    alert('データを送信しました');
+                                    window.close();
+                                }
+                            }
+                        </script>
+                    </body>
+                    </html>
+                `);
+                log('エクスポートウィンドウを開きました', 'success');
+            } else {
+                log('エクスポートウィンドウを開けませんでした', 'error');
+            }
+        }
+
+        // ページロード時の初期化
+        window.onload = function() {
+            log('デバッグページが読み込まれました', 'success');
+            log('各種テストボタンを使用してテストを実行してください');
+        };
+    </script>
+</body>
+</html>

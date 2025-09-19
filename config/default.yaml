@@ -1,0 +1,53 @@
+# Qugeister System Configuration
+# Default settings for quantum AI training and competition
+
+# Game Engine Settings
+game:
+  board_size: 6
+  max_turns: 200
+  timeout_seconds: 30
+
+# Quantum Network Configuration  
+quantum:
+  n_qubits: 4
+  n_layers: 1
+  device: "lightning.qubit"  # fallback to default.qubit
+  cache_size: 10000
+  
+# Neural Network Architecture
+network:
+  input_dim: 252  # 7 channels * 6x6 board
+  hidden_dims: [64, 32]
+  output_dim: 36  # 6x6 spatial Q-value map
+  activation: "relu"
+  dropout_rate: 0.1
+
+# Training Parameters
+training:
+  learning_rate: 0.001
+  batch_size: 8
+  replay_buffer_size: 1000
+  episodes: 1000
+  epsilon_start: 0.1
+  epsilon_decay: 0.995
+  epsilon_min: 0.01
+  gamma: 0.99
+  
+# Analysis Settings
+analysis:
+  max_states: 1000
+  visualization_samples: 9
+  save_formats: ["json", "csv", "png", "pkl"]
+  
+# Web Interface
+web:
+  host: "localhost"
+  port: 8080
+  debug: true
+  
+# File Paths
+paths:
+  models: "models/"
+  results: "results/"
+  logs: "logs/"
+  temp: "temp/"

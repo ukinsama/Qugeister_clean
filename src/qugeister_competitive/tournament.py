@@ -82,7 +82,13 @@ class TournamentManager:
     def _play_single_game(self, player_a: BaseAI, player_b: BaseAI) -> tuple:
         """単一ゲーム実行"""
         game = GeisterGame()
-        game_log = {"player_a": player_a.name, "player_b": player_b.name, "moves": [], "winner": None, "turns": 0}
+        game_log = {
+            "player_a": player_a.name,
+            "player_b": player_b.name,
+            "moves": [],
+            "winner": None,
+            "turns": 0,
+        }
 
         max_turns = 100
 
@@ -108,7 +114,12 @@ class TournamentManager:
 
             # ログ記録
             game_log["moves"].append(
-                {"turn": turn, "player": game.current_player, "move": move, "board_state": game.board.tolist()}
+                {
+                    "turn": turn,
+                    "player": game.current_player,
+                    "move": move,
+                    "board_state": game.board.tolist(),
+                }
             )
 
             # 勝利判定
@@ -171,7 +182,10 @@ class TournamentManager:
     def save_results(self, filepath: str):
         """結果保存"""
         results = {
-            "tournament_info": {"participants": len(self.participants), "total_games": len(self.game_logs)},
+            "tournament_info": {
+                "participants": len(self.participants),
+                "total_games": len(self.game_logs),
+            },
             "leaderboard": self.get_leaderboard(),
             "game_logs": self.game_logs,
         }

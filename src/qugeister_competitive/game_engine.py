@@ -68,7 +68,9 @@ class GeisterGame:
         self.game_over = False
         self.winner = None
 
-    def get_legal_moves(self, player: str) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
+    def get_legal_moves(
+        self, player: str
+    ) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
         """合法手を取得"""
         pieces = self.player_a_pieces if player == "A" else self.player_b_pieces
         legal_moves = []
@@ -90,8 +92,12 @@ class GeisterGame:
         if self.game_over:
             return False
 
-        current_pieces = self.player_a_pieces if self.current_player == "A" else self.player_b_pieces
-        opponent_pieces = self.player_b_pieces if self.current_player == "A" else self.player_a_pieces
+        current_pieces = (
+            self.player_a_pieces if self.current_player == "A" else self.player_b_pieces
+        )
+        opponent_pieces = (
+            self.player_b_pieces if self.current_player == "A" else self.player_a_pieces
+        )
 
         # 合法性チェック
         if from_pos not in current_pieces:
@@ -131,8 +137,12 @@ class GeisterGame:
     def _check_win_condition(self):
         """勝利条件をチェック（正しい脱出判定）"""
         # 善玉全取り勝ち
-        a_good_count = sum(1 for piece in self.player_a_pieces.values() if piece == "good")
-        b_good_count = sum(1 for piece in self.player_b_pieces.values() if piece == "good")
+        a_good_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "good"
+        )
+        b_good_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "good"
+        )
 
         if a_good_count == 0:
             self.game_over = True
@@ -159,8 +169,12 @@ class GeisterGame:
                 return
 
         # 悪玉全取らせ勝ち
-        a_bad_count = sum(1 for piece in self.player_a_pieces.values() if piece == "bad")
-        b_bad_count = sum(1 for piece in self.player_b_pieces.values() if piece == "bad")
+        a_bad_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "bad"
+        )
+        b_bad_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "bad"
+        )
 
         if a_bad_count == 0:
             self.game_over = True

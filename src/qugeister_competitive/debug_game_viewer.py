@@ -100,8 +100,12 @@ class DebugGeisterGame:
         if self.game_over:
             return False
 
-        current_pieces = self.player_a_pieces if self.current_player == "A" else self.player_b_pieces
-        opponent_pieces = self.player_b_pieces if self.current_player == "A" else self.player_a_pieces
+        current_pieces = (
+            self.player_a_pieces if self.current_player == "A" else self.player_b_pieces
+        )
+        opponent_pieces = (
+            self.player_b_pieces if self.current_player == "A" else self.player_a_pieces
+        )
 
         # 合法性チェック
         if from_pos not in current_pieces:
@@ -143,7 +147,9 @@ class DebugGeisterGame:
         if to_pos in opponent_pieces:
             captured_type = opponent_pieces[to_pos]
             del opponent_pieces[to_pos]
-            print(f"🎯 {self.current_player}が{to_pos}で相手の{captured_type}駒を取得！")
+            print(
+                f"🎯 {self.current_player}が{to_pos}で相手の{captured_type}駒を取得！"
+            )
 
         current_pieces[to_pos] = piece_type
 
@@ -155,13 +161,27 @@ class DebugGeisterGame:
         self.move_history.append((from_pos, to_pos))
         self.turn += 1
 
-        print(f"📋 手#{self.turn}: {self.current_player} {from_pos} → {to_pos} ({piece_type})")
+        print(
+            f"📋 手#{self.turn}: {self.current_player} {from_pos} → {to_pos} ({piece_type})"
+        )
 
         # 脱出口到達の通知（正しい脱出口）
-        if self.current_player == "A" and (to_pos == (0, 0) or to_pos == (5, 0)) and piece_type == "good":
-            print(f"🚪 プレイヤーAの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能")
-        elif self.current_player == "B" and (to_pos == (0, 5) or to_pos == (5, 5)) and piece_type == "good":
-            print(f"🚪 プレイヤーBの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能")
+        if (
+            self.current_player == "A"
+            and (to_pos == (0, 0) or to_pos == (5, 0))
+            and piece_type == "good"
+        ):
+            print(
+                f"🚪 プレイヤーAの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能"
+            )
+        elif (
+            self.current_player == "B"
+            and (to_pos == (0, 5) or to_pos == (5, 5))
+            and piece_type == "good"
+        ):
+            print(
+                f"🚪 プレイヤーBの善玉が相手陣地の脱出口{to_pos}に到達！次のターンで脱出可能"
+            )
 
         # その他の勝利判定
         if not self.game_over:
@@ -176,8 +196,12 @@ class DebugGeisterGame:
     def _check_win_condition(self):
         """その他の勝利条件をチェック"""
         # 善玉全取り勝ち
-        a_good_count = sum(1 for piece in self.player_a_pieces.values() if piece == "good")
-        b_good_count = sum(1 for piece in self.player_b_pieces.values() if piece == "good")
+        a_good_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "good"
+        )
+        b_good_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "good"
+        )
 
         if a_good_count == 0:
             self.game_over = True
@@ -191,8 +215,12 @@ class DebugGeisterGame:
             return
 
         # 悪玉全取らせ勝ち
-        a_bad_count = sum(1 for piece in self.player_a_pieces.values() if piece == "bad")
-        b_bad_count = sum(1 for piece in self.player_b_pieces.values() if piece == "bad")
+        a_bad_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "bad"
+        )
+        b_bad_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "bad"
+        )
 
         if a_bad_count == 0:
             self.game_over = True
@@ -288,7 +316,11 @@ class DebugGUI:
 
         cell = self.get_cell_from_mouse(mouse_pos)
 
-        current_pieces = self.game.player_a_pieces if self.game.current_player == "A" else self.game.player_b_pieces
+        current_pieces = (
+            self.game.player_a_pieces
+            if self.game.current_player == "A"
+            else self.game.player_b_pieces
+        )
 
         if self.selected_piece is None:
             # 駒選択
@@ -315,7 +347,9 @@ class DebugGUI:
                     else [(0, 5), (5, 5)]
                 )  # Bは相手陣地（下側）から脱出
                 if cell in escape_positions and piece_type == "good":
-                    print("🚪 この駒は相手陣地の脱出口にいます！右クリックまたはESCキーで脱出")
+                    print(
+                        "🚪 この駒は相手陣地の脱出口にいます！右クリックまたはESCキーで脱出"
+                    )
         else:
             # 移動実行
             if cell and cell in self.legal_moves:
@@ -338,7 +372,9 @@ class DebugGUI:
                                 self.legal_moves.append(move[1])
 
                     piece_type = current_pieces[cell]
-                    print(f"📍 {self.game.current_player}の{piece_type}駒を選択: {cell}")
+                    print(
+                        f"📍 {self.game.current_player}の{piece_type}駒を選択: {cell}"
+                    )
                     return
                 else:
                     if cell:
@@ -362,7 +398,9 @@ class DebugGUI:
     def draw_board(self):
         """盤面描画"""
         # ボード背景
-        board_rect = pygame.Rect(self.board_x, self.board_y, self.board_size, self.board_size)
+        board_rect = pygame.Rect(
+            self.board_x, self.board_y, self.board_size, self.board_size
+        )
         pygame.draw.rect(self.screen, self.colors["board"], board_rect)
 
         # 脱出口をハイライト（正しい脱出口）
@@ -371,7 +409,10 @@ class DebugGUI:
 
         for x, y in escape_positions_a + escape_positions_b:
             cell_rect = pygame.Rect(
-                self.board_x + x * self.cell_size, self.board_y + y * self.cell_size, self.cell_size, self.cell_size
+                self.board_x + x * self.cell_size,
+                self.board_y + y * self.cell_size,
+                self.cell_size,
+                self.cell_size,
             )
             pygame.draw.rect(self.screen, self.colors["escape"], cell_rect)
 
@@ -379,7 +420,10 @@ class DebugGUI:
         if self.selected_piece and "ESCAPE" in self.legal_moves:
             x, y = self.selected_piece
             cell_rect = pygame.Rect(
-                self.board_x + x * self.cell_size, self.board_y + y * self.cell_size, self.cell_size, self.cell_size
+                self.board_x + x * self.cell_size,
+                self.board_y + y * self.cell_size,
+                self.cell_size,
+                self.cell_size,
             )
             pygame.draw.rect(self.screen, self.colors["escape_ready"], cell_rect, 5)
 
@@ -388,7 +432,10 @@ class DebugGUI:
             if move != "ESCAPE" and isinstance(move, tuple):
                 x, y = move
                 cell_rect = pygame.Rect(
-                    self.board_x + x * self.cell_size, self.board_y + y * self.cell_size, self.cell_size, self.cell_size
+                    self.board_x + x * self.cell_size,
+                    self.board_y + y * self.cell_size,
+                    self.cell_size,
+                    self.cell_size,
                 )
                 pygame.draw.rect(self.screen, self.colors["legal_move"], cell_rect, 3)
 
@@ -397,13 +444,21 @@ class DebugGUI:
             # 縦線
             start_x = self.board_x + i * self.cell_size
             pygame.draw.line(
-                self.screen, self.colors["grid"], (start_x, self.board_y), (start_x, self.board_y + self.board_size), 2
+                self.screen,
+                self.colors["grid"],
+                (start_x, self.board_y),
+                (start_x, self.board_y + self.board_size),
+                2,
             )
 
             # 横線
             start_y = self.board_y + i * self.cell_size
             pygame.draw.line(
-                self.screen, self.colors["grid"], (self.board_x, start_y), (self.board_x + self.board_size, start_y), 2
+                self.screen,
+                self.colors["grid"],
+                (self.board_x, start_y),
+                (self.board_x + self.board_size, start_y),
+                2,
             )
 
         # 駒描画
@@ -413,10 +468,22 @@ class DebugGUI:
         for i in range(6):
             # X座標
             text = self.font_small.render(str(i), True, self.colors["text"])
-            self.screen.blit(text, (self.board_x + i * self.cell_size + self.cell_size // 2 - 5, self.board_y - 20))
+            self.screen.blit(
+                text,
+                (
+                    self.board_x + i * self.cell_size + self.cell_size // 2 - 5,
+                    self.board_y - 20,
+                ),
+            )
             # Y座標
             text = self.font_small.render(str(i), True, self.colors["text"])
-            self.screen.blit(text, (self.board_x - 20, self.board_y + i * self.cell_size + self.cell_size // 2 - 5))
+            self.screen.blit(
+                text,
+                (
+                    self.board_x - 20,
+                    self.board_y + i * self.cell_size + self.cell_size // 2 - 5,
+                ),
+            )
 
     def draw_pieces(self):
         """駒描画（種類表示付き）"""
@@ -428,11 +495,23 @@ class DebugGUI:
 
             # 選択ハイライト
             if self.selected_piece == pos:
-                pygame.draw.circle(self.screen, self.colors["highlight"], (center_x, center_y), self.cell_size // 2, 3)
+                pygame.draw.circle(
+                    self.screen,
+                    self.colors["highlight"],
+                    (center_x, center_y),
+                    self.cell_size // 2,
+                    3,
+                )
 
             # 駒の色（善玉は緑、悪玉は赤）
-            piece_color = self.colors["good_piece"] if piece_type == "good" else self.colors["bad_piece"]
-            pygame.draw.circle(self.screen, piece_color, (center_x, center_y), self.cell_size // 3)
+            piece_color = (
+                self.colors["good_piece"]
+                if piece_type == "good"
+                else self.colors["bad_piece"]
+            )
+            pygame.draw.circle(
+                self.screen, piece_color, (center_x, center_y), self.cell_size // 3
+            )
 
             # プレイヤー表示
             text = self.font.render("A", True, (255, 255, 255))
@@ -453,11 +532,23 @@ class DebugGUI:
 
             # 選択ハイライト
             if self.selected_piece == pos:
-                pygame.draw.circle(self.screen, self.colors["highlight"], (center_x, center_y), self.cell_size // 2, 3)
+                pygame.draw.circle(
+                    self.screen,
+                    self.colors["highlight"],
+                    (center_x, center_y),
+                    self.cell_size // 2,
+                    3,
+                )
 
             # 駒の色（善玉は緑、悪玉は赤）
-            piece_color = self.colors["good_piece"] if piece_type == "good" else self.colors["bad_piece"]
-            pygame.draw.circle(self.screen, piece_color, (center_x, center_y), self.cell_size // 3)
+            piece_color = (
+                self.colors["good_piece"]
+                if piece_type == "good"
+                else self.colors["bad_piece"]
+            )
+            pygame.draw.circle(
+                self.screen, piece_color, (center_x, center_y), self.cell_size // 3
+            )
 
             # プレイヤー表示
             text = self.font.render("B", True, (255, 255, 255))
@@ -502,7 +593,10 @@ class DebugGUI:
         b_good = sum(1 for p in self.game.player_b_pieces.values() if p == "good")
         b_bad = sum(1 for p in self.game.player_b_pieces.values() if p == "bad")
 
-        pieces_info = [f"プレイヤーA: 善{a_good} 悪{a_bad}", f"プレイヤーB: 善{b_good} 悪{b_bad}"]
+        pieces_info = [
+            f"プレイヤーA: 善{a_good} 悪{a_bad}",
+            f"プレイヤーB: 善{b_good} 悪{b_bad}",
+        ]
 
         for info in pieces_info:
             info_surf = self.font_small.render(info, True, self.colors["text"])
@@ -527,7 +621,11 @@ class DebugGUI:
         y_offset += 10
 
         # 脱出説明
-        escape_help = ["脱出方法:", "1.善玉を相手陣地の脱出口に移動", "2.右クリック/ESCで脱出"]
+        escape_help = [
+            "脱出方法:",
+            "1.善玉を相手陣地の脱出口に移動",
+            "2.右クリック/ESCで脱出",
+        ]
 
         for help_text in escape_help:
             help_surf = self.font_small.render(help_text, True, self.colors["text"])
@@ -537,7 +635,14 @@ class DebugGUI:
         y_offset += 10
 
         # 操作説明
-        controls = ["操作:", "左クリック: 駒選択/移動", "右クリック: 脱出", "ESCキー: 脱出", "R: リセット", "Q: 終了"]
+        controls = [
+            "操作:",
+            "左クリック: 駒選択/移動",
+            "右クリック: 脱出",
+            "ESCキー: 脱出",
+            "R: リセット",
+            "Q: 終了",
+        ]
 
         for control in controls:
             control_surf = self.font_small.render(control, True, self.colors["text"])
@@ -547,7 +652,11 @@ class DebugGUI:
         # 選択状況
         if self.selected_piece:
             y_offset += 10
-            current_pieces = self.game.player_a_pieces if self.game.current_player == "A" else self.game.player_b_pieces
+            current_pieces = (
+                self.game.player_a_pieces
+                if self.game.current_player == "A"
+                else self.game.player_b_pieces
+            )
             piece_type = current_pieces[self.selected_piece]
             select_text = f"選択中: {self.selected_piece} ({piece_type})"
             select_surf = self.font_small.render(select_text, True, (0, 0, 255))

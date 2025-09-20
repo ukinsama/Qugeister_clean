@@ -345,8 +345,16 @@
             </div>
 
             <div class="control-group">
+                <label class="control-label">エンコーディング</label>
+                <select id="embedding-select" class="control-input" onchange="updateEmbedding(this.value)">
+                    <option value="angle">Angle</option>
+                    <option value="amplitude">Amplitude</option>
+                </select>
+            </div>
+
+            <div class="control-group">
                 <label class="control-label">エンタングルメント</label>
-                <select class="control-input" onchange="updateEntanglement(this.value)">
+                <select id="entanglement-select" class="control-input" onchange="updateEntanglement(this.value)">
                     <option value="linear">Linear</option>
                     <option value="circular">Circular</option>
                     <option value="full">Full</option>
@@ -408,6 +416,13 @@
                 </button>
                 <div style="font-size: 0.8em; color: #666; margin-top: 5px; text-align: center;">
                     OpenQASMコードを生成してComposerで実行
+                </div>
+                
+                <button class="btn btn-quantum" style="width: 100%; margin-top: 10px; background: #ff6b35;" onclick="exportToQuantumDesigner()">
+                    🎨 Quantum Designerへ →
+                </button>
+                <div style="font-size: 0.8em; color: #666; margin-top: 5px; text-align: center;">
+                    設定とQASMコードをDesignerで編集・学習
                 </div>
             </div>
         </div>
@@ -949,6 +964,13 @@
             initializeNetwork();
         }
 
+        // エンコーディングの更新
+        function updateEmbedding(value) {
+            // エンコーディング方式の変更
+            console.log('Embedding changed to:', value);
+            initializeNetwork();
+        }
+
         // 行動予測
         function predictAction() {
             // Q値から最適行動を決定
@@ -1088,9 +1110,10 @@
             const n_qubits = networkStructure.quantum || 8;
             const n_layers = parseInt(document.getElementById('layer-count')?.textContent || 3);
             const entanglement = document.getElementById('entanglement-select')?.value || 'linear';
+            const embedding = document.getElementById('embedding-select')?.value || 'angle';
             
             // OpenQASMコードを生成
-            const qasmCode = generateOpenQASM(n_qubits, n_layers, entanglement);
+            const qasmCode = generateOpenQASM(n_qubits, n_layers, entanglement, embedding);
             
             // Base64エンコード
             const encodedQASM = btoa(qasmCode);
@@ -1099,11 +1122,12 @@
             const composerURL = `https://quantum.cloud.ibm.com/composer?initial=${encodedQASM}`;
             
             // 設定情報をクリップボードにコピー
-            const configInfo = `# Quantum AI Configuration from Playground
-# Generated: ${new Date().toISOString()}
-# Qubits: ${n_qubits}
-# Layers: ${n_layers}
-# Entanglement: ${entanglement}
+            const configInfo = `// Quantum AI Configuration from Playground
+// Generated: ${new Date().toISOString()}
+// Qubits: ${n_qubits}
+// Layers: ${n_layers}
+// Entanglement: ${entanglement}
+// Encoding: ${embedding}
 
 ${qasmCode}`;
             
@@ -1116,9 +1140,52 @@ ${qasmCode}`;
             
             showNotification('🚀 IBM Quantum Composerを開いています...');
         }
+
+        function exportToQuantumDesigner() {
+            // 現在の設定を収集
+            const n_qubits = networkStructure.quantum || 8;
+            const n_layers = parseInt(document.getElementById('layer-count')?.textContent || 3);
+            const entanglement = document.getElementById('entanglement-select')?.value || 'linear';
+            const embedding = document.getElementById('embedding-select')?.value || 'angle';
+            
+            // OpenQASMコードを生成
+            const qasmCode = generateOpenQASM(n_qubits, n_layers, entanglement, embedding);
+            
+            // 設定情報とQASMコードを統合
+            const fullExport = `// Quantum AI Configuration from Playground
+// Generated: ${new Date().toISOString()}
+// Qubits: ${n_qubits}
+// Layers: ${n_layers}
+// Entanglement: ${entanglement}
+// Encoding: ${embedding}
+
+${qasmCode}
+`;
+            
+            // クリップボードにコピー
+            navigator.clipboard.writeText(fullExport).then(() => {
+                // Quantum Designerを新しいタブで開く
+                const designerParams = new URLSearchParams({
+                    qubits: n_qubits,
+                    layers: n_layers,
+                    entanglement: entanglement,
+                    source: 'playground',
+                    autoload: 'true',
+                    hasQasm: 'true'
+                });
+                
+                const designerUrl = `quantum_designer.html?${designerParams.toString()}`;
+                window.open(designerUrl, '_blank');
+                
+                showNotification('🎨 Quantum Designerを開いています... (QASMコードはクリップボードにコピーされました)');
+            }).catch(err => {
+                console.error('クリップボードコピーに失敗:', err);
+                showNotification('❌ エクスポートに失敗しました');
+            });
+        }
         
         // OpenQASMコード生成
-        function generateOpenQASM(n_qubits, n_layers, entanglement) {
+        function generateOpenQASM(n_qubits, n_layers, entanglement, embedding = 'angle') {
             let qasm = `// Quantum AI Circuit from Playground
 // Geister Game Quantum Model
 OPENQASM 2.0;
@@ -1128,13 +1195,26 @@ include "qelib1.inc";
 qreg q[${n_qubits}];
 creg c[${n_qubits}];
 
-// Input encoding layer (angle encoding)
+// Input encoding layer (${embedding} encoding)
 `;
             
             // 入力エンコーディング層
-            for (let i = 0; i < n_qubits; i++) {
-                qasm += `ry(pi/4) q[${i}]; // Input feature ${i+1}\n`;
+            if (embedding === 'amplitude') {
+                // Amplitude encoding - より複雑な初期化状態
+                qasm += `// Amplitude encoding: preparing normalized state\n`;
+                for (let i = 0; i < n_qubits; i++) {
+                    qasm += `ry(pi/${Math.pow(2, i+1)}) q[${i}]; // Amplitude feature ${i+1}\n`;
+                    qasm += `rz(pi/${Math.pow(2, i+2)}) q[${i}]; // Phase component ${i+1}\n`;
+                }
+            } else {
+                // Angle encoding (default)
+                for (let i = 0; i < n_qubits; i++) {
+                    qasm += `ry(pi/4) q[${i}]; // Input feature ${i+1}\n`;
+                }
             }
+            
+            // エンコーディング層の後にバリア
+            qasm += `\nbarrier q; // Encoding layer barrier\n`;
             
             qasm += `\n// Parameterized quantum layers (${n_layers} layers)\n`;
             
@@ -1168,8 +1248,16 @@ creg c[${n_qubits}];
                         }
                     }
                 }
+                
+                // 各レイヤーの後にバリア
+                if (layer < n_layers - 1) {
+                    qasm += `barrier q; // Layer ${layer + 1} barrier\n`;
+                }
                 qasm += '\n';
             }
+            
+            // 測定前の最終バリア
+            qasm += `barrier q; // Final barrier before measurement\n`;
             
             // 測定
             qasm += `// Measurement\n`;

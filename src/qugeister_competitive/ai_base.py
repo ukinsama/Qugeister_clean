@@ -20,7 +20,9 @@ class BaseAI(ABC):
 
     @abstractmethod
     def get_move(
-        self, game_state: GameState, legal_moves: List[Tuple[Tuple[int, int], Tuple[int, int]]]
+        self,
+        game_state: GameState,
+        legal_moves: List[Tuple[Tuple[int, int], Tuple[int, int]]],
     ) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
         """手を選択"""
         pass
@@ -77,7 +79,11 @@ class SimpleAI(BaseAI):
             score += 1 - abs(to_pos[0] - 2.5) / 2.5
 
             # 相手駒を取るボーナス
-            opponent_pieces = game_state.player_b_pieces if self.player_id == "A" else game_state.player_a_pieces
+            opponent_pieces = (
+                game_state.player_b_pieces
+                if self.player_id == "A"
+                else game_state.player_a_pieces
+            )
             if to_pos in opponent_pieces:
                 score += 5
 
@@ -101,7 +107,11 @@ class AggressiveAI(BaseAI):
             return None
 
         # 攻撃を最優先
-        opponent_pieces = game_state.player_b_pieces if self.player_id == "A" else game_state.player_a_pieces
+        opponent_pieces = (
+            game_state.player_b_pieces
+            if self.player_id == "A"
+            else game_state.player_a_pieces
+        )
 
         # 相手駒を取る手があれば優先
         attack_moves = []
@@ -122,4 +132,8 @@ class AggressiveAI(BaseAI):
             elif self.player_id == "B" and to_pos[1] < from_pos[1]:
                 advance_moves.append(move)
 
-        return random.choice(advance_moves) if advance_moves else random.choice(legal_moves)
+        return (
+            random.choice(advance_moves)
+            if advance_moves
+            else random.choice(legal_moves)
+        )

@@ -8,8 +8,4 @@ for enhanced AI performance using quantum computing principles.
 from .quantum_trainer import FastQuantumTrainer, FastQuantumNeuralNetwork
 from .quantum_circuit import FastQuantumCircuit
 
-__all__ = [
-    "FastQuantumTrainer",
-    "FastQuantumNeuralNetwork", 
-    "FastQuantumCircuit"
-]
+__all__ = ["FastQuantumTrainer", "FastQuantumNeuralNetwork", "FastQuantumCircuit"]

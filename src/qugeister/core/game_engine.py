@@ -1,14 +1,18 @@
 """
 Qugeister Game Engine - Core Game Logic
 
-A clean, efficient implementation of the 6x6 Geister game with proper 
+A clean, efficient implementation of the 6x6 Geister game with proper
 escape zone validation and quantum AI integration support.
 """
 
 import numpy as np
-from typing import List, Tuple, Optional, Dict, Literal
+import logging
+from typing import List, Tuple, Optional, Dict, Literal, Union, Set
 from dataclasses import dataclass
+from enum import Enum
 from .game_state import GameState
+
+logger = logging.getLogger(__name__)
 
 # Game constants
 BOARD_SIZE = 6
@@ -18,14 +22,58 @@ PLAYER_B = -1
 
 PieceType = Literal["good", "bad"]
 PlayerType = Literal["A", "B"]
+Position = Tuple[int, int]
+Move = Tuple[Position, Position]  # (from, to)
+
+
+class GameResult(Enum):
+    """Game result enumeration"""
+
+    ONGOING = "ongoing"
+    PLAYER_A_WIN = "player_a_win"
+    PLAYER_B_WIN = "player_b_win"
+    DRAW = "draw"
+
+
+class MoveValidationError(Exception):
+    """Exception raised for invalid moves"""
+
+    pass
+
+
+class GameStateError(Exception):
+    """Exception raised for invalid game states"""
+
+    pass
 
 
 class GeisterEngine:
-    """6x6ガイスターゲーム実装（正しい脱出判定版）"""
+    """6x6ガイスターゲーム実装（正しい脱出判定版）
 
-    def __init__(self):
-        self.board_size = BOARD_SIZE
+    Enhanced with proper error handling, validation, and type safety.
+    """
+
+    def __init__(self, board_size: int = BOARD_SIZE):
+        """Initialize the game engine
+
+        Args:
+            board_size: Size of the game board (default: 6)
+
+        Raises:
+            ValueError: If board_size is invalid
+        """
+        if board_size < 4 or board_size > 10:
+            raise ValueError(
+                f"Invalid board size: {board_size}. Must be between 4 and 10."
+            )
+
+        self.board_size = board_size
+        self._game_result = GameResult.ONGOING
         self.reset_game()
+
+        logger.info(
+            f"GeisterEngine initialized with board size {board_size}x{board_size}"
+        )
 
     def reset_game(self):
         """ゲーム状態をリセット"""
@@ -66,7 +114,9 @@ class GeisterEngine:
         self.game_over = False
         self.winner = None
 
-    def get_legal_moves(self, player: str) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
+    def get_legal_moves(
+        self, player: str
+    ) -> List[Tuple[Tuple[int, int], Tuple[int, int]]]:
         """合法手を取得"""
         pieces = self.player_a_pieces if player == "A" else self.player_b_pieces
         legal_moves = []
@@ -83,42 +133,95 @@ class GeisterEngine:
 
         return legal_moves
 
-    def make_move(self, from_pos: Tuple[int, int], to_pos: Tuple[int, int]) -> bool:
-        """手を実行"""
-        if self.game_over:
+    def make_move(self, from_pos: Position, to_pos: Position) -> bool:
+        """手を実行
+
+        Args:
+            from_pos: 移動元の位置
+            to_pos: 移動先の位置
+
+        Returns:
+            bool: 移動が成功したかどうか
+
+        Raises:
+            MoveValidationError: 不正な手の場合
+            GameStateError: ゲームが終了している場合
+        """
+        try:
+            if self.game_over:
+                raise GameStateError("Game is already over")
+
+            # Position validation
+            self._validate_position(from_pos)
+            self._validate_position(to_pos)
+
+            current_pieces = (
+                self.player_a_pieces
+                if self.current_player == "A"
+                else self.player_b_pieces
+            )
+            opponent_pieces = (
+                self.player_b_pieces
+                if self.current_player == "A"
+                else self.player_a_pieces
+            )
+
+            # Move validation
+            if from_pos not in current_pieces:
+                raise MoveValidationError(f"No piece at position {from_pos}")
+
+            move = (from_pos, to_pos)
+            legal_moves = self.get_legal_moves(self.current_player)
+            if move not in legal_moves:
+                raise MoveValidationError(f"Illegal move: {move}")
+
+            # Execute move
+            piece_type = current_pieces[from_pos]
+            del current_pieces[from_pos]
+
+            # Handle capture
+            captured_piece = None
+            if to_pos in opponent_pieces:
+                captured_piece = opponent_pieces[to_pos]
+                del opponent_pieces[to_pos]
+                self.board[to_pos[1], to_pos[0]] = 0
+                logger.debug(f"Captured {captured_piece} piece at {to_pos}")
+
+            current_pieces[to_pos] = piece_type
+
+            # Update board
+            self.board[from_pos[1], from_pos[0]] = 0
+            self.board[to_pos[1], to_pos[0]] = 1 if self.current_player == "A" else -1
+
+            # Record move
+            self.move_history.append((from_pos, to_pos, captured_piece))
+            self.turn += 1
+
+            logger.debug(
+                f"Move executed: {from_pos} -> {to_pos} by player {self.current_player}"
+            )
+
+            return True
+
+        except (MoveValidationError, GameStateError) as e:
+            logger.warning(f"Move failed: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"Unexpected error in make_move: {e}")
             return False
 
-        current_pieces = self.player_a_pieces if self.current_player == "A" else self.player_b_pieces
-        opponent_pieces = self.player_b_pieces if self.current_player == "A" else self.player_a_pieces
+    def _validate_position(self, pos: Position) -> None:
+        """Validate a board position
 
-        # 合法性チェック
-        if from_pos not in current_pieces:
-            return False
+        Args:
+            pos: Position to validate
 
-        legal_moves = self.get_legal_moves(self.current_player)
-        if (from_pos, to_pos) not in legal_moves:
-            return False
-
-        # 駒移動
-        piece_type = current_pieces[from_pos]
-        del current_pieces[from_pos]
-
-        # 相手駒を取る場合
-        if to_pos in opponent_pieces:
-            captured_piece = opponent_pieces[to_pos]
-            del opponent_pieces[to_pos]
-            # ボードから駒を除去
-            self.board[to_pos[1], to_pos[0]] = 0
-
-        current_pieces[to_pos] = piece_type
-
-        # ボード更新
-        self.board[from_pos[1], from_pos[0]] = 0
-        self.board[to_pos[1], to_pos[0]] = 1 if self.current_player == "A" else -1
-
-        # 履歴記録
-        self.move_history.append((from_pos, to_pos))
-        self.turn += 1
+        Raises:
+            MoveValidationError: If position is invalid
+        """
+        x, y = pos
+        if not (0 <= x < self.board_size and 0 <= y < self.board_size):
+            raise MoveValidationError(f"Position {pos} is out of bounds")
 
         # 勝利判定
         self._check_win_condition()
@@ -131,8 +234,12 @@ class GeisterEngine:
     def _check_win_condition(self):
         """勝利条件をチェック（正しい脱出判定）"""
         # 善玉全取り勝ち
-        a_good_count = sum(1 for piece in self.player_a_pieces.values() if piece == "good")
-        b_good_count = sum(1 for piece in self.player_b_pieces.values() if piece == "good")
+        a_good_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "good"
+        )
+        b_good_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "good"
+        )
 
         if a_good_count == 0:
             self.game_over = True
@@ -159,8 +266,12 @@ class GeisterEngine:
                 return
 
         # 悪玉全取らせ勝ち
-        a_bad_count = sum(1 for piece in self.player_a_pieces.values() if piece == "bad")
-        b_bad_count = sum(1 for piece in self.player_b_pieces.values() if piece == "bad")
+        a_bad_count = sum(
+            1 for piece in self.player_a_pieces.values() if piece == "bad"
+        )
+        b_bad_count = sum(
+            1 for piece in self.player_b_pieces.values() if piece == "bad"
+        )
 
         if a_bad_count == 0:
             self.game_over = True

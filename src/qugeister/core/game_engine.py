@@ -201,6 +201,12 @@ class GeisterEngine:
                 f"Move executed: {from_pos} -> {to_pos} by player {self.current_player}"
             )
 
+            # 勝利判定
+            self._check_win_condition()
+
+            # プレイヤー交代
+            self.current_player = "B" if self.current_player == "A" else "A"
+
             return True
 
         except (MoveValidationError, GameStateError) as e:
@@ -222,14 +228,6 @@ class GeisterEngine:
         x, y = pos
         if not (0 <= x < self.board_size and 0 <= y < self.board_size):
             raise MoveValidationError(f"Position {pos} is out of bounds")
-
-        # 勝利判定
-        self._check_win_condition()
-
-        # プレイヤー交代
-        self.current_player = "B" if self.current_player == "A" else "A"
-
-        return True
 
     def _check_win_condition(self):
         """勝利条件をチェック（正しい脱出判定）"""
@@ -282,8 +280,8 @@ class GeisterEngine:
             self.winner = "B"  # Bの悪玉が全て取られた → Bの勝ち
             return
 
-        # ターン制限
-        if self.turn >= 100:
+        # ターン制限（100手→200手に延長）
+        if self.turn >= 200:
             self.game_over = True
             self.winner = "Draw"
 

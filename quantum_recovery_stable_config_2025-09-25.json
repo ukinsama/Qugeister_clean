@@ -1,0 +1,419 @@
+{
+  "metadata": {
+    "generated_by": "Claude Code - Quantum Recovery Optimizer",
+    "generated_at": "2025-09-25T17:45:00.000Z",
+    "version": "3.0.0",
+    "experiment_type": "quantum_collapse_prevention",
+    "previous_lessons": [
+      "Episode 5100-5200 achieved Balance 0.77 (success pattern)",
+      "Episode 6500+ collapsed to 0.0 (prevention required)",
+      "Epsilon minimum 0.02 causes exploration death",
+      "Quantum parameters need periodic perturbation",
+      "Draw strategy fixation needs active prevention"
+    ],
+    "improvements": [
+      "Dynamic epsilon revival system",
+      "Quantum parameter noise injection",
+      "Experience replay periodic reset",
+      "Anti-collapse monitoring",
+      "Adaptive reward scaling",
+      "Learning rate adaptation"
+    ]
+  },
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "quantum_stable_spatial_36d",
+    "timestamp": "2025-09-25T17:45:00.000Z",
+    "strategy": "collapse_resistant_learning",
+    "stability_monitoring": true
+  },
+  "module_config": {
+    "placement": {
+      "type": "custom",
+      "description": "バランス型初期配置（安定版）",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_config": [
+        [0, 1, -1, -1, 1, 0],
+        [0, 1, -1, -1, 1, 0]
+      ],
+      "escape_positions": {
+        "player_a": [[0, 0], [0, 5]],
+        "player_b": [[5, 0], [5, 5]]
+      }
+    },
+    "quantum": {
+      "description": "Collapse-Resistant Quantum Architecture\n- 2層量子回路（表現力と安定性のバランス）\n- Full entanglement（最大相関活用）\n- Parameter noise injection（局所解脱出）\n- Coherence preservation（量子優位性維持）",
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "total_params": 24,
+      "state_channels": 7,
+      "state_dimension": 252,
+      "parameter_init": "xavier_uniform",
+      "noise_resilience": true,
+      "coherence_preservation": true,
+      "parameter_noise_frequency": 500,
+      "parameter_noise_amplitude": 0.015
+    },
+    "reward": {
+      "description": "適応的報酬システム（崩壊防止版）\n• Draw戦略への軽いペナルティ追加\n• 勝利報酬の動的スケーリング\n• 探索行動への追加ボーナス",
+      "strategy": "adaptive_anti_collapse",
+      "capture_good_reward": 12,
+      "capture_bad_penalty": -2,
+      "escape_reward": 55,
+      "captured_good_penalty": -12,
+      "captured_bad_reward": 10,
+      "draw_penalty": -0.5,
+      "exploration_bonus": 1.0,
+      "victory_scaling_factor": 1.2,
+      "position_rewards": {
+        "advance_toward_escape": 2.0,
+        "center_control": 1.2,
+        "opponent_territory": 3.0,
+        "defensive_positioning": 1.0,
+        "strategic_retreat": 0.8,
+        "active_engagement": 1.5
+      }
+    },
+    "qmap": {
+      "description": "36次元安定空間マッピング\n• 動的アクション重み付け\n• 有効手優先化\n• 探索/活用バランス最適化",
+      "method": "stable_spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36,
+      "selected_channels": 7,
+      "legal_moves_only": true,
+      "action_weighting": "dynamic_balanced",
+      "exploration_bonus": 0.15,
+      "stability_enhancement": true
+    },
+    "action_selection": {
+      "description": "動的復活型ε-greedy戦略\n• 周期的探索復活\n• 崩壊検出時の自動介入\n• プレイヤー別適応調整",
+      "strategy": "dynamic_revival_epsilon",
+      "epsilon_player_1": 0.4,
+      "epsilon_player_2": 0.6,
+      "temperature": null,
+      "adaptive_decay": true,
+      "revival_system": true,
+      "collapse_detection": true
+    }
+  },
+  "hyperparameters": {
+    "learning_rate": 0.0006,
+    "learning_rate_player_1": 0.0004,
+    "learning_rate_player_2": 0.0008,
+    "learning_rate_adaptation": true,
+    "batch_size": 96,
+    "epochs": 50000,
+    "validation_split": 0.1,
+    "optimizer": "adam",
+    "scheduler": "cosine_annealing_warm_restarts",
+    "scheduler_params": {
+      "T_0": 2000,
+      "T_mult": 2,
+      "eta_min": 0.00001
+    },
+    "dropout_rate": 0.25,
+    "l2_regularization": 0.0003,
+    "gradient_clipping": 0.8,
+    "epsilon": 0.5,
+    "epsilon_decay": 0.9998,
+    "epsilon_min": 0.08,
+    "epsilon_revival_frequency": 1000,
+    "epsilon_revival_amplitude": 0.15,
+    "epsilon_player_1": 0.4,
+    "epsilon_player_2": 0.6,
+    "gamma": 0.97,
+    "replay_buffer_size": 6000,
+    "buffer_reset_frequency": 3000,
+    "target_update_freq": 150,
+    "polyak_tau": 0.002,
+    "prioritized_replay": true,
+    "priority_alpha": 0.5,
+    "priority_beta": 0.6,
+    "double_dqn": true,
+    "training_frequency": 6,
+    "stability_monitoring": {
+      "balance_threshold_warning": 0.1,
+      "draw_rate_threshold": 0.7,
+      "intervention_trigger": true,
+      "auto_parameter_reset": true
+    }
+  },
+  "architecture": {
+    "type": "Stability_Enhanced_CQCNN",
+    "frontend_cnn": {
+      "input_channels": 7,
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 252,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 32
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [32]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 32,
+          "out_features": 4
+        },
+        {
+          "type": "tanh"
+        }
+      ]
+    },
+    "quantum_section": {
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "device": "lightning.qubit",
+      "parameter_init": "xavier_uniform",
+      "rotation_gates": ["RY", "RZ"],
+      "entangling_gates": ["CNOT"],
+      "measurement": "expectation_z",
+      "circuit_depth": 8,
+      "noise_injection": {
+        "enabled": true,
+        "frequency": 500,
+        "amplitude": 0.015,
+        "type": "gaussian"
+      }
+    },
+    "backend_cnn": {
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 4,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 128
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [128]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 96
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 96
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 96,
+          "out_features": 64
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [64]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.05
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 36
+        }
+      ]
+    }
+  },
+  "convergence": {
+    "balance_threshold": 0.95,
+    "patience": 50,
+    "min_games": 1000,
+    "stability_check": true,
+    "collapse_prevention": {
+      "enabled": true,
+      "draw_rate_limit": 0.65,
+      "balance_floor": 0.05,
+      "auto_intervention": true,
+      "parameter_reset_trigger": 0.02
+    },
+    "early_stopping": {
+      "enabled": true,
+      "monitor": "balance",
+      "patience": 150,
+      "min_delta": 0.002,
+      "restore_best_weights": true
+    },
+    "checkpointing": {
+      "enabled": true,
+      "frequency": 200,
+      "save_best": true,
+      "metric": "balance_score",
+      "milestone_saves": [0.5, 0.6, 0.7, 0.8, 0.9]
+    }
+  },
+  "training_schedule": {
+    "warmup_episodes": 300,
+    "phase_1": {
+      "episodes": "0-2000",
+      "focus": "controlled_exploration",
+      "learning_rate_multiplier": 1.0,
+      "epsilon_multiplier": 1.2,
+      "stability_priority": "high"
+    },
+    "phase_2": {
+      "episodes": "2001-8000",
+      "focus": "balanced_competition",
+      "learning_rate_multiplier": 0.9,
+      "epsilon_multiplier": 1.0,
+      "stability_priority": "medium"
+    },
+    "phase_3": {
+      "episodes": "8001-25000",
+      "focus": "convergence_stability",
+      "learning_rate_multiplier": 0.7,
+      "epsilon_multiplier": 0.8,
+      "stability_priority": "maximum"
+    },
+    "phase_4": {
+      "episodes": "25001-50000",
+      "focus": "fine_tuning",
+      "learning_rate_multiplier": 0.5,
+      "epsilon_multiplier": 0.6,
+      "stability_priority": "maximum"
+    }
+  },
+  "anti_collapse_features": {
+    "dynamic_epsilon_revival": {
+      "enabled": true,
+      "base_frequency": 1000,
+      "amplitude": 0.15,
+      "decay_protection": 0.08,
+      "emergency_boost": 0.3
+    },
+    "quantum_parameter_perturbation": {
+      "enabled": true,
+      "frequency": 500,
+      "amplitude": 0.015,
+      "adaptive_scaling": true,
+      "gradient_based": false
+    },
+    "experience_refresh": {
+      "enabled": true,
+      "buffer_reset_frequency": 3000,
+      "partial_reset_ratio": 0.3,
+      "priority_preservation": true
+    },
+    "draw_strategy_prevention": {
+      "enabled": true,
+      "draw_penalty": -0.5,
+      "engagement_reward": 1.5,
+      "timeout_penalty": -2.0
+    },
+    "adaptive_reward_scaling": {
+      "enabled": true,
+      "victory_bonus_multiplier": 1.2,
+      "exploration_bonus": 1.0,
+      "balance_sensitive": true
+    },
+    "real_time_monitoring": {
+      "enabled": true,
+      "balance_alert_threshold": 0.1,
+      "draw_rate_alert": 0.7,
+      "loss_divergence_alert": 100.0,
+      "auto_intervention": true
+    }
+  },
+  "experimental_features": {
+    "curriculum_learning": true,
+    "adaptive_buffer_size": true,
+    "dynamic_reward_scaling": true,
+    "multi_step_returns": false,
+    "noisy_networks": false,
+    "distributional_rl": false,
+    "quantum_annealing": true,
+    "self_play_evolution": true
+  },
+  "logging": {
+    "tensorboard": true,
+    "wandb": false,
+    "detailed_metrics": true,
+    "save_frequency": 100,
+    "plot_frequency": 300,
+    "convergence_tracking": true,
+    "stability_monitoring": true,
+    "collapse_alerts": true,
+    "milestone_notifications": true
+  }
+}

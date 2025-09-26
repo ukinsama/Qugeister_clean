@@ -1,0 +1,69 @@
+{
+    "metadata": {
+        "creation_date": "2025-09-26",
+        "experiment_name": "Copy5_MildAntiDraw_Copy2Inspired",
+        "inspiration": "Copy 2 success factors",
+        "approach": "Natural learning first, emergency intervention only",
+        "philosophy": "Mild anti-draw with natural learning priority"
+    },
+    "quantum_architecture": {
+        "n_qubits": 4,
+        "n_layers": 2,
+        "state_dimension": 252,
+        "use_setup_id_embedding": false,
+        "encoding_type": "amplitude"
+    },
+    "game_mechanics": {
+        "max_turns": 180,
+        "stalemate_detection_turns": 30,
+        "repetition_limit": 5,
+        "early_termination_enabled": true
+    },
+    "hyperparameters": {
+        "epsilon": 0.5,
+        "epsilon_min": 0.05,
+        "epsilon_decay": 0.9998,
+        "learning_rate": 0.001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "memory_size": 10000,
+        "target_update_freq": 1000
+    },
+    "anti_draw_features": {
+        "dynamic_epsilon_revival": {
+            "enabled": true,
+            "threshold": 0.9,
+            "amplitude": 0.1,
+            "emergency_boost": 0.2,
+            "frequency": 500,
+            "max_epsilon": 0.3,
+            "natural_learning_priority_episodes": 2000
+        },
+        "quantum_parameter_perturbation": {
+            "enabled": true,
+            "frequency": 1000,
+            "amplitude": 0.005,
+            "draw_triggered": true,
+            "threshold": 0.9,
+            "adaptive_scaling": false
+        }
+    },
+    "training_schedule": {
+        "total_episodes": 10000,
+        "evaluation_frequency": 300,
+        "natural_learning_phase": {
+            "duration": 2000,
+            "description": "First 2000 episodes prioritize natural epsilon decay"
+        },
+        "emergency_intervention_phase": {
+            "start_episode": 2000,
+            "description": "Emergency anti-draw intervention only at 90%+ draw rate"
+        }
+    },
+    "convergence_criteria": {
+        "balance_score_threshold": 0.7,
+        "stability_episodes": 1000,
+        "min_coverage": 5,
+        "draw_rate_emergency_threshold": 0.9
+    }
+}

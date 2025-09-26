@@ -1,0 +1,166 @@
+{
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "dqn_5d",
+    "timestamp": "2025-09-24T12:28:27.790Z"
+  },
+  "module_config": {
+    "placement": {
+      "type": "standard",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_only": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "escape_positions": {
+        "player_a": [
+          [
+            0,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "player_b": [
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    },
+    "quantum": {
+      "n_qubits": 4,
+      "n_layers": 1,
+      "embedding_type": "amplitude",
+      "entanglement": "linear",
+      "total_params": 12
+    },
+    "reward": {
+      "strategy": "balanced",
+      "capture_good_reward": 10,
+      "capture_bad_penalty": -5,
+      "escape_reward": 50,
+      "captured_good_penalty": -20,
+      "captured_bad_reward": 10
+    },
+    "cqcnn_architecture": {
+      "frontend_cnn": {
+        "input_channels": 7,
+        "layers": [
+          {
+            "type": "conv2d",
+            "in_channels": 7,
+            "out_channels": 16,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 16,
+            "out_channels": 32,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 32,
+            "out_channels": 64,
+            "kernel_size": 3,
+            "padding": 1
+          }
+        ]
+      },
+      "quantum_section": {
+        "n_qubits": 4,
+        "n_layers": 1,
+        "embedding_type": "amplitude",
+        "entanglement": "linear",
+        "quantum_dim": 8,
+        "total_params": 12
+      },
+      "backend_cnn": {
+        "layers": [
+          {
+            "type": "linear",
+            "in_features": 8,
+            "out_features": 64
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "dropout",
+            "p": 0.3
+          },
+          {
+            "type": "linear",
+            "in_features": 64,
+            "out_features": 32
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "linear",
+            "in_features": 32,
+            "out_features": 5
+          }
+        ]
+      }
+    },
+    "qmap": {
+      "method": "dqn_5d",
+      "state_dim": 252,
+      "action_dim": 5,
+      "selected_channels": 7
+    },
+    "action_selection": {
+      "strategy": "epsilon",
+      "epsilon": 0.1,
+      "temperature": null
+    }
+  },
+  "hyperparameters": {
+    "batchSize": 128,
+    "epochs": 1000,
+    "learningRate": 0.002,
+    "optimizer": "adam",
+    "epsilon": 0.1,
+    "epsilonDecay": 0.999,
+    "gamma": 0.95,
+    "replayBufferSize": 10000,
+    "targetUpdateFreq": 100
+  }
+}

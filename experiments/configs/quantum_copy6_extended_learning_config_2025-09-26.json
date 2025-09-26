@@ -1,0 +1,215 @@
+{
+    "metadata": {
+        "creation_date": "2025-09-26",
+        "experiment_name": "Copy6_Extended_ProgressiveLearning_20K",
+        "philosophy": "Progressive Learning with Adaptive Intervention - Extended Duration",
+        "base_version": "Copy 6",
+        "major_improvements": 5,
+        "approach": "Extended 5-phase learning with intelligent adaptation",
+        "description": "Extended learning duration Copy 6 with 20,000 episode training for deeper mastery"
+    },
+    "quantum_architecture": {
+        "n_qubits": 4,
+        "n_layers": 2,
+        "state_dimension": 252,
+        "use_setup_id_embedding": false,
+        "encoding_type": "amplitude",
+        "entanglement_pattern": "circular",
+        "parameter_initialization": "xavier_uniform"
+    },
+    "game_mechanics": {
+        "max_turns": 180,
+        "stalemate_detection_turns": 35,
+        "repetition_limit": 6,
+        "early_termination_enabled": true,
+        "timeout_handling": "adaptive"
+    },
+    "learning_phases": {
+        "phase_1_initialization": {
+            "episodes": 300,
+            "focus": "Environment adaptation and basic exploration",
+            "epsilon_start": 0.8,
+            "epsilon_min": 0.5,
+            "epsilon_decay": 0.995,
+            "learning_rate": 0.002,
+            "batch_size_multiplier": 0.5,
+            "description": "High exploration initialization phase"
+        },
+        "phase_2_exploration": {
+            "episodes": 2000,
+            "focus": "Broad strategy space exploration",
+            "epsilon_start": 0.6,
+            "epsilon_min": 0.3,
+            "epsilon_decay": 0.9995,
+            "learning_rate": 0.001,
+            "batch_size_multiplier": 1.0,
+            "description": "Extended natural decay exploration phase"
+        },
+        "phase_3_consolidation": {
+            "episodes": 1500,
+            "focus": "Promising strategy consolidation",
+            "epsilon_start": 0.3,
+            "epsilon_min": 0.1,
+            "epsilon_decay": 0.9998,
+            "learning_rate": 0.0008,
+            "intervention_threshold": 0.85,
+            "guidance_boost": 0.05,
+            "experience_replay_priority": true,
+            "description": "Extended guided learning consolidation phase"
+        },
+        "phase_4_optimization": {
+            "episodes": 1500,
+            "focus": "Strategy optimization",
+            "epsilon_start": 0.1,
+            "epsilon_min": 0.05,
+            "epsilon_decay": 0.9999,
+            "learning_rate": 0.0005,
+            "target_update_freq_multiplier": 1.5,
+            "description": "Extended controlled optimization phase"
+        },
+        "phase_5_mastery": {
+            "episodes": "remaining",
+            "focus": "Mastery and emergency response",
+            "epsilon_start": 0.05,
+            "epsilon_min": 0.02,
+            "epsilon_decay": 0.99995,
+            "learning_rate": 0.0003,
+            "emergency_threshold": 0.92,
+            "emergency_boost": 0.15,
+            "max_epsilon": 0.35,
+            "stability_monitoring": true,
+            "description": "Emergency-only intervention phase"
+        }
+    },
+    "hyperparameters": {
+        "base_learning_rate": 0.001,
+        "gamma": 0.99,
+        "batch_size": 32,
+        "memory_size": 12000,
+        "target_update_freq": 1000,
+        "adaptive_learning_rate": true,
+        "adaptive_batch_size": true
+    },
+    "dynamic_quantum_perturbation": {
+        "enabled": true,
+        "adaptive_frequency": {
+            "base_frequency": 800,
+            "draw_rate_scaling": true,
+            "min_frequency": 200,
+            "max_frequency": 1500,
+            "scaling_formula": "base_freq * (1 - draw_rate * 0.5)"
+        },
+        "intelligent_amplitude": {
+            "base_amplitude": 0.003,
+            "phase_multipliers": {
+                "initialization": 0.5,
+                "exploration": 0.8,
+                "consolidation": 1.0,
+                "optimization": 1.2,
+                "mastery": 2.0
+            },
+            "draw_rate_scaling": true,
+            "convergence_scaling": true
+        },
+        "perturbation_targeting": {
+            "parameter_selection": "gradient_based",
+            "selective_perturbation": true,
+            "perturbation_ratio": 0.3,
+            "targeting_strategy": "high_impact_parameters"
+        }
+    },
+    "advanced_balance_detection": {
+        "multi_timeframe_analysis": {
+            "short_term": 200,
+            "medium_term": 500,
+            "long_term": 1000
+        },
+        "balance_metrics": {
+            "win_rate_balance": true,
+            "temporal_stability": true,
+            "draw_rate_penalty": true,
+            "strategic_diversity": true
+        },
+        "intervention_triggers": {
+            "immediate": {
+                "draw_rate_threshold": 0.95,
+                "balance_threshold": 0.3
+            },
+            "delayed": {
+                "draw_rate_threshold": 0.88,
+                "balance_threshold": 0.6,
+                "delay_episodes": 100
+            },
+            "predictive": {
+                "trend_analysis": true,
+                "prediction_window": 150
+            }
+        }
+    },
+    "graduated_emergency_response": {
+        "alert_levels": {
+            "level_1_caution": {
+                "trigger_draw_rate": 0.80,
+                "response_type": "monitoring_enhancement",
+                "epsilon_adjustment": 0.0,
+                "actions": ["increase_logging", "detailed_metrics"]
+            },
+            "level_2_concern": {
+                "trigger_draw_rate": 0.85,
+                "response_type": "mild_intervention",
+                "epsilon_adjustment": 0.05,
+                "actions": ["epsilon_boost", "parameter_analysis"]
+            },
+            "level_3_warning": {
+                "trigger_draw_rate": 0.90,
+                "response_type": "moderate_intervention",
+                "epsilon_adjustment": 0.10,
+                "actions": ["epsilon_boost", "light_perturbation"]
+            },
+            "level_4_critical": {
+                "trigger_draw_rate": 0.93,
+                "response_type": "strong_intervention",
+                "epsilon_adjustment": 0.15,
+                "actions": ["epsilon_boost", "moderate_perturbation", "learning_rate_adjustment"]
+            },
+            "level_5_emergency": {
+                "trigger_draw_rate": 0.96,
+                "response_type": "maximum_intervention",
+                "epsilon_adjustment": 0.25,
+                "max_epsilon": 0.4,
+                "actions": ["epsilon_boost", "strong_perturbation", "architecture_adjustment"]
+            }
+        },
+        "recovery_monitoring": {
+            "success_threshold": 0.75,
+            "recovery_window": 200,
+            "intervention_cooldown": 300
+        }
+    },
+    "training_schedule": {
+        "total_episodes": 20000,
+        "evaluation_frequency": 300,
+        "checkpoint_frequency": 1500,
+        "progress_reporting_frequency": 400,
+        "early_stopping": {
+            "enabled": true,
+            "patience": 100,
+            "min_episodes": 5000,
+            "improvement_threshold": 0.0008
+        }
+    },
+    "convergence_criteria": {
+        "balance_score_threshold": 0.8,
+        "stability_episodes": 800,
+        "min_coverage": 8,
+        "draw_rate_target": 0.7,
+        "multi_metric_convergence": true
+    },
+    "logging_and_monitoring": {
+        "detailed_phase_tracking": true,
+        "intervention_logging": true,
+        "parameter_evolution_tracking": true,
+        "performance_metrics_history": true,
+        "real_time_monitoring": true
+    }
+}

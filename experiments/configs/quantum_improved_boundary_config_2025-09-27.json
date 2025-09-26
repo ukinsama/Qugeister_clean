@@ -1,0 +1,104 @@
+{
+  "metadata": {
+    "name": "quantum_improved_boundary_2025-09-27",
+    "experiment_name": "ImprovedBoundaryLearning_8K",
+    "description": "Improved configuration focusing on boundary condition learning and action validation",
+    "created_at": "2025-09-27T08:00:00Z",
+    "source": "manual_optimization",
+    "version": "1.1",
+    "improvements": [
+      "Enhanced invalid action penalty",
+      "Increased training episodes",
+      "Improved exploration strategy",
+      "Better reward shaping for valid moves",
+      "Boundary-aware state representation"
+    ]
+  },
+  "quantum": {
+    "n_qubits": 6,
+    "n_layers": 2,
+    "embedding_type": "amplitude",
+    "entanglement": "linear",
+    "circuit_type": "variational",
+    "rotation_gates": ["RX", "RY", "RZ"]
+  },
+  "network": {
+    "classical_layers": [252, 128, 84, 42],
+    "quantum_output": 6,
+    "final_layers": [84, 128, 84, 48],
+    "action_dim": 36,
+    "activation": "relu",
+    "dropout": 0.15,
+    "batch_norm": true
+  },
+  "training": {
+    "algorithm": "dqn",
+    "loss_function": "huber",
+    "optimizer": "adam",
+    "learning_rate": 0.0008,
+    "batch_size": 64,
+    "epochs": 8000,
+    "scheduler": "cosine",
+    "l2_regularization": 0.0002,
+    "validation_split": 0.15
+  },
+  "reinforcement": {
+    "epsilon": 0.2,
+    "epsilon_decay": 0.998,
+    "epsilon_min": 0.02,
+    "gamma": 0.96,
+    "replay_buffer_size": 12000,
+    "target_update_freq": 150,
+    "reward_strategy": "balanced_with_penalty",
+    "invalid_action_penalty": -2.0,
+    "valid_move_bonus": 0.1,
+    "boundary_awareness": true
+  },
+  "game_config": {
+    "board_size": [6, 6],
+    "state_channels": 8,
+    "placement_strategy": "adaptive",
+    "coordinate_system": "corrected",
+    "rule_compliant": true,
+    "max_turns": 100,
+    "early_termination": true
+  },
+  "modules": {
+    "placement": {
+      "type": "adaptive",
+      "description": "Adaptive placement with boundary awareness"
+    },
+    "quantum": {
+      "type": "enhanced_cqcnn",
+      "description": "6-qubit 2-layer quantum processor with amplitude encoding"
+    },
+    "reward": {
+      "strategy": "balanced_with_penalty",
+      "description": "Balanced reward with strong invalid action penalties",
+      "components": {
+        "valid_move": 0.1,
+        "invalid_move": -2.0,
+        "capture": 5.0,
+        "escape": 50.0,
+        "win": 100.0,
+        "draw_penalty": -10.0
+      }
+    },
+    "qmap": {
+      "method": "spatial_36d",
+      "description": "36-dimensional spatial Q-mapping with boundary validation"
+    },
+    "action": {
+      "strategy": "epsilon_greedy_enhanced",
+      "description": "Enhanced epsilon-greedy with action validation"
+    }
+  },
+  "advanced_features": {
+    "progressive_learning": true,
+    "curriculum_stages": 4,
+    "adaptive_exploration": true,
+    "experience_replay_priorities": true,
+    "double_dqn": true,
+    "dueling_network": false
+  }
+}

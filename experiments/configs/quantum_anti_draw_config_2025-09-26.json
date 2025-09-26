@@ -1,0 +1,428 @@
+{
+  "metadata": {
+    "generated_by": "Claude Code - Anti-Draw Solution System",
+    "generated_at": "2025-09-26T12:00:00.000Z",
+    "version": "3.1.0",
+    "experiment_type": "anti_draw_aggressive_learning",
+    "base_config": "quantum_recovery_stable_config_2025-09-25.json",
+    "checkpoint_compatible": "checkpoints/ep003000_setup.pth",
+    "problem_addressed": "High draw rate with low loss",
+    "solution_approach": [
+      "Aggressive action bonuses (+300%)",
+      "Strong draw penalties (-400%)",
+      "Dynamic epsilon revival system",
+      "Quantum parameter perturbation",
+      "Engagement reward system",
+      "Shortened game length limits",
+      "Stalemate detection and penalties"
+    ]
+  },
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "anti_draw_quantum_spatial_36d",
+    "timestamp": "2025-09-26T12:00:00.000Z",
+    "strategy": "aggressive_anti_stalemate",
+    "continuation_learning": true
+  },
+  "module_config": {
+    "placement": {
+      "type": "custom",
+      "description": "アンチドロー配置戦略\n- より攻撃的な初期配置\n- 早期接触を促進する配置\n- 消極的戦略を防ぐバランス",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_config": [
+        [0, 1, -1, -1, 1, 0],
+        [0, 1, -1, -1, 1, 0]
+      ],
+      "escape_positions": {
+        "player_a": [[0, 0], [0, 5]],
+        "player_b": [[5, 0], [5, 5]]
+      }
+    },
+    "quantum": {
+      "description": "Anti-Draw Quantum Architecture\n- ハイパー活性化量子回路（2層）\n- 攻撃性を促進するエンタングルメント\n- ドロー戦略を抑制するパラメータ初期化\n- 定期的摂動によるローカル解脱出",
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "total_params": 24,
+      "state_channels": 7,
+      "state_dimension": 322,
+      "parameter_init": "xavier_uniform",
+      "noise_resilience": true,
+      "coherence_preservation": true,
+      "parameter_perturbation": {
+        "enabled": true,
+        "frequency": 200,
+        "amplitude": 0.025,
+        "draw_rate_threshold": 0.6
+      }
+    },
+    "reward": {
+      "description": "超攻撃的報酬システム（アンチドロー特化）\n• 駒捕獲への巨大ボーナス（+15）\n• ドローへの強力ペナルティ（-5.0）\n• 接触・前進への大幅報酬\n• タイムアウトペナルティ（-10）\n• 膠着状態検出とペナルティ",
+      "strategy": "ultra_aggressive_anti_draw",
+      "capture_good_reward": 15,
+      "capture_bad_penalty": -1,
+      "escape_reward": 60,
+      "captured_good_penalty": -8,
+      "captured_bad_reward": 12,
+      "draw_penalty": -5.0,
+      "aggressive_bonus": 4.0,
+      "engagement_reward": 2.0,
+      "timeout_penalty": -10.0,
+      "stalemate_penalty": -3.0,
+      "position_rewards": {
+        "advance_toward_escape": 3.0,
+        "center_control": 1.5,
+        "opponent_territory": 4.0,
+        "defensive_positioning": 0.5,
+        "strategic_retreat": -0.5,
+        "active_engagement": 2.5,
+        "proximity_to_enemy": 1.0
+      },
+      "dynamic_scaling": {
+        "draw_rate_threshold": 0.7,
+        "escalation_factor": 1.5,
+        "engagement_multiplier": 2.0
+      }
+    },
+    "qmap": {
+      "description": "攻撃優先36次元マッピング\n• 攻撃的行動の優先化\n• 消極的選択のペナルティ化\n• 動的重み付けによる戦略誘導",
+      "method": "aggressive_spatial_36d",
+      "state_dim": 322,
+      "action_dim": 36,
+      "selected_channels": 7,
+      "legal_moves_only": true,
+      "action_weighting": "aggressive_priority",
+      "exploration_bonus": 0.2,
+      "aggression_boost": 0.3
+    },
+    "action_selection": {
+      "description": "動的復活ε-greedy（アンチドロー版）\n• ドロー率に応じたε自動調整\n• 攻撃的行動の優先選択\n• 消極戦略の能動的回避",
+      "strategy": "dynamic_aggressive_epsilon",
+      "epsilon_player_1": 0.6,
+      "epsilon_player_2": 0.6,
+      "temperature": null,
+      "adaptive_decay": true,
+      "draw_rate_revival": {
+        "threshold": 0.6,
+        "revival_factor": 0.4,
+        "max_boost": 0.5
+      }
+    }
+  },
+  "hyperparameters": {
+    "learning_rate": 0.001,
+    "learning_rate_player_1": 0.0008,
+    "learning_rate_player_2": 0.0012,
+    "learning_rate_adaptation": true,
+    "batch_size": 64,
+    "epochs": 10000,
+    "validation_split": 0.1,
+    "optimizer": "adam",
+    "scheduler": "cosine_annealing_warm_restarts",
+    "scheduler_params": {
+      "T_0": 1000,
+      "T_mult": 2,
+      "eta_min": 0.00005
+    },
+    "dropout_rate": 0.2,
+    "l2_regularization": 0.0002,
+    "gradient_clipping": 1.0,
+    "epsilon": 0.6,
+    "epsilon_decay": 0.9995,
+    "epsilon_min": 0.15,
+    "epsilon_revival_system": {
+      "enabled": true,
+      "frequency": 150,
+      "amplitude": 0.2,
+      "draw_threshold": 0.6,
+      "emergency_boost": 0.4
+    },
+    "gamma": 0.95,
+    "replay_buffer_size": 4000,
+    "target_update_freq": 100,
+    "polyak_tau": 0.005,
+    "prioritized_replay": true,
+    "priority_alpha": 0.7,
+    "priority_beta": 0.5,
+    "double_dqn": true,
+    "training_frequency": 4
+  },
+  "architecture": {
+    "type": "Anti_Draw_Enhanced_CQCNN",
+    "frontend_cnn": {
+      "input_channels": 7,
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 322,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 32
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [32]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 32,
+          "out_features": 4
+        },
+        {
+          "type": "tanh"
+        }
+      ]
+    },
+    "quantum_section": {
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "device": "lightning.qubit",
+      "parameter_init": "xavier_uniform",
+      "rotation_gates": ["RY", "RZ"],
+      "entangling_gates": ["CNOT"],
+      "measurement": "expectation_z",
+      "circuit_depth": 8,
+      "anti_draw_enhancement": {
+        "aggressive_initialization": true,
+        "periodic_perturbation": true,
+        "coherence_optimization": true
+      }
+    },
+    "backend_cnn": {
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 4,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 128
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [128]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 96
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 96
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 96,
+          "out_features": 64
+        },
+        {
+          "type": "layer_norm",
+          "normalized_shape": [64]
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.05
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 36
+        }
+      ]
+    }
+  },
+  "game_mechanics": {
+    "max_turns": 120,
+    "stalemate_detection_turns": 15,
+    "early_draw_penalty_turns": 60,
+    "aggression_timeout": 80,
+    "engagement_proximity_radius": 2
+  },
+  "convergence": {
+    "balance_threshold": 0.95,
+    "draw_rate_threshold": 0.4,
+    "patience": 30,
+    "min_games": 500,
+    "stability_check": true,
+    "anti_draw_conditions": {
+      "max_acceptable_draw_rate": 0.3,
+      "draw_improvement_patience": 20,
+      "aggressive_action_minimum": 0.4
+    },
+    "early_stopping": {
+      "enabled": true,
+      "monitor": ["balance", "draw_rate", "aggression"],
+      "balance_patience": 50,
+      "draw_rate_patience": 30,
+      "min_delta": 0.005,
+      "restore_best_weights": true
+    },
+    "checkpointing": {
+      "enabled": true,
+      "frequency": 200,
+      "save_best": true,
+      "metric": "anti_draw_score",
+      "save_conditions": {
+        "best_balance": true,
+        "lowest_draw_rate": true,
+        "highest_aggression": true
+      }
+    }
+  },
+  "training_schedule": {
+    "warmup_episodes": 200,
+    "phase_1": {
+      "episodes": "0-1000",
+      "focus": "aggressive_exploration",
+      "learning_rate_multiplier": 1.2,
+      "epsilon_multiplier": 1.3,
+      "draw_penalty_multiplier": 1.0
+    },
+    "phase_2": {
+      "episodes": "1001-3000",
+      "focus": "anti_draw_optimization",
+      "learning_rate_multiplier": 1.0,
+      "epsilon_multiplier": 1.1,
+      "draw_penalty_multiplier": 1.5
+    },
+    "phase_3": {
+      "episodes": "3001-10000",
+      "focus": "balanced_aggression",
+      "learning_rate_multiplier": 0.8,
+      "epsilon_multiplier": 0.9,
+      "draw_penalty_multiplier": 2.0
+    }
+  },
+  "anti_draw_features": {
+    "dynamic_epsilon_revival": {
+      "enabled": true,
+      "base_frequency": 150,
+      "amplitude": 0.2,
+      "draw_threshold": 0.6,
+      "emergency_boost": 0.4,
+      "decay_protection": 0.15
+    },
+    "quantum_parameter_perturbation": {
+      "enabled": true,
+      "frequency": 200,
+      "amplitude": 0.025,
+      "draw_triggered": true,
+      "adaptive_scaling": true
+    },
+    "aggressive_reward_scaling": {
+      "enabled": true,
+      "capture_multiplier": 1.5,
+      "engagement_multiplier": 2.0,
+      "proximity_bonus": 1.0,
+      "draw_escalation": 2.0
+    },
+    "stalemate_prevention": {
+      "enabled": true,
+      "detection_window": 15,
+      "repetition_penalty": -2.0,
+      "passivity_penalty": -1.5,
+      "timeout_escalation": true
+    },
+    "real_time_monitoring": {
+      "enabled": true,
+      "draw_alert_threshold": 0.7,
+      "aggression_alert_threshold": 0.3,
+      "auto_intervention": true,
+      "parameter_reset_trigger": 0.8
+    }
+  },
+  "experimental_features": {
+    "curriculum_learning": false,
+    "adaptive_buffer_size": true,
+    "dynamic_reward_scaling": true,
+    "multi_step_returns": false,
+    "noisy_networks": false,
+    "distributional_rl": false,
+    "aggressive_action_sampling": true,
+    "draw_penalty_escalation": true,
+    "quantum_coherence_optimization": true
+  },
+  "logging": {
+    "tensorboard": true,
+    "wandb": false,
+    "detailed_metrics": true,
+    "save_frequency": 50,
+    "plot_frequency": 200,
+    "convergence_tracking": true,
+    "draw_rate_monitoring": true,
+    "aggression_tracking": true,
+    "quantum_state_logging": false
+  }
+}

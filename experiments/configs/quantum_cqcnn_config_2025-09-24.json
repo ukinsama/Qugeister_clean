@@ -1,0 +1,258 @@
+{
+  "metadata": {
+    "generated_by": "Quantum Battle System Designer (JSON)",
+    "generated_at": "2025-09-24T12:52:25.688Z",
+    "version": "1.0.0"
+  },
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "spatial_36d",
+    "timestamp": "2025-09-24T12:52:25.688Z"
+  },
+  "module_config": {
+    "placement": {
+      "type": "custom",
+      "description": "標準配置：バランス型の初期配置\n- 前列と後列にバランス良く駒を配置\n- 善玉と悪玉を混在させて相手の推測を困難にする\n- 脱出と攻撃の両方に対応可能な柔軟な配置",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_config": [
+        [
+          0,
+          1,
+          -1,
+          -1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          -1,
+          -1,
+          1,
+          0
+        ]
+      ],
+      "escape_positions": {
+        "player_a": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            5
+          ]
+        ],
+        "player_b": [
+          [
+            5,
+            0
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    },
+    "quantum": {
+      "description": "Classical-Quantum Convolutional Neural Network\n- 前処理CNN: 252次元の盤面状態を量子ビット数に圧縮\n- 量子回路: パラメータ化量子回路による特徴抽出\n- 後処理CNN: 量子特徴を最終出力に変換\n- 敵駒の善玉/悪玉確率を推定",
+      "n_qubits": 4,
+      "n_layers": 1,
+      "embedding_type": "angle",
+      "entanglement": "linear",
+      "total_params": 12,
+      "state_channels": 7,
+      "state_dimension": 252
+    },
+    "reward": {
+      "description": "バランス型報酬設計（ガイスタールール準拠）\n• 相手の善玉を捕獲: +10ポイント（有利になる）\n• 相手の悪玉を捕獲: -5ポイント（相手に有利を与える）\n• 脱出成功: +100ポイント（勝利条件）\n• 善玉が取られる: -20ポイント（不利になる）\n• 悪玉を取らせる: +10ポイント（戦略的価値）\n• 相手陣地への前進: +3ポイント（脱出への道筋）",
+      "strategy": "balanced",
+      "capture_good_reward": 10,
+      "capture_bad_penalty": -5,
+      "escape_reward": 50,
+      "captured_good_penalty": -20,
+      "captured_bad_reward": 10,
+      "position_rewards": {
+        "advance_toward_escape": 2,
+        "center_control": 1,
+        "opponent_territory": 3
+      }
+    },
+    "qmap": {
+      "description": "5次元Q値（4方向+脱出）\n• 従来の行動ベース強化学習手法\n• 上・下・左・右の4方向 + 脱出アクション\n• 出力: 5次元ベクトル（各行動の価値）\n• シンプルで理解しやすく、実装が安定",
+      "method": "spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36,
+      "selected_channels": 7,
+      "legal_moves_only": true
+    },
+    "action_selection": {
+      "description": "ε-greedy戦略\n• ε確率でランダム行動（探索）\n• (1-ε)確率で最適行動（活用）\n• 探索と活用のバランスを動的調整\n• 学習初期は探索重視、後期は活用重視",
+      "strategy": "epsilon",
+      "epsilon": 0.5,
+      "temperature": null
+    }
+  },
+  "hyperparameters": {
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "epochs": 50000,
+    "validation_split": 0.2,
+    "optimizer": "adam",
+    "scheduler": "cosine",
+    "dropout_rate": 0.2,
+    "l2_regularization": 0.0001,
+    "epsilon": 0.5,
+    "epsilon_decay": 0.995,
+    "epsilon_min": 0.01,
+    "gamma": 0.99,
+    "replay_buffer_size": 1000,
+    "target_update_freq": 100
+  },
+  "architecture": {
+    "type": "CQCNN",
+    "frontend_cnn": {
+      "input_channels": 7,
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 252,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 32
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 32
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 32,
+          "out_features": 4
+        },
+        {
+          "type": "tanh"
+        }
+      ]
+    },
+    "quantum_section": {
+      "n_qubits": 4,
+      "n_layers": 1,
+      "embedding_type": "angle",
+      "entanglement": "linear",
+      "device": "lightning.qubit"
+    },
+    "backend_cnn": {
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 4,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 32
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 32
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.05
+        },
+        {
+          "type": "linear",
+          "in_features": 32,
+          "out_features": 36
+        }
+      ]
+    }
+  }
+}

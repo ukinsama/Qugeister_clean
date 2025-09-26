@@ -1,0 +1,214 @@
+{
+  "metadata": {
+    "experiment_name": "CQCNN_spatial_36d_standard_4Q1L",
+    "philosophy": "Classical-Quantum Hybrid Neural Network for Geister AI",
+    "architecture_type": "CQCNN",
+    "generation_timestamp": "2025-09-26T16:38:29.138Z",
+    "version": "1.0"
+  },
+  "module_01_placement": {
+    "module_name": "initial_placement",
+    "execution_order": 1,
+    "description": "Determines initial piece placement on game board",
+    "config": {
+      "type": "standard",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_only": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "escape_positions": {
+        "player_a": [
+          [
+            0,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "player_b": [
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    }
+  },
+  "module_02_quantum": {
+    "module_name": "quantum_circuit",
+    "execution_order": 2,
+    "description": "Quantum processing layer with parametrized circuits",
+    "config": {
+      "n_qubits": 4,
+      "n_layers": 1,
+      "embedding_type": "amplitude",
+      "entanglement": "linear",
+      "total_params": 12,
+      "device": "default.qubit"
+    }
+  },
+  "module_03_reward": {
+    "module_name": "reward_system",
+    "execution_order": 3,
+    "description": "Defines reward structure for reinforcement learning",
+    "config": {
+      "strategy": "balanced",
+      "capture_good_reward": 10,
+      "capture_bad_penalty": -5,
+      "escape_reward": 50,
+      "captured_good_penalty": -20,
+      "captured_bad_reward": 10
+    }
+  },
+  "module_04_cqcnn_architecture": {
+    "module_name": "cqcnn_architecture",
+    "execution_order": 4,
+    "description": "Classical-Quantum CNN hybrid architecture definition",
+    "config": {
+      "frontend_cnn": {
+        "layer_name": "classical_preprocessing",
+        "input_channels": 7,
+        "layers": [
+          {
+            "type": "conv2d",
+            "in_channels": 7,
+            "out_channels": 16,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 16,
+            "out_channels": 32,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 32,
+            "out_channels": 64,
+            "kernel_size": 3,
+            "padding": 1
+          }
+        ]
+      },
+      "quantum_section": {
+        "layer_name": "quantum_processing",
+        "n_qubits": 4,
+        "n_layers": 1,
+        "embedding_type": "amplitude",
+        "entanglement": "linear",
+        "quantum_dim": 8,
+        "total_params": 12
+      },
+      "backend_cnn": {
+        "layers": [
+          {
+            "type": "linear",
+            "in_features": 8,
+            "out_features": 128
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "dropout",
+            "p": 0.4
+          },
+          {
+            "type": "linear",
+            "in_features": 128,
+            "out_features": 72
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "dropout",
+            "p": 0.2
+          },
+          {
+            "type": "linear",
+            "in_features": 72,
+            "out_features": 36
+          }
+        ]
+      }
+    }
+  },
+  "module_05_qmap": {
+    "module_name": "q_value_mapping",
+    "execution_order": 5,
+    "description": "Maps quantum states to Q-values for decision making",
+    "config": {
+      "method": "spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36,
+      "selected_channels": 7,
+      "output_format": "spatial_grid"
+    }
+  },
+  "module_06_action": {
+    "module_name": "action_selection",
+    "execution_order": 6,
+    "description": "Selects actions based on Q-values and exploration strategy",
+    "config": {
+      "strategy": "epsilon",
+      "epsilon": 0.1,
+      "temperature": null,
+      "exploration_decay": 0.999,
+      "min_epsilon": 0.01
+    }
+  },
+  "training_config": {
+    "hyperparameters": {
+      "batchSize": 128,
+      "epochs": 1000,
+      "learningRate": 0.002,
+      "optimizer": "adam",
+      "epsilon": 0.1,
+      "epsilonDecay": 0.999,
+      "gamma": 0.95,
+      "replayBufferSize": 10000,
+      "targetUpdateFreq": 100
+    },
+    "learning_schedule": {
+      "method": "reinforcement",
+      "algorithm": "spatial_36d",
+      "total_episodes": 5000,
+      "evaluation_frequency": 100
+    }
+  }
+}

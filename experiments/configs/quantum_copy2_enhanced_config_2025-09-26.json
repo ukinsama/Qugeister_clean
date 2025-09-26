@@ -1,0 +1,336 @@
+{
+  "metadata": {
+    "generated_by": "Claude Code - Copy2 Enhancement Optimizer",
+    "generated_at": "2025-09-26T00:00:00.000Z",
+    "version": "2.0.0",
+    "experiment_type": "copy2_enhanced_convergence",
+    "base_config": "quantum_cqcnn_config_2025-09-24.json",
+    "target_notebook": "full_cqcnn_experiment copy 2.ipynb",
+    "improvements": [
+      "Copy2版の安定性を維持",
+      "252D次元の完全一貫性",
+      "収束性向上のためのバランス調整",
+      "エプシロン減衰の最適化",
+      "リプレイバッファ拡大",
+      "量子回路の表現力強化"
+    ]
+  },
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "copy2_enhanced_spatial_36d",
+    "timestamp": "2025-09-26T00:00:00.000Z",
+    "strategy": "stable_convergence_enhanced"
+  },
+  "module_config": {
+    "placement": {
+      "type": "custom",
+      "description": "標準配置：バランス型の初期配置\n- 前列と後列にバランス良く駒を配置\n- 善玉と悪玉を混在させて相手の推測を困難にする\n- 脱出と攻撃の両方に対応可能な柔軟な配置",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_config": [
+        [0, 1, -1, -1, 1, 0],
+        [0, 1, -1, -1, 1, 0]
+      ],
+      "escape_positions": {
+        "player_a": [[0, 0], [0, 5]],
+        "player_b": [[5, 0], [5, 5]]
+      }
+    },
+    "quantum": {
+      "description": "Enhanced Classical-Quantum CNN (Copy2版最適化)\n- 前処理CNN: 252次元の盤面状態を量子ビット数に圧縮\n- 量子回路: 改良された2層パラメータ化量子回路\n- 後処理CNN: 量子特徴を最終出力に変換\n- Copy2版の252D一貫性を完全維持",
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "total_params": 24,
+      "state_channels": 7,
+      "state_dimension": 252,
+      "parameter_init": "xavier_uniform",
+      "noise_resilience": true
+    },
+    "reward": {
+      "description": "Copy2版最適化報酬設計\n• 相手の善玉を捕獲: +10ポイント\n• 相手の悪玉を捕獲: -3ポイント (軽減)\n• 脱出成功: +50ポイント\n• 善玉が取られる: -15ポイント (軽減)\n• 悪玉を取らせる: +8ポイント\n• 位置的報酬の最適化",
+      "strategy": "copy2_enhanced",
+      "capture_good_reward": 10,
+      "capture_bad_penalty": -3,
+      "escape_reward": 50,
+      "captured_good_penalty": -15,
+      "captured_bad_reward": 8,
+      "position_rewards": {
+        "advance_toward_escape": 1.8,
+        "center_control": 1.0,
+        "opponent_territory": 2.8,
+        "defensive_positioning": 0.8
+      }
+    },
+    "qmap": {
+      "description": "36次元空間Q値マッピング（Copy2版強化）\n• 252次元状態から36次元行動への変換\n• 有効手のみの学習で効率化\n• Copy2版の次元一貫性維持",
+      "method": "copy2_enhanced_spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36,
+      "selected_channels": 7,
+      "legal_moves_only": true,
+      "action_weighting": "enhanced",
+      "exploration_bonus": 0.08
+    },
+    "action_selection": {
+      "description": "Copy2版最適化ε-greedy戦略\n• 収束重視のε減衰設計\n• 安定した探索/活用バランス\n• Copy2版の特性に最適化",
+      "strategy": "copy2_enhanced_epsilon",
+      "epsilon_player_1": 0.5,
+      "epsilon_player_2": 0.5,
+      "temperature": null,
+      "adaptive_decay": false
+    }
+  },
+  "hyperparameters": {
+    "learning_rate": 0.0008,
+    "batch_size": 128,
+    "epochs": 50000,
+    "validation_split": 0.15,
+    "optimizer": "adam",
+    "scheduler": "cosine",
+    "scheduler_params": {
+      "T_max": 5000,
+      "eta_min": 0.00001
+    },
+    "dropout_rate": 0.2,
+    "l2_regularization": 0.0002,
+    "gradient_clipping": 1.0,
+    "epsilon": 0.5,
+    "epsilon_decay": 0.9996,
+    "epsilon_min": 0.03,
+    "gamma": 0.98,
+    "replay_buffer_size": 2500,
+    "target_update_freq": 120,
+    "polyak_tau": 0.005,
+    "prioritized_replay": false,
+    "priority_alpha": 0.6,
+    "priority_beta": 0.4,
+    "double_dqn": false,
+    "training_frequency": 5
+  },
+  "architecture": {
+    "type": "Copy2_Enhanced_CQCNN",
+    "frontend_cnn": {
+      "input_channels": 7,
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 252,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 32
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 32
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 32,
+          "out_features": 4
+        },
+        {
+          "type": "tanh"
+        }
+      ]
+    },
+    "quantum_section": {
+      "n_qubits": 4,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "full",
+      "device": "lightning.qubit",
+      "parameter_init": "xavier_uniform",
+      "rotation_gates": ["RY", "RZ"],
+      "entangling_gates": ["CNOT"],
+      "measurement": "expectation_z",
+      "circuit_depth": 6
+    },
+    "backend_cnn": {
+      "layers": [
+        {
+          "type": "linear",
+          "in_features": 4,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.2
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 128
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 128
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.15
+        },
+        {
+          "type": "linear",
+          "in_features": 128,
+          "out_features": 96
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 96
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.1
+        },
+        {
+          "type": "linear",
+          "in_features": 96,
+          "out_features": 64
+        },
+        {
+          "type": "batch_norm",
+          "num_features": 64
+        },
+        {
+          "type": "relu"
+        },
+        {
+          "type": "dropout",
+          "p": 0.05
+        },
+        {
+          "type": "linear",
+          "in_features": 64,
+          "out_features": 36
+        }
+      ]
+    }
+  },
+  "convergence": {
+    "balance_threshold": 0.95,
+    "patience": 50,
+    "min_games": 1000,
+    "stability_check": true,
+    "loss_improvement": {
+      "enabled": true,
+      "patience": 30,
+      "improvement_threshold": 0.001,
+      "min_samples": 100,
+      "divergence_threshold": 0.1
+    },
+    "early_stopping": {
+      "enabled": true,
+      "monitor": ["balance", "loss"],
+      "balance_patience": 50,
+      "loss_patience": 30,
+      "min_delta": 0.002,
+      "restore_best_weights": true
+    },
+    "checkpointing": {
+      "enabled": true,
+      "frequency": 200,
+      "save_best": true,
+      "metric": "comprehensive_score",
+      "save_conditions": {
+        "best_balance": true,
+        "best_loss": true,
+        "comprehensive_best": true
+      }
+    },
+    "comprehensive_conditions": {
+      "balance_weight": 0.7,
+      "loss_weight": 0.3,
+      "require_both": true,
+      "min_balance_for_loss_priority": 0.8
+    }
+  },
+  "training_schedule": {
+    "warmup_episodes": 300,
+    "phase_1": {
+      "episodes": "0-2500",
+      "focus": "stable_exploration",
+      "learning_rate_multiplier": 1.0,
+      "epsilon_multiplier": 1.0
+    },
+    "phase_2": {
+      "episodes": "2501-10000",
+      "focus": "balanced_learning",
+      "learning_rate_multiplier": 0.9,
+      "epsilon_multiplier": 0.85
+    },
+    "phase_3": {
+      "episodes": "10001-50000",
+      "focus": "convergence_pursuit",
+      "learning_rate_multiplier": 0.7,
+      "epsilon_multiplier": 0.7
+    }
+  },
+  "experimental_features": {
+    "curriculum_learning": false,
+    "adaptive_buffer_size": false,
+    "dynamic_reward_scaling": false,
+    "multi_step_returns": false,
+    "noisy_networks": false,
+    "distributional_rl": false
+  },
+  "logging": {
+    "tensorboard": false,
+    "wandb": false,
+    "detailed_metrics": true,
+    "save_frequency": 100,
+    "plot_frequency": 500,
+    "convergence_tracking": true
+  }
+}

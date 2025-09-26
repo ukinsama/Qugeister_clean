@@ -1,0 +1,105 @@
+{
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "spatial_36d",
+    "timestamp": "2025-09-24T11:07:43.471Z"
+  },
+  "module_config": {
+    "cqcnn_architecture": {
+      "frontend_cnn": {
+        "input_channels": 7,
+        "layers": [
+          {
+            "type": "conv2d",
+            "in_channels": 7,
+            "out_channels": 16,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 16,
+            "out_channels": 32,
+            "kernel_size": 3,
+            "padding": 1
+          },
+          {
+            "type": "maxpool2d",
+            "kernel_size": 2,
+            "stride": 2
+          },
+          {
+            "type": "conv2d",
+            "in_channels": 32,
+            "out_channels": 64,
+            "kernel_size": 3,
+            "padding": 1
+          }
+        ]
+      },
+      "quantum_section": {
+        "n_qubits": 8,
+        "n_layers": 3,
+        "embedding_type": "angle",
+        "entanglement": "linear",
+        "quantum_dim": 48,
+        "total_params": 72
+      },
+      "backend_cnn": {
+        "layers": [
+          {
+            "type": "linear",
+            "in_features": 48,
+            "out_features": 128
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "dropout",
+            "p": 0.4
+          },
+          {
+            "type": "linear",
+            "in_features": 128,
+            "out_features": 72
+          },
+          {
+            "type": "relu"
+          },
+          {
+            "type": "dropout",
+            "p": 0.2
+          },
+          {
+            "type": "linear",
+            "in_features": 72,
+            "out_features": 36
+          }
+        ]
+      }
+    },
+    "reward": {
+      "strategy": "balanced"
+    },
+    "qmap": {
+      "method": "spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36
+    },
+    "action_selection": {
+      "strategy": "epsilon"
+    }
+  },
+  "hyperparameters": {
+    "batch_size": 32,
+    "epochs": 1000,
+    "learning_rate": 0.001,
+    "optimizer": "adam"
+  }
+}

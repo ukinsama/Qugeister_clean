@@ -1,0 +1,91 @@
+{
+  "learning_config": {
+    "method": "reinforcement",
+    "algorithm": "spatial_36d",
+    "timestamp": "2025-09-24T10:37:33.414Z"
+  },
+  "module_config": {
+    "placement": {
+      "type": "standard",
+      "player_a_bottom": true,
+      "player_b_top": true,
+      "my_pieces_only": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "escape_positions": {
+        "player_a": [
+          [
+            0,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "player_b": [
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    },
+    "quantum": {
+      "n_qubits": 6,
+      "n_layers": 2,
+      "embedding_type": "angle",
+      "entanglement": "linear",
+      "total_params": 36
+    },
+    "reward": {
+      "strategy": "balanced",
+      "capture_good_reward": 10,
+      "capture_bad_penalty": -5,
+      "escape_reward": 50,
+      "captured_good_penalty": -20,
+      "captured_bad_reward": 10
+    },
+    "qmap": {
+      "method": "spatial_36d",
+      "state_dim": 252,
+      "action_dim": 36,
+      "selected_channels": 7
+    },
+    "action_selection": {
+      "strategy": "epsilon",
+      "epsilon": 0.1,
+      "temperature": null
+    }
+  },
+  "hyperparameters": {
+    "batchSize": 8,
+    "epochs": 5,
+    "learningRate": 0.001,
+    "optimizer": "adam",
+    "epsilon": 0.1,
+    "epsilonDecay": 0.995,
+    "gamma": 0.99,
+    "replayBufferSize": 10000,
+    "targetUpdateFreq": 100
+  }
+}

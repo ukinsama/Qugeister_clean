@@ -164,13 +164,120 @@
             font-weight: 600;
             color: var(--primary-color);
         }
+
+        /* Board Placement Styles */
+        .board-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-top: 15px;
+        }
+
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 2px;
+            border: 3px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+
+        .board-cell {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .board-cell:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .board-cell.player-zone {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .board-cell.escape-zone {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+        }
+
+        .placement-controls {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .piece-selector {
+            margin-bottom: 20px;
+        }
+
+        .piece-selector label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .piece-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .piece-btn {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .piece-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .piece-btn.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .placement-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .placement-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 6px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>⚛️ Quantum CQCNN Designer</h1>
-            <p>Classical-Quantum Convolutional Neural Network for Geister AI</p>
+            <p>Structured JSON Config Generator for Unified Training System</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                <strong>🎯 Design → Train → Battle:</strong> Generate config → Use unified_trainer.py → Run model_battle.py
+            </div>
         </div>
 
         <!-- 量子回路設計 -->
@@ -185,6 +292,39 @@
                         <button class="option-button selected" onclick="selectOption('placement', 'standard', event)">Standard</button>
                         <button class="option-button" onclick="selectOption('placement', 'defensive', event)">Defensive</button>
                         <button class="option-button" onclick="selectOption('placement', 'aggressive', event)">Aggressive</button>
+                        <button class="option-button" onclick="selectOption('placement', 'custom', event)">Custom</button>
+                    </div>
+                </div>
+
+                <!-- Interactive Board Placement -->
+                <div class="config-item" id="customPlacement" style="display: none;">
+                    <label class="config-label">🎯 Custom Piece Placement:</label>
+                    <div class="board-container">
+                        <div class="board-grid" id="boardGrid">
+                            <!-- 6x6 board will be generated here -->
+                        </div>
+                        <div class="placement-controls">
+                            <div class="piece-selector">
+                                <label>Select Piece Type:</label>
+                                <div class="piece-buttons">
+                                    <button class="piece-btn selected" onclick="selectPieceType('good')" id="goodPiece">👻 Good Ghost</button>
+                                    <button class="piece-btn" onclick="selectPieceType('bad')" id="badPiece">😈 Bad Ghost</button>
+                                    <button class="piece-btn" onclick="selectPieceType('empty')" id="emptySpace">⬜ Empty</button>
+                                </div>
+                            </div>
+                            <div class="placement-buttons">
+                                <button class="btn btn-secondary" onclick="resetBoard()">Reset Board</button>
+                                <button class="btn btn-warning" onclick="randomPlacement()">Random Setup</button>
+                            </div>
+                            <div class="placement-info">
+                                <strong>📋 Instructions:</strong><br>
+                                • Click cells to place pieces<br>
+                                • Blue areas: Player zones<br>
+                                • Green corners: Escape zones<br>
+                                • 👻 Good ghosts, 😈 Bad ghosts<br>
+                                • Each player needs 4 pieces
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,8 +425,13 @@
             entanglement: 'linear',
             reward: 'balanced',
             qmap: 'dqn',
-            action: 'epsilon'
+            action: 'epsilon',
+            customBoard: null
         };
+
+        // Board state management
+        let currentPieceType = 'good';
+        let boardState = Array(6).fill().map(() => Array(6).fill('empty'));
 
         function selectOption(category, value, event) {
             // Remove selected class from siblings
@@ -299,7 +444,122 @@
             // Update config
             config[category] = value;
 
+            // Show/hide custom placement UI
+            if (category === 'placement') {
+                const customPlacement = document.getElementById('customPlacement');
+                if (value === 'custom') {
+                    customPlacement.style.display = 'block';
+                    initializeBoard();
+                } else {
+                    customPlacement.style.display = 'none';
+                }
+            }
+
             console.log('Configuration updated:', config);
+        }
+
+        function initializeBoard() {
+            const boardGrid = document.getElementById('boardGrid');
+            boardGrid.innerHTML = '';
+
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 6; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'board-cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+
+                    // Mark player zones and escape zones
+                    if (row === 0 || row === 5) {
+                        cell.classList.add('player-zone');
+                    }
+                    if ((row === 0 && (col === 0 || col === 5)) || (row === 5 && (col === 0 || col === 5))) {
+                        cell.classList.add('escape-zone');
+                    }
+
+                    cell.addEventListener('click', () => placePiece(row, col));
+                    boardGrid.appendChild(cell);
+                }
+            }
+            updateBoardDisplay();
+        }
+
+        function selectPieceType(type) {
+            currentPieceType = type;
+
+            // Update UI
+            document.querySelectorAll('.piece-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(type + 'Piece').classList.add('selected');
+        }
+
+        function placePiece(row, col) {
+            boardState[row][col] = currentPieceType;
+            updateBoardDisplay();
+            updateConfigBoard();
+        }
+
+        function updateBoardDisplay() {
+            const cells = document.querySelectorAll('.board-cell');
+            cells.forEach(cell => {
+                const row = parseInt(cell.dataset.row);
+                const col = parseInt(cell.dataset.col);
+                const piece = boardState[row][col];
+
+                switch(piece) {
+                    case 'good':
+                        cell.textContent = '👻';
+                        break;
+                    case 'bad':
+                        cell.textContent = '😈';
+                        break;
+                    case 'empty':
+                        cell.textContent = '';
+                        break;
+                }
+            });
+        }
+
+        function resetBoard() {
+            boardState = Array(6).fill().map(() => Array(6).fill('empty'));
+            updateBoardDisplay();
+            updateConfigBoard();
+        }
+
+        function randomPlacement() {
+            // Reset board first
+            boardState = Array(6).fill().map(() => Array(6).fill('empty'));
+
+            // Place some random pieces
+            const pieces = ['good', 'good', 'good', 'good', 'bad', 'bad', 'bad', 'bad'];
+
+            // Player 1 area (bottom rows)
+            for (let i = 0; i < 4; i++) {
+                let row, col;
+                do {
+                    row = Math.random() < 0.5 ? 4 : 5;
+                    col = Math.floor(Math.random() * 6);
+                } while (boardState[row][col] !== 'empty');
+
+                boardState[row][col] = pieces[i];
+            }
+
+            // Player 2 area (top rows)
+            for (let i = 4; i < 8; i++) {
+                let row, col;
+                do {
+                    row = Math.random() < 0.5 ? 0 : 1;
+                    col = Math.floor(Math.random() * 6);
+                } while (boardState[row][col] !== 'empty');
+
+                boardState[row][col] = pieces[i];
+            }
+
+            updateBoardDisplay();
+            updateConfigBoard();
+        }
+
+        function updateConfigBoard() {
+            config.customBoard = boardState.map(row => [...row]);
         }
 
         function updateQuantumConfig() {
@@ -313,15 +573,22 @@
         }
 
         function generateConfig() {
-            // Generate CQCNN JSON configuration
+            // Generate Structured CQCNN JSON configuration with ordered modules
             const cqcnnConfig = {
-                learning_config: {
-                    method: 'reinforcement',
-                    algorithm: config.qmap === 'dqn' ? 'dqn_5d' : config.qmap,
-                    timestamp: new Date().toISOString()
+                metadata: {
+                    experiment_name: `CQCNN_${config.qmap}_${config.placement}_${config.qubits}Q${config.layers}L`,
+                    philosophy: "Classical-Quantum Hybrid Neural Network for Geister AI",
+                    architecture_type: "CQCNN",
+                    generation_timestamp: new Date().toISOString(),
+                    version: "1.0"
                 },
-                module_config: {
-                    placement: {
+
+                // Module 1: Placement Strategy (First in execution order)
+                module_01_placement: {
+                    module_name: "initial_placement",
+                    execution_order: 1,
+                    description: "Determines initial piece placement on game board",
+                    config: {
                         type: config.placement,
                         player_a_bottom: true,
                         player_b_top: true,
@@ -329,16 +596,32 @@
                         escape_positions: {
                             player_a: [[0,0],[5,0]],
                             player_b: [[0,5],[5,5]]
-                        }
-                    },
-                    quantum: {
+                        },
+                        custom_board: config.placement === 'custom' ? config.customBoard : null
+                    }
+                },
+
+                // Module 2: Quantum Circuit (Core processing)
+                module_02_quantum: {
+                    module_name: "quantum_circuit",
+                    execution_order: 2,
+                    description: "Quantum processing layer with parametrized circuits",
+                    config: {
                         n_qubits: config.qubits,
                         n_layers: config.layers,
                         embedding_type: config.embedding,
                         entanglement: config.entanglement,
-                        total_params: config.qubits * config.layers * 3
-                    },
-                    reward: (() => {
+                        total_params: config.qubits * config.layers * 3,
+                        device: "default.qubit"
+                    }
+                },
+
+                // Module 3: Reward System (Learning guidance)
+                module_03_reward: {
+                    module_name: "reward_system",
+                    execution_order: 3,
+                    description: "Defines reward structure for reinforcement learning",
+                    config: (() => {
                         const rewardConfigs = {
                             balanced: {
                                 strategy: 'balanced',
@@ -366,9 +649,17 @@
                             }
                         };
                         return rewardConfigs[config.reward];
-                    })(),
-                    cqcnn_architecture: {
+                    })()
+                },
+
+                // Module 4: CQCNN Architecture (Neural network structure)
+                module_04_cqcnn_architecture: {
+                    module_name: "cqcnn_architecture",
+                    execution_order: 4,
+                    description: "Classical-Quantum CNN hybrid architecture definition",
+                    config: {
                         frontend_cnn: {
+                            layer_name: "classical_preprocessing",
                             input_channels: 7,
                             layers: [
                                 {"type": "conv2d", "in_channels": 7, "out_channels": 16, "kernel_size": 3, "padding": 1},
@@ -379,6 +670,7 @@
                             ]
                         },
                         quantum_section: {
+                            layer_name: "quantum_processing",
                             n_qubits: config.qubits,
                             n_layers: config.layers,
                             embedding_type: config.embedding,
@@ -436,29 +728,56 @@
                                     };
                             }
                         })()
-                    },
-                    qmap: {
+                    }
+                },
+
+                // Module 5: Q-Value Mapping (Decision making)
+                module_05_qmap: {
+                    module_name: "q_value_mapping",
+                    execution_order: 5,
+                    description: "Maps quantum states to Q-values for decision making",
+                    config: {
                         method: config.qmap === 'dqn' ? 'dqn_5d' : config.qmap,
                         state_dim: 252,
                         action_dim: config.qmap === 'spatial_36d' ? 36 : 5,
-                        selected_channels: 7
-                    },
-                    action_selection: {
-                        strategy: config.action,
-                        epsilon: config.action === 'epsilon' ? 0.1 : null,
-                        temperature: config.action === 'boltzmann' ? 1.0 : null
+                        selected_channels: 7,
+                        output_format: config.qmap === 'spatial_36d' ? 'spatial_grid' : 'action_values'
                     }
                 },
-                hyperparameters: {
-                    batchSize: 128,
-                    epochs: 1000,
-                    learningRate: 0.002,
-                    optimizer: "adam",
-                    epsilon: 0.1,
-                    epsilonDecay: 0.999,
-                    gamma: 0.95,
-                    replayBufferSize: 10000,
-                    targetUpdateFreq: 100
+
+                // Module 6: Action Selection (Exploration strategy)
+                module_06_action: {
+                    module_name: "action_selection",
+                    execution_order: 6,
+                    description: "Selects actions based on Q-values and exploration strategy",
+                    config: {
+                        strategy: config.action,
+                        epsilon: config.action === 'epsilon' ? 0.1 : null,
+                        temperature: config.action === 'boltzmann' ? 1.0 : null,
+                        exploration_decay: config.action === 'epsilon' ? 0.999 : null,
+                        min_epsilon: config.action === 'epsilon' ? 0.01 : null
+                    }
+                },
+
+                // Training Configuration
+                training_config: {
+                    hyperparameters: {
+                        batchSize: 128,
+                        epochs: 1000,
+                        learningRate: 0.002,
+                        optimizer: "adam",
+                        epsilon: 0.1,
+                        epsilonDecay: 0.999,
+                        gamma: 0.95,
+                        replayBufferSize: 10000,
+                        targetUpdateFreq: 100
+                    },
+                    learning_schedule: {
+                        method: 'reinforcement',
+                        algorithm: config.qmap === 'dqn' ? 'dqn_5d' : config.qmap,
+                        total_episodes: 5000,
+                        evaluation_frequency: 100
+                    }
                 }
             };
 
@@ -467,7 +786,7 @@
             const element = document.createElement('a');
             const file = new Blob([configJson], {type: 'application/json'});
             element.href = URL.createObjectURL(file);
-            element.download = `cqcnn_config_${new Date().toISOString().slice(0,10)}.json`;
+            element.download = `experiments_configs_cqcnn_config_${new Date().toISOString().slice(0,10)}.json`;
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
@@ -482,30 +801,46 @@
             output.className = 'output-area success';
 
             output.innerHTML = `
-                <h3>🎉 CQCNN Configuration Generated!</h3>
-                <p>Configuration file downloaded: <code>cqcnn_config_${new Date().toISOString().slice(0,10)}.json</code></p>
+                <h3>🎉 Structured CQCNN Configuration Generated!</h3>
+                <p>Configuration file downloaded: <code>experiments_configs_cqcnn_config_${new Date().toISOString().slice(0,10)}.json</code></p>
+                <p style="color: #666; font-size: 0.9em; margin-top: 10px;">📁 Move this file to <code>experiments/configs/</code> directory before training</p>
 
                 <div style="margin-top: 20px;">
-                    <h4>📋 Architecture Summary</h4>
+                    <h4>📋 Module Execution Order</h4>
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Module 01 - Placement:</strong> ${config.module_01_placement.config.type}</li>
+                        <li><strong>Module 02 - Quantum:</strong> ${config.module_02_quantum.config.n_qubits}Q${config.module_02_quantum.config.n_layers}L (${config.module_02_quantum.config.embedding_type}, ${config.module_02_quantum.config.entanglement})</li>
+                        <li><strong>Module 03 - Reward:</strong> ${config.module_03_reward.config.strategy}</li>
+                        <li><strong>Module 04 - CQCNN:</strong> Frontend → Quantum → Backend</li>
+                        <li><strong>Module 05 - Q-Map:</strong> ${config.module_05_qmap.config.method} (${config.module_05_qmap.config.action_dim}D)</li>
+                        <li><strong>Module 06 - Action:</strong> ${config.module_06_action.config.strategy}</li>
+                    </ol>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h4>🔧 Architecture Details</h4>
                     <ul style="margin-left: 20px;">
-                        <li><strong>Placement:</strong> ${config.module_config.placement.type}</li>
-                        <li><strong>Quantum Section:</strong> ${config.module_config.cqcnn_architecture.quantum_section.n_qubits}Q${config.module_config.cqcnn_architecture.quantum_section.n_layers}L (${config.module_config.cqcnn_architecture.quantum_section.embedding_type}, ${config.module_config.cqcnn_architecture.quantum_section.entanglement})</li>
-                        <li><strong>Reward Strategy:</strong> ${config.module_config.reward.strategy}</li>
-                        <li><strong>Frontend CNN:</strong> 7ch → Conv2D(16,32,64) → MaxPool</li>
-                        <li><strong>Backend CNN:</strong> QNN → Linear → ${config.module_config.cqcnn_architecture.backend_cnn.layers.filter(l => l.type === 'linear').length} layers</li>
-                        <li><strong>Q-Learning:</strong> ${config.module_config.qmap.method}</li>
-                        <li><strong>Action Selection:</strong> ${config.module_config.action_selection.strategy}</li>
+                        <li><strong>Experiment:</strong> ${config.metadata.experiment_name}</li>
+                        <li><strong>Total Modules:</strong> 6 (ordered execution)</li>
+                        <li><strong>Quantum Params:</strong> ${config.module_02_quantum.config.total_params}</li>
+                        <li><strong>Training Episodes:</strong> ${config.training_config.learning_schedule.total_episodes}</li>
+                        <li><strong>Architecture Type:</strong> ${config.metadata.architecture_type}</li>
                     </ul>
                 </div>
 
                 <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.05); border-radius: 8px;">
-                    <h4>🚀 Next Steps</h4>
+                    <h4>🚀 Next Steps with Unified System</h4>
                     <ol style="margin-left: 20px;">
-                        <li>Use this JSON configuration with your Python training script</li>
-                        <li>Load configuration: <code>config = json.load(open('cqcnn_config_*.json'))</code></li>
-                        <li>Build CQCNN architecture from the configuration</li>
-                        <li>Start reinforcement learning training</li>
+                        <li><strong>Move Config:</strong> Place downloaded JSON in <code>experiments/configs/</code></li>
+                        <li><strong>Train Models:</strong> <code>python tools/unified_trainer.py experiments/configs/your_config.json</code></li>
+                        <li><strong>Battle Models:</strong> <code>python tools/model_battle.py experiments/models/model1.pth experiments/models/model2.pth</code></li>
+                        <li><strong>Check Results:</strong> Models saved in <code>experiments/models/</code></li>
                     </ol>
+
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(102, 126, 234, 0.1); border-radius: 5px;">
+                        <strong>💡 Professional Workflow:</strong><br>
+                        Design Config → Train Models → Battle Results → Analyze Performance
+                    </div>
                 </div>
             `;
         }

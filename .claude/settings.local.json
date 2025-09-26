@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(py webui_convergence_test.py)",
+      "Bash(where python)",
+      "Bash(jupyter:*)",
+      "Bash(py -m jupyter kernelspec:*)",
+      "Bash(./qugeister_venv/Scripts/python -m jupyter kernelspec list)",
+      "Bash(python.exe:*)",
+      "Bash(./setup_environment.bat)",
+      "Bash(find:*)",
+      "Bash(git restore:*)",
+      "Bash(/bashes)",
+      "Bash(findstr:*)",
+      "Bash(qugeister_venvScriptsactivate)",
+      "Bash(./qugeister_venv/Scripts/activate.bat)",
+      "Bash(./qugeister_venv/Scripts/python -m pip install --upgrade pip)",
+      "Bash(./qugeister_venv/Scripts/python -m pip install:*)",
+      "Bash(./qugeister_venv/Scripts/python -c \"import torch; import pennylane; import numpy; print(''PyTorch:'', torch.__version__); print(''PennyLane:'', pennylane.__version__); print(''NumPy:'', numpy.__version__)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(del test_dimension_fix.py)",
+      "Bash(tasklist)",
+      "Bash(dir:*)",
+      "Bash(powercfg:*)",
+      "Bash(del \"full_cqcnn_experiment copy 5.ipynb\")",
+      "Bash(timeout:*)",
+      "Bash(move copy6*_experiment.py legacy_experiments/)",
+      "Bash(move *convergence*.py legacy_experiments/)",
+      "Bash(move quantum_*_config_*.json configs/)",
+      "Bash(del:*)",
+      "Bash(tree:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

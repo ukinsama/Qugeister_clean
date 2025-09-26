@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "name": "QuantumGeisterAI",
+    "version": "1.0.0",
+    "created": "2025-09-24T11:18:59.080Z",
+    "description": "3-Step Designer Auto-Generated Configuration"
+  },
+  "placement": {
+    "type": "defensive",
+    "player_a_bottom": true,
+    "player_b_top": true,
+    "my_pieces_only": [
+      [
+        0,
+        1,
+        -1,
+        1,
+        -1,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        -1,
+        -1,
+        0
+      ]
+    ],
+    "escape_positions": {
+      "player_a": [
+        [
+          0,
+          0
+        ],
+        [
+          5,
+          0
+        ]
+      ],
+      "player_b": [
+        [
+          0,
+          5
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    },
+    "rule_compliant": true
+  },
+  "quantum": {
+    "n_qubits": 4,
+    "n_layers": 2,
+    "embedding_type": "angle",
+    "entanglement": "linear",
+    "total_params": 24,
+    "device": "lightning.qubit"
+  },
+  "reward": {
+    "strategy": "balanced",
+    "capture_good_reward": 0,
+    "capture_bad_penalty": 0,
+    "escape_reward": 0,
+    "captured_good_penalty": 0,
+    "captured_bad_reward": 10,
+    "win_condition_rewards": {
+      "escape_win": 100,
+      "eliminate_all_good": 100,
+      "eliminate_all_bad": 100
+    }
+  },
+  "qmap": {
+    "method": "dqn",
+    "state_dim": 252,
+    "action_dim": 5,
+    "selected_channels": 7,
+    "legal_moves_only": true
+  },
+  "action": {
+    "strategy": "epsilon",
+    "epsilon": null,
+    "temperature": null
+  },
+  "hyperparameters": {
+    "learning_rate": 0.001,
+    "batch_size": 32,
+    "epochs": 100,
+    "optimizer": "adam",
+    "dropout_rate": 0.2,
+    "l2_regularization": 0.0001,
+    "replay_buffer_size": 10000,
+    "target_update_freq": 100,
+    "gamma": 0.99
+  },
+  "learning": {
+    "method": "reinforcement",
+    "algorithm": "",
+    "validation_split": 0.2
+  }
+}

@@ -1,0 +1,342 @@
+{
+    "metadata": {
+        "creation_date": "2025-09-26",
+        "experiment_name": "Copy63_EnhancedMonitoring_AdvancedLearning",
+        "philosophy": "Advanced Learning with Comprehensive Real-Time Monitoring",
+        "base_version": "Copy 6.2 Enhanced",
+        "major_improvements": 9,
+        "approach": "Huber Loss + Target Network + Double DQN + PER + Enhanced Monitoring",
+        "description": "Copy 6.2 with comprehensive monitoring and real-time feedback systems"
+    },
+    "quantum_architecture": {
+        "n_qubits": 4,
+        "n_layers": 2,
+        "state_dimension": 252,
+        "use_setup_id_embedding": false,
+        "encoding_type": "amplitude",
+        "entanglement_pattern": "circular",
+        "parameter_initialization": "xavier_uniform"
+    },
+    "game_mechanics": {
+        "max_turns": 180,
+        "stalemate_detection_turns": 35,
+        "repetition_limit": 6,
+        "early_termination_enabled": true,
+        "timeout_handling": "adaptive"
+    },
+    "advanced_learning_system": {
+        "loss_function": {
+            "type": "huber",
+            "delta": 1.0,
+            "description": "Huber loss for stable learning with outlier robustness"
+        },
+        "target_network": {
+            "enabled": true,
+            "update_frequency": 500,
+            "soft_update": false,
+            "sync_method": "hard_copy",
+            "description": "Target network for stable Q-learning with monitoring"
+        },
+        "double_dqn": {
+            "enabled": true,
+            "description": "Double DQN to prevent overestimation bias"
+        },
+        "prioritized_experience_replay": {
+            "enabled": true,
+            "alpha": 0.6,
+            "beta_start": 0.4,
+            "beta_end": 1.0,
+            "epsilon_priority": 0.01,
+            "description": "PER for efficient learning from important experiences"
+        },
+        "multi_step_learning": {
+            "enabled": false,
+            "n_steps": 3,
+            "description": "Multi-step returns for better temporal credit assignment"
+        }
+    },
+    "learning_phases": {
+        "phase_1_initialization": {
+            "episodes": 300,
+            "focus": "Environment adaptation with stable foundation",
+            "epsilon_start": 0.8,
+            "epsilon_min": 0.5,
+            "epsilon_decay": 0.995,
+            "learning_rate": 0.002,
+            "batch_size_multiplier": 0.5,
+            "target_update_freq": 200,
+            "description": "Stable initialization phase with frequent monitoring"
+        },
+        "phase_2_exploration": {
+            "episodes": 1800,
+            "focus": "Controlled exploration with loss stability",
+            "epsilon_start": 0.6,
+            "epsilon_min": 0.25,
+            "epsilon_decay": 0.9996,
+            "learning_rate": 0.001,
+            "batch_size_multiplier": 1.0,
+            "target_update_freq": 400,
+            "description": "Enhanced exploration with comprehensive tracking"
+        },
+        "phase_3_consolidation": {
+            "episodes": 1500,
+            "focus": "Strategy consolidation with advanced methods",
+            "epsilon_start": 0.25,
+            "epsilon_min": 0.08,
+            "epsilon_decay": 0.9998,
+            "learning_rate": 0.0008,
+            "batch_size_multiplier": 1.2,
+            "target_update_freq": 500,
+            "intervention_threshold": 0.85,
+            "guidance_boost": 0.04,
+            "experience_replay_priority": true,
+            "description": "Advanced consolidation with real-time adjustment"
+        },
+        "phase_4_mastery": {
+            "episodes": "remaining",
+            "focus": "Mastery with stability maintenance and monitoring",
+            "epsilon_start": 0.08,
+            "epsilon_min": 0.03,
+            "epsilon_decay": 0.9999,
+            "learning_rate": 0.0005,
+            "batch_size_multiplier": 1.0,
+            "target_update_freq": 600,
+            "emergency_threshold": 0.88,
+            "emergency_boost": 0.08,
+            "max_epsilon": 0.2,
+            "stability_monitoring": true,
+            "description": "Mastery phase with enhanced monitoring and control"
+        }
+    },
+    "hyperparameters": {
+        "base_learning_rate": 0.001,
+        "learning_rate_scheduler": {
+            "enabled": true,
+            "type": "adaptive",
+            "patience": 300,
+            "factor": 0.8,
+            "min_lr": 0.0001,
+            "description": "Adaptive learning rate scheduling with monitoring"
+        },
+        "gamma": 0.99,
+        "batch_size": 32,
+        "memory_size": 15000,
+        "target_update_freq": 500,
+        "gradient_clipping": {
+            "enabled": true,
+            "max_norm": 0.5,
+            "description": "Tightened gradient clipping for stability"
+        },
+        "optimizer_settings": {
+            "type": "adam",
+            "beta1": 0.9,
+            "beta2": 0.999,
+            "eps": 1e-8,
+            "weight_decay": 1e-5
+        }
+    },
+    "enhanced_monitoring_system": {
+        "target_network_tracking": {
+            "enabled": true,
+            "log_updates": true,
+            "track_divergence": true,
+            "divergence_threshold": 0.1,
+            "description": "Comprehensive target network monitoring"
+        },
+        "real_time_feedback": {
+            "enabled": true,
+            "update_frequency": 50,
+            "detailed_every": 300,
+            "progress_indicators": ["phase", "epsilon", "loss", "balance", "interventions"],
+            "description": "Real-time learning progress feedback"
+        },
+        "advanced_analytics": {
+            "q_value_distribution_tracking": true,
+            "gradient_norm_tracking": true,
+            "learning_rate_adaptation_logging": true,
+            "memory_utilization_tracking": true,
+            "convergence_monitoring": true,
+            "description": "Advanced analytics for deep learning insights"
+        },
+        "intervention_logging": {
+            "detailed_tracking": true,
+            "effectiveness_analysis": true,
+            "recovery_time_monitoring": true,
+            "success_rate_tracking": true,
+            "description": "Comprehensive intervention analysis"
+        }
+    },
+    "dynamic_quantum_perturbation": {
+        "enabled": true,
+        "adaptive_frequency": {
+            "base_frequency": 600,
+            "draw_rate_scaling": true,
+            "min_frequency": 200,
+            "max_frequency": 1000,
+            "scaling_formula": "base_freq * (1 - draw_rate * 0.3)"
+        },
+        "intelligent_amplitude": {
+            "base_amplitude": 0.003,
+            "phase_multipliers": {
+                "initialization": 0.5,
+                "exploration": 0.7,
+                "consolidation": 0.9,
+                "mastery": 1.2
+            },
+            "draw_rate_scaling": true,
+            "convergence_scaling": true,
+            "loss_aware_scaling": true
+        },
+        "perturbation_targeting": {
+            "parameter_selection": "gradient_based",
+            "selective_perturbation": true,
+            "perturbation_ratio": 0.25,
+            "targeting_strategy": "high_impact_parameters"
+        },
+        "monitoring": {
+            "enabled": true,
+            "track_effectiveness": true,
+            "parameter_change_logging": true,
+            "impact_analysis": true,
+            "description": "Comprehensive perturbation monitoring"
+        }
+    },
+    "advanced_balance_detection": {
+        "multi_timeframe_analysis": {
+            "short_term": 200,
+            "medium_term": 400,
+            "long_term": 800
+        },
+        "balance_metrics": {
+            "win_rate_balance": true,
+            "temporal_stability": true,
+            "draw_rate_penalty": true,
+            "strategic_diversity": true,
+            "q_value_stability": true
+        },
+        "intervention_triggers": {
+            "immediate": {
+                "draw_rate_threshold": 0.90,
+                "balance_threshold": 0.3,
+                "loss_explosion_threshold": 500.0
+            },
+            "delayed": {
+                "draw_rate_threshold": 0.83,
+                "balance_threshold": 0.6,
+                "delay_episodes": 100
+            },
+            "predictive": {
+                "trend_analysis": true,
+                "prediction_window": 150,
+                "loss_trend_monitoring": true
+            }
+        }
+    },
+    "graduated_emergency_response": {
+        "alert_levels": {
+            "level_1_caution": {
+                "trigger_draw_rate": 0.75,
+                "trigger_loss_explosion": 200.0,
+                "response_type": "monitoring_enhancement",
+                "epsilon_adjustment": 0.0,
+                "learning_rate_adjustment": 1.0,
+                "actions": ["increase_logging", "detailed_metrics", "loss_monitoring"]
+            },
+            "level_2_concern": {
+                "trigger_draw_rate": 0.80,
+                "trigger_loss_explosion": 350.0,
+                "response_type": "mild_intervention",
+                "epsilon_adjustment": 0.02,
+                "learning_rate_adjustment": 0.9,
+                "actions": ["epsilon_boost", "lr_reduction", "parameter_analysis"]
+            },
+            "level_3_warning": {
+                "trigger_draw_rate": 0.85,
+                "trigger_loss_explosion": 500.0,
+                "response_type": "moderate_intervention",
+                "epsilon_adjustment": 0.05,
+                "learning_rate_adjustment": 0.7,
+                "actions": ["epsilon_boost", "lr_reduction", "light_perturbation", "target_sync"]
+            },
+            "level_4_critical": {
+                "trigger_draw_rate": 0.88,
+                "trigger_loss_explosion": 800.0,
+                "response_type": "strong_intervention",
+                "epsilon_adjustment": 0.08,
+                "learning_rate_adjustment": 0.5,
+                "actions": ["epsilon_boost", "lr_reduction", "moderate_perturbation", "target_sync", "optimizer_reset"]
+            },
+            "level_5_emergency": {
+                "trigger_draw_rate": 0.92,
+                "trigger_loss_explosion": 1200.0,
+                "response_type": "maximum_intervention",
+                "epsilon_adjustment": 0.12,
+                "learning_rate_adjustment": 0.3,
+                "max_epsilon": 0.25,
+                "actions": ["epsilon_boost", "lr_reduction", "strong_perturbation", "target_sync", "optimizer_reset", "architecture_adjustment"]
+            }
+        },
+        "recovery_monitoring": {
+            "success_threshold": 0.72,
+            "loss_recovery_threshold": 100.0,
+            "recovery_window": 200,
+            "intervention_cooldown": 250,
+            "effectiveness_tracking": true
+        }
+    },
+    "training_schedule": {
+        "total_episodes": 12000,
+        "evaluation_frequency": 50,
+        "detailed_reporting_frequency": 300,
+        "checkpoint_frequency": 1000,
+        "progress_reporting_frequency": 50,
+        "target_network_sync_frequency": 500,
+        "early_stopping": {
+            "enabled": true,
+            "patience": 60,
+            "min_episodes": 2500,
+            "improvement_threshold": 0.001,
+            "stability_episodes": 600,
+            "loss_stability_threshold": 50.0
+        }
+    },
+    "convergence_criteria": {
+        "balance_score_threshold": 0.85,
+        "stability_episodes": 600,
+        "min_coverage": 6,
+        "draw_rate_target": 0.60,
+        "loss_stability_target": 100.0,
+        "multi_metric_convergence": true
+    },
+    "logging_and_monitoring": {
+        "detailed_phase_tracking": true,
+        "intervention_logging": true,
+        "parameter_evolution_tracking": true,
+        "performance_metrics_history": true,
+        "real_time_monitoring": true,
+        "loss_monitoring": {
+            "enabled": true,
+            "display_frequency": 50,
+            "track_td_errors": true,
+            "track_priority_weights": true,
+            "loss_explosion_alerts": true,
+            "target_network_divergence_alerts": true
+        },
+        "advanced_analytics": {
+            "q_value_distribution_tracking": true,
+            "target_network_divergence_monitoring": true,
+            "gradient_norm_tracking": true,
+            "learning_rate_adaptation_logging": true,
+            "memory_efficiency_monitoring": true,
+            "perturbation_effectiveness_tracking": true
+        },
+        "comprehensive_reporting": {
+            "enabled": true,
+            "episode_summary_frequency": 50,
+            "detailed_analysis_frequency": 300,
+            "intervention_analysis": true,
+            "learning_curve_analysis": true,
+            "performance_trend_analysis": true
+        }
+    }
+}

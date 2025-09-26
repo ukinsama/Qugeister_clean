@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qugeister - Quantum AI for Geister Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .card h2 {
+            color: #2196F3;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #1976D2;
+        }
+        
+        .btn-secondary {
+            background: #4CAF50;
+        }
+        
+        .btn-secondary:hover {
+            background: #45a049;
+        }
+        
+        .btn-warning {
+            background: #FF9800;
+        }
+        
+        .btn-warning:hover {
+            background: #F57C00;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            opacity: 0.8;
+        }
+        
+        .github-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .github-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌌 Qugeister</h1>
+            <p>Simplified Quantum AI System - JSON→Training→Battle Workflow</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                <strong>🎯 Dual Design Systems:</strong><br>
+                • <strong>CQCNN Designer:</strong> Structured JSON → unified_trainer.py → PTH models<br>
+                • <strong>3-Step System:</strong> Detailed config → JSON/Python → Advanced training
+            </div>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">🎮</div>
+                <h2>Quantum AI Playground</h2>
+                <p>量子ニューラルネットワークの構造を可視化し、パラメータを調整できるインタラクティブなプレイグラウンドです。量子回路とCQCNNアーキテクチャを探索。</p>
+                <a href="playground.html" class="btn">プレイグラウンドを開く</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🔬</div>
+                <h2>Quantum CQCNN Designer</h2>
+                <p>構造化されたJSONを生成する量子AI設計ツール。6つのモジュール（配置→量子→報酬→CQCNN→Qマップ→行動）を順序付きで設計。</p>
+                <a href="quantum_designer.html" class="btn btn-secondary">デザイナーを開く</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🔬</div>
+                <h2>3-Step Design System</h2>
+                <p>詳細な設定が可能な3ステップ量子AI設計システム。JSON設定とPythonコードの両方を生成可能。豊富なパラメータ調整機能付き。</p>
+                <a href="original.html" class="btn btn-warning">3ステップシステムを開く</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <h2>Training & Battle System</h2>
+                <p>統合学習システムでJSONからPTHモデルを生成し、モデル同士を対戦させる機能。Huber Lossとターゲットネットワークを使用。</p>
+                <a href="../../notebooks/" class="btn btn-warning">ノートブックを見る</a>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚛️</div>
+                <h3>Structured Configs</h3>
+                <p>6-module execution order with JSON generation</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <h3>CQCNN Architecture</h3>
+                <p>Classical-Quantum hybrid neural networks</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔗</div>
+                <h3>Unified Training</h3>
+                <p>Single script handles all quantum architectures</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Model Battles</h3>
+                <p>PTH vs PTH tournament system</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Qugeister - Simplified Quantum AI System</p>
+            <div style="margin: 20px 0;">
+                <strong>🛠️ Tools Available:</strong><br>
+                <code>python tools/unified_trainer.py experiments/configs/your_config.json</code><br>
+                <code>python tools/model_battle.py experiments/models/model1.pth experiments/models/model2.pth</code>
+            </div>
+            <a href="https://github.com/ukinsama/Qugeister_clean" class="github-link">
+                📱 GitHub Repository
+            </a>
+            <p style="margin-top: 20px; font-size: 0.9em;">
+                Professional structure with tools/, experiments/, docs/, notebooks/
+            </p>
+        </div>
+    </div>
+</body>
+</html>
